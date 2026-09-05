@@ -406,20 +406,20 @@ footer{border-top:3px double var(--color-line-strong);padding-block:2.6rem 3rem;
       <div class="section-head">
         <p class="kicker">La diferencia</p>
         <h2 id="dientes-h2">Otros toolkits predicen. Este impone.</h2>
-        <p class="lede">En las herramientas de la categoría, el checklist de seguridad lo marca el agente «bajo palabra». Aquí cada regla clave es una comprobación que rompe el build: el informe del agente deja de ser la evidencia; pasa a ser decoración.</p>
+        <p class="lede">En las herramientas de la categoría, el checklist de seguridad lo marca el agente «bajo palabra»: la buena fe es el único mecanismo de cumplimiento. En FIA Harness, cada regla clave es una comprobación que rompe el build — el informe del agente deja de ser la evidencia; pasa a ser decoración.</p>
       </div>
       <div class="tablewrap" data-reveal>
         <table>
-          <caption class="kicker" style="clip:rect(0 0 0 0);position:absolute">Reglas de oro y su mecanismo de cumplimiento</caption>
+          <caption class="kicker" style="clip:rect(0 0 0 0);position:absolute">Reglas de oro: la convención de la categoría frente al mecanismo de FIA Harness</caption>
           <thead>
-            <tr><th scope="col">Regla de oro</th><th scope="col">Antes · convención</th><th scope="col">Ahora · mecanismo</th></tr>
+            <tr><th scope="col">Regla de oro</th><th scope="col">En otros toolkits</th><th scope="col">En FIA Harness</th></tr>
           </thead>
           <tbody>
-            <tr><td><strong>No cerrar fases con dependencias abiertas</strong></td><td class="before">El agente promete no hacerlo</td><td class="after"><span class="mono">progress.json</span> validado: cerrar F2 con F1 abierta rompe el build</td></tr>
-            <tr><td><strong>Nada de fases sin Definition of Done</strong></td><td class="before">Checklist marcado a mano</td><td class="after">Toda fase cerrada exige su checkpoint de contexto registrado</td></tr>
-            <tr><td><strong>Ninguna fase sin su TASK-Fx.md</strong></td><td class="before">Recomendación en el protocolo</td><td class="after">El validador comprueba el archivo por cada fase F cerrada</td></tr>
-            <tr><td><strong>Sin secretos en el repositorio</strong></td><td class="before">Revisión humana puntual</td><td class="after"><span class="mono">gitleaks</span> escanea todo el historial en cada push</td></tr>
-            <tr><td><strong>Dependencias sin CVEs conocidos</strong></td><td class="before">Confianza del agente</td><td class="after"><span class="mono">npm audit</span> / <span class="mono">pip-audit</span> como job de CI según stack</td></tr>
+            <tr><td><strong>No cerrar fases con dependencias abiertas</strong></td><td class="before">El agente promete no hacerlo — y nadie comprueba</td><td class="after"><span class="mono">progress.json</span> validado: cerrar F2 con F1 abierta rompe el build</td></tr>
+            <tr><td><strong>Nada de fases sin Definition of Done</strong></td><td class="before">Un checklist que el agente marca a mano</td><td class="after">Toda fase cerrada exige su checkpoint de contexto registrado</td></tr>
+            <tr><td><strong>Ninguna fase sin su TASK-Fx.md</strong></td><td class="before">Recomendación del protocolo, sin validación</td><td class="after">El validador exige el archivo por cada fase F cerrada</td></tr>
+            <tr><td><strong>Sin secretos en el repositorio</strong></td><td class="before">Revisión humana puntual, si acaso</td><td class="after"><span class="mono">gitleaks</span> escanea todo el historial en cada push</td></tr>
+            <tr><td><strong>Dependencias sin CVEs conocidos</strong></td><td class="before">Confianza en que el agente elige bien</td><td class="after"><span class="mono">npm audit</span> / <span class="mono">pip-audit</span> como job de CI según stack</td></tr>
             <tr><td><strong>Aprobaciones humanas rastreables</strong></td><td class="before">Una línea en un documento</td><td class="after">Sello <span class="mono">APPROVAL-ID</span>: lo citado debe existir, lo incompleto rompe</td></tr>
           </tbody>
         </table>
