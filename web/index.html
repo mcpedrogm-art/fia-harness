@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FIA Harness — El enclavamiento de los agentes de IA | Especificación antes que código</title>
+<meta name="description" content="FIA Harness es el kit ligero, local y en español que convierte cualquier agente de IA en un proceso de ingeniería disciplinado: especificación antes de código, seguridad por diseño y reglas de oro que se imponen mecánicamente en el CI.">
+<meta property="og:title" content="FIA Harness — El enclavamiento de los agentes de IA">
+<meta property="og:description" content="Reglas de oro que no son consejos: son checks de merge. Kit local, cero dependencias, en español.">
+<meta property="og:type" content="website">
+<meta name="color-scheme" content="light">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%2317160F'/%3E%3Ccircle cx='16' cy='9' r='4' fill='%23C6433B'/%3E%3Ccircle cx='16' cy='22' r='4' fill='%231F9D57'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "FIA Harness",
+  "applicationCategory": "DeveloperApplication",
+  "operatingSystem": "Cualquiera (Python 3.8+)",
+  "inLanguage": "es",
+  "description": "Kit local de archivos y scripts que convierte cualquier agente de IA en un proceso de ingeniería disciplinado: especificación antes de código, seguridad por diseño y reglas verificadas mecánicamente en CI.",
+  "softwareVersion": "2.0.0",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "EUR" }
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "¿Qué es FIA Harness?",
+      "acceptedAnswer": { "@type": "Answer", "text": "FIA Harness es un kit de archivos y scripts que convierte cualquier agente de IA en un proceso de ingeniería disciplinado: especificación antes que código, seguridad por diseño y reglas de oro que el propio sistema impone mecánicamente en el CI." }
+    },
+    {
+      "@type": "Question",
+      "name": "¿Qué impide que un agente de IA se salte las reglas?",
+      "acceptedAnswer": { "@type": "Answer", "text": "El CI generado por el kit valida el estado del proyecto en cada push: una fase cerrada sin checkpoint o sin su tarea, una dependencia abierta, un secreto filtrado o una aprobación no registrada rompen el build y bloquean el merge." }
+    },
+    {
+      "@type": "Question",
+      "name": "¿Necesito instalar dependencias o crear cuentas?",
+      "acceptedAnswer": { "@type": "Answer", "text": "No. El kit es Python 3.8+ y Markdown, sin dependencias externas, sin cuentas y sin telemetría. GitHub solo interviene si quieres el CI; en local todo funciona igual." }
+    },
+    {
+      "@type": "Question",
+      "name": "¿Funciona con mi agente de IA?",
+      "acceptedAnswer": { "@type": "Answer", "text": "Sí. El kit es agnóstico del modelo y de la herramienta: funciona con Claude Code, Codex, Copilot, Gemini CLI, Cursor o cualquier agente capaz de leer archivos y ejecutar comandos." }
+    }
+  ]
+}
+</script>
+<style>
+/* ============================================================
+   FIA HARNESS — Dirección «ENCLAVAMIENTO» (ver web/DESIGN_DIRECTION.md)
+   Tokens conceptuales (UI_UX_EXCLUSIVA.md §9)
+   ============================================================ */
+:root{
+  --color-surface-base:#F2EEE3;
+  --color-surface-raised:#FBF9F2;
+  --color-surface-deep:#17160F;
+  --color-content-primary:#191813;
+  --color-content-muted:#6B6753;
+  --color-content-invert:#E9E4D4;
+  --color-content-invert-muted:#9C9784;
+  --color-line:#D9D3C0;
+  --color-line-strong:#B9B29A;
+  --color-signal-green:#1F9D57;
+  --color-signal-amber:#C78A06;
+  --color-signal-red:#C6433B;
+  --color-signal-green-glow:#3DDC84;
+  --type-display:"Space Grotesk","Avenir Next","Segoe UI",sans-serif;
+  --type-label:"IBM Plex Mono","Cascadia Mono","Consolas",monospace;
+  --space-section:clamp(4.5rem,10vw,8rem);
+  --space-gutter:clamp(1.25rem,4vw,2.5rem);
+  --radius-control:6px;
+  --radius-surface:14px;
+  --motion-enter:240ms;
+  --motion-state:480ms;
+  --shadow-ambient:0 1px 0 rgba(25,24,19,.06),0 14px 34px -22px rgba(25,24,19,.28);
+  --measure:70ch;
+}
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{transition:none!important;animation:none!important}
+}
+body{
+  margin:0;background:var(--color-surface-base);color:var(--color-content-primary);
+  font-family:var(--type-display);font-size:1.0625rem;line-height:1.65;
+  -webkit-font-smoothing:antialiased;
+}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--color-signal-green);outline-offset:3px;border-radius:2px}
+.skip{position:absolute;left:-999px;top:0;background:var(--color-content-primary);color:var(--color-content-invert);padding:.6rem 1rem;z-index:99}
+.skip:focus{left:1rem;top:1rem}
+
+/* ---------- estructura ---------- */
+.wrap{max-width:1080px;margin-inline:auto;padding-inline:var(--space-gutter)}
+section{padding-block:var(--space-section)}
+.section-head{max-width:46rem;margin-bottom:clamp(2rem,5vw,3.25rem)}
+.kicker{font-family:var(--type-label);font-size:.78rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--color-content-muted);display:flex;align-items:center;gap:.6rem}
+.kicker::before{content:"";width:1.6rem;height:2px;background:var(--color-content-primary)}
+h2{font-size:clamp(1.7rem,3.6vw,2.5rem);line-height:1.12;letter-spacing:-.02em;margin:.6rem 0 .8rem}
+.lede{color:var(--color-content-muted);font-size:1.1rem;max-width:var(--measure)}
+
+/* divisor de vía (patrón distintivo) */
+.track{position:relative;border:0;height:26px;margin:0;background:none}
+.track::before{content:"";position:absolute;left:0;right:0;top:11px;border-top:3px double var(--color-line-strong)}
+.track::after{content:"";position:absolute;left:0;right:0;top:7px;height:11px;
+  background:repeating-linear-gradient(90deg,var(--color-line-strong) 0 3px,transparent 3px 26px);
+  opacity:.55}
+.track--invert::before{border-color:#3A382C}
+.track--invert::after{background:repeating-linear-gradient(90deg,#3A382C 0 3px,transparent 3px 26px)}
+
+/* ---------- señal de estado (componente portador de estado) ---------- */
+.signal{display:inline-flex;align-items:center;gap:.55rem;font-family:var(--type-label);font-size:.74rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--color-content-primary)}
+.signal .lamp{width:.72rem;height:.72rem;border-radius:50%;flex:none;border:2px solid currentColor;background:transparent;transition:background var(--motion-state) ease,box-shadow var(--motion-state) ease}
+.signal--go{color:var(--color-content-primary)}
+.signal--go .lamp{background:var(--color-signal-green);border-color:var(--color-signal-green);box-shadow:0 0 0 3px rgba(31,157,87,.18)}
+.signal--warn .lamp{background:var(--color-signal-amber);border-color:var(--color-signal-amber)}
+.signal--stop .lamp{background:var(--color-signal-red);border-color:var(--color-signal-red)}
+.tunnel .signal{color:var(--color-content-invert)}
+
+/* ---------- aparición de secciones ---------- */
+.reveal{opacity:0;transform:translateY(12px);transition:opacity var(--motion-enter) ease,transform var(--motion-enter) ease}
+.reveal.is-live{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none}}
+
+/* ---------- cabecera ---------- */
+.site-head{padding-block:1.35rem}
+.site-head .wrap{display:flex;align-items:center;justify-content:space-between;gap:1rem}
+.brand{display:flex;align-items:center;gap:.7rem;text-decoration:none;font-weight:700;letter-spacing:-.01em;font-size:1.05rem}
+.brand .badge{display:grid;place-items:center;width:2.1rem;height:2.1rem;border-radius:50%;background:var(--color-surface-deep);flex:none}
+.brand .badge svg{display:block}
+.brand small{font-family:var(--type-label);font-weight:400;font-size:.68rem;color:var(--color-content-muted);display:block;letter-spacing:.08em}
+.site-nav{display:flex;gap:1.4rem;align-items:center}
+.site-nav a{font-family:var(--type-label);font-size:.78rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;text-decoration:none;color:var(--color-content-muted);border-bottom:2px solid transparent;padding-bottom:.2rem;transition:color 160ms ease,border-color 160ms ease}
+.site-nav a:hover{color:var(--color-content-primary);border-color:var(--color-signal-green)}
+@media (max-width:720px){.site-nav a:not(.nav-cta){display:none}}
+
+/* ---------- héroe ---------- */
+.hero{padding-block:clamp(3.5rem,9vw,6.5rem) var(--space-section)}
+.hero h1{font-size:clamp(2.3rem,6vw,4rem);line-height:1.04;letter-spacing:-.03em;margin:.9rem 0 1.1rem;max-width:19ch}
+.hero .lede{font-size:clamp(1.08rem,2vw,1.3rem);max-width:52ch}
+.hero-ctas{display:flex;flex-wrap:wrap;gap:.9rem;margin-top:2rem}
+.btn{display:inline-flex;align-items:center;gap:.6rem;font-family:var(--type-label);font-weight:600;font-size:.85rem;letter-spacing:.06em;text-transform:uppercase;text-decoration:none;padding:.95rem 1.5rem;border-radius:var(--radius-control);border:2px solid var(--color-content-primary);transition:transform 160ms ease,background 160ms ease,color 160ms ease}
+.btn--primary{background:var(--color-content-primary);color:var(--color-surface-base)}
+.btn--primary:hover{background:#000}
+.btn--ghost{background:transparent;color:var(--color-content-primary)}
+.btn--ghost:hover{background:rgba(25,24,19,.06)}
+@media (prefers-reduced-motion:reduce){.btn{transition:none}}
+
+/* panel de ruta del héroe: 3 señales que liberan */
+.route{margin-top:clamp(2.5rem,6vw,4rem);background:var(--color-surface-raised);border:1px solid var(--color-line);border-radius:var(--radius-surface);box-shadow:var(--shadow-ambient);padding:clamp(1.2rem,3vw,1.9rem) clamp(1.2rem,3vw,2rem)}
+.route-track{position:relative;display:flex;justify-content:space-between;gap:1rem}
+.route-track::before{content:"";position:absolute;left:2%;right:2%;top:50%;border-top:3px double var(--color-line-strong);transform:translateY(-50%)}
+.route-stop{position:relative;display:flex;flex-direction:column;align-items:center;gap:.55rem;background:none;border:0;padding:0;min-width:7rem}
+.route-stop .lamp{width:1.35rem;height:1.35rem;border-radius:50%;border:3px solid var(--color-signal-red);background:var(--color-signal-red);transition:background var(--motion-state) ease,border-color var(--motion-state) ease,box-shadow var(--motion-state) ease}
+.route-stop .tag{font-family:var(--type-label);font-size:.72rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--color-content-muted)}
+.route.is-live .route-stop .lamp{border-color:var(--color-signal-green);background:var(--color-signal-green);box-shadow:0 0 0 4px rgba(31,157,87,.15)}
+.route.is-live .route-stop:nth-child(2) .lamp{transition-delay:400ms}
+.route.is-live .route-stop:nth-child(3) .lamp{transition-delay:800ms}
+.route-caption{margin-top:1rem;font-family:var(--type-label);font-size:.78rem;color:var(--color-content-muted);display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap}
+.route-caption .signal--go{color:var(--color-content-primary)}
+@media (prefers-reduced-motion:reduce){.route-stop .lamp{transition:none}}
+
+/* ---------- túnel: registro real de CI ---------- */
+.tunnel{background:var(--color-surface-deep);color:var(--color-content-invert)}
+.tunnel .kicker{color:var(--color-content-invert-muted)}
+.tunnel .kicker::before{background:var(--color-signal-green-glow)}
+.tunnel h2{color:var(--color-content-invert)}
+.tunnel .lede{color:var(--color-content-invert-muted)}
+.ci-log{margin-top:2.2rem;border:1px solid #34322a;border-radius:var(--radius-surface);background:#111008;overflow:hidden}
+.ci-log header{display:flex;align-items:center;gap:.7rem;padding:.75rem 1.1rem;border-bottom:1px solid #34322a;font-family:var(--type-label);font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--color-content-invert-muted)}
+.ci-log pre{margin:0;padding:1.2rem 1.3rem 1.4rem;overflow-x:auto;font-family:var(--type-label);font-size:.86rem;line-height:1.75;color:var(--color-content-invert)}
+.ci-log .cmd{color:var(--color-content-invert-muted)}
+.ci-log .ok{color:var(--color-signal-green-glow)}
+.ci-log .bad{color:#FF8A80}
+.ci-log .dim{color:#8f8a76}
+.ci-log .cmt{color:#6f6a58;font-style:italic}
+.ci-foot{display:flex;gap:1rem;flex-wrap:wrap;margin-top:1.2rem;font-family:var(--type-label);font-size:.76rem;color:var(--color-content-invert-muted)}
+
+/* ---------- método: dos vías y un ciclo ---------- */
+.rail{margin-top:1.6rem}
+.rail-title{display:flex;align-items:baseline;gap:.8rem;margin:0 0 .9rem}
+.rail-title code{font-family:var(--type-label);font-size:.8rem;background:rgba(25,24,19,.07);padding:.15rem .5rem;border-radius:4px}
+.stations{position:relative;display:flex;justify-content:space-between;gap:.4rem;padding:1.1rem 0}
+.stations::before{content:"";position:absolute;left:2%;right:2%;top:50%;border-top:3px double var(--color-line-strong)}
+.station{position:relative;display:flex;flex-direction:column;align-items:center;gap:.4rem;min-width:0;text-align:center}
+.station .dot{width:1rem;height:1rem;border-radius:50%;background:var(--color-surface-base);border:3px solid var(--color-line-strong);transition:background var(--motion-state) ease,border-color var(--motion-state) ease}
+.station.is-done .dot{background:var(--color-signal-green);border-color:var(--color-signal-green)}
+.station .id{font-family:var(--type-label);font-weight:600;font-size:.78rem}
+.station .lbl{font-size:.78rem;color:var(--color-content-muted);max-width:11rem}
+.motors{display:grid;gap:2.4rem}
+.motor{background:var(--color-surface-raised);border:1px solid var(--color-line);border-radius:var(--radius-surface);padding:clamp(1.2rem,3vw,1.8rem);box-shadow:var(--shadow-ambient)}
+.motor h3{margin:.2rem 0 .2rem;font-size:1.15rem}
+.motor p{margin:.3rem 0 0;color:var(--color-content-muted);font-size:.95rem;max-width:60ch}
+.cycle{display:flex;flex-wrap:wrap;gap:.45rem;margin-top:1rem}
+.cycle span{font-family:var(--type-label);font-size:.74rem;font-weight:600;padding:.32rem .62rem;border:1.5px solid var(--color-line-strong);border-radius:999px;color:var(--color-content-muted)}
+.cycle span.is-hot{border-color:var(--color-signal-green);color:var(--color-content-primary)}
+
+/* ---------- tabla de reglas con dientes ---------- */
+.tablewrap{overflow-x:auto;border:1px solid var(--color-line);border-radius:var(--radius-surface);background:var(--color-surface-raised);box-shadow:var(--shadow-ambient)}
+table{border-collapse:collapse;width:100%;min-width:640px;font-size:.95rem}
+th{font-family:var(--type-label);font-size:.74rem;letter-spacing:.1em;text-transform:uppercase;text-align:left;color:var(--color-content-muted);padding:.9rem 1.1rem;border-bottom:2px solid var(--color-line-strong)}
+td{padding:.95rem 1.1rem;border-bottom:1px solid var(--color-line);vertical-align:top}
+tr:last-child td{border-bottom:0}
+td strong{font-weight:700}
+td .mono, .mono{font-family:var(--type-label);font-size:.82em}
+td .before{color:var(--color-content-muted)}
+td .before::before{content:"✕ ";color:var(--color-signal-red);font-weight:700}
+td .after::before{content:"● ";color:var(--color-signal-green);font-weight:700}
+
+/* ---------- cifras ---------- */
+.metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(9.5rem,1fr));gap:1px;background:var(--color-line);border:1px solid var(--color-line);border-radius:var(--radius-surface);overflow:hidden;box-shadow:var(--shadow-ambient)}
+.metric{background:var(--color-surface-raised);padding:1.4rem 1.2rem}
+.metric .n{font-family:var(--type-label);font-weight:600;font-size:clamp(1.7rem,3.4vw,2.3rem);letter-spacing:-.02em}
+.metric .n em{font-style:normal;color:var(--color-signal-green)}
+.metric .l{font-family:var(--type-label);font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:var(--color-content-muted);margin-top:.35rem}
+
+/* ---------- FAQ ---------- */
+.faq{display:grid;gap:.7rem;max-width:52rem}
+details{background:var(--color-surface-raised);border:1px solid var(--color-line);border-radius:var(--radius-control);padding:0}
+summary{cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center;gap:1rem;padding:1.05rem 1.2rem;font-weight:700}
+summary::-webkit-details-marker{display:none}
+summary .sig{font-family:var(--type-label);font-size:.7rem;letter-spacing:.1em;color:var(--color-content-muted)}
+details[open] summary{border-bottom:1px solid var(--color-line)}
+details .answer{padding:1rem 1.2rem 1.2rem;color:var(--color-content-muted)}
+details .answer strong{color:var(--color-content-primary)}
+
+/* ---------- arranque (estaciones finales) ---------- */
+.start-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:clamp(1.5rem,4vw,3rem);align-items:start}
+@media (max-width:860px){.start-grid{grid-template-columns:1fr}}
+.steps{list-style:none;margin:0;padding:0;display:grid;gap:0}
+.steps li{position:relative;padding:0 0 1.4rem 2.6rem}
+.steps li::before{content:"";position:absolute;left:.62rem;top:1.9rem;bottom:-.15rem;border-left:3px double var(--color-line-strong)}
+.steps li:last-child::before{display:none}
+.steps .n{position:absolute;left:0;top:.1rem;width:1.45rem;height:1.45rem;border-radius:50%;border:3px solid var(--color-signal-green);display:grid;place-items:center;font-family:var(--type-label);font-size:.72rem;font-weight:600}
+.steps h3{margin:.15rem 0 .25rem;font-size:1.02rem}
+.steps p{margin:0;color:var(--color-content-muted);font-size:.93rem}
+.code{background:var(--color-surface-deep);color:var(--color-content-invert);border-radius:var(--radius-surface);padding:1.3rem 1.4rem;font-family:var(--type-label);font-size:.85rem;line-height:1.9;white-space:pre;overflow-x:auto}
+.code .cmt{color:#6f6a58}
+.code .ok{color:var(--color-signal-green-glow)}
+
+/* ---------- pie ---------- */
+footer{border-top:3px double var(--color-line-strong);padding-block:2.6rem 3rem;font-size:.92rem}
+.foot-grid{display:flex;flex-wrap:wrap;gap:2.5rem;justify-content:space-between}
+.foot-grid nav{display:grid;gap:.45rem}
+.foot-grid a{text-decoration:none;color:var(--color-content-muted)}
+.foot-grid a:hover{color:var(--color-content-primary);text-decoration:underline}
+.foot-note{margin-top:2rem;font-family:var(--type-label);font-size:.74rem;color:var(--color-content-muted);display:flex;gap:1.2rem;flex-wrap:wrap}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Saltar al contenido</a>
+
+<header class="site-head">
+  <div class="wrap">
+    <a class="brand" href="#">
+      <span class="badge" aria-hidden="true">
+        <svg width="14" height="14" viewBox="0 0 14 14"><circle cx="7" cy="4" r="2.4" fill="#C6433B"/><circle cx="7" cy="10" r="2.4" fill="#3DDC84"/></svg>
+      </span>
+      <span>FIA Harness<small>v2.0.0 · kit local</small></span>
+    </a>
+    <nav class="site-nav" aria-label="Principal">
+      <a href="#metodo">Método</a>
+      <a href="#dientes">Con dientes</a>
+      <a href="#paisaje">El paisaje</a>
+      <a href="#faq">FAQ</a>
+      <a class="nav-cta" href="#arranque">Arranca en 4 pasos</a>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+
+  <!-- ============ PROMESA ============ -->
+  <section class="hero" aria-labelledby="hero-h1">
+    <div class="wrap">
+      <p class="kicker">Kit de ingeniería con agentes de IA · 0 dependencias · Español</p>
+      <h1 id="hero-h1">El sistema operativo para construir software con agentes de IA.</h1>
+      <p class="lede">Especificación antes que código. Seguridad por diseño. Y desde la v2, las reglas de oro no son consejos: son checks de merge que ningún agente puede saltarse.</p>
+      <div class="hero-ctas">
+        <a class="btn btn--primary" href="#arranque">Arranca en 4 pasos</a>
+        <a class="btn btn--ghost" href="#dientes">Ver las reglas con dientes</a>
+      </div>
+
+      <div class="route" id="route" data-reveal aria-label="Demostración: una ruta ferroviaria que se libera al verificarse cada fase">
+        <div class="route-track">
+          <div class="route-stop"><span class="lamp" aria-hidden="true"></span><span class="tag">Especificar</span></div>
+          <div class="route-stop"><span class="lamp" aria-hidden="true"></span><span class="tag">Verificar</span></div>
+          <div class="route-stop"><span class="lamp" aria-hidden="true"></span><span class="tag">Merge</span></div>
+        </div>
+        <p class="route-caption">
+          <span class="signal signal--go"><span class="lamp" aria-hidden="true"></span>Ruta libre: estado validado</span>
+          <span>Como un enclavamiento ferroviario: el verde lo da el mecanismo, no la promesa.</span>
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <hr class="track" aria-hidden="true">
+
+  <!-- ============ PRUEBA (registro real) ============ -->
+  <section class="tunnel" aria-labelledby="tunnel-h2">
+    <div class="wrap">
+      <p class="kicker">Prueba real · capturada del kit, no maquillada</p>
+      <h2 id="tunnel-h2">Un contrato social no detiene a nadie.<br>Un enclavamiento sí.</h2>
+      <p class="lede">Esto es la salida real de <span class="mono">task_generator.py --check</span> durante la construcción de la v2: primero el estado verde del CI; luego un agente intenta cerrar la fase F1 sin su tarea ni su checkpoint. Observa quién gana.</p>
+
+      <div class="ci-log" role="img" aria-label="Registro de CI: el chequeo en verde y un intento de cerrar la fase F1 sin evidencia, bloqueado con siete errores">
+<pre><span class="cmd">$ python task_generator.py --check</span>
+<span class="ok">✅ Estado del harness válido:</span> 4 fases de proceso, 0 de ejecución, 1 checkpoints, aprobaciones íntegras.
+
+<span class="cmt"># el agente intenta colar: "F1 · Modelo de datos ... [x] Listo" sin evidencia</span>
+<span class="cmd">$ python task_generator.py --check</span>
+<span class="bad">❌ PROGRESS.md y progress.json están desincronizados (¿edición manual sin compilar?)</span>
+<span class="bad">❌ F1 está cerrada pero no existe TASK-F1.md — nunca ejecutar una fase sin su TASK</span>
+<span class="bad">❌ F1 está cerrada sin checkpoint de contexto en PROGRESS.md (Definition of Done)</span>
+<span class="bad">❌ Estado del harness inválido: 7 problema(s).</span>
+<span class="dim">exit 1  → el merge no pasa</span></pre>
+      </div>
+
+      <div class="ci-foot">
+        <span class="signal signal--go"><span class="lamp" aria-hidden="true"></span>49 tests · 0 dependencias</span>
+        <span class="signal signal--stop"><span class="lamp" aria-hidden="true"></span>Trampa detectada: merge bloqueado</span>
+        <span class="signal signal--warn"><span class="lamp" aria-hidden="true"></span>Sin CI: los mismos comandos funcionan en local</span>
+      </div>
+    </div>
+  </section>
+
+  <hr class="track" aria-hidden="true">
+
+  <!-- ============ MÉTODO: TRES MOTORES ============ -->
+  <section id="metodo" aria-labelledby="metodo-h2">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="kicker">Método</p>
+        <h2 id="metodo-h2">Tres motores, una vía.</h2>
+        <p class="lede">El kit obliga a pensar antes de construir, trocea la construcción en fases verificables y encierra cada fase en un ciclo cerrado con su informe. El agente nunca recibe «el proyecto entero»: recibe el tramo de vía que le toca.</p>
+      </div>
+
+      <div class="motors">
+        <article class="motor" data-reveal>
+          <span class="signal signal--go"><span class="lamp" aria-hidden="true"></span>Motor 1 · Proceso</span>
+          <h3>Fases M0–M3: pensar antes de construir</h3>
+          <p>Hasta que la especificación está aprobada por un humano, no se escribe una línea de código de producción.</p>
+          <div class="rail">
+            <p class="rail-title"><code>PROGRESS.md · fases de proceso</code></p>
+            <div class="stations" role="list" aria-label="Fases M0 a M3">
+              <div class="station is-done" role="listitem"><span class="dot" aria-hidden="true"></span><span class="id">M0</span><span class="lbl">Bootstrap + PRD</span></div>
+              <div class="station" role="listitem"><span class="dot" aria-hidden="true"></span><span class="id">M1</span><span class="lbl">Entrevista técnica</span></div>
+              <div class="station" role="listitem"><span class="dot" aria-hidden="true"></span><span class="id">M2</span><span class="lbl">SPEC.md aprobado</span></div>
+              <div class="station" role="listitem"><span class="dot" aria-hidden="true"></span><span class="id">M3</span><span class="lbl">Plan de fases</span></div>
+            </div>
+          </div>
+        </article>
+
+        <article class="motor" data-reveal>
+          <span class="signal signal--warn"><span class="lamp" aria-hidden="true"></span>Motor 2 · Ejecución</span>
+          <h3>Fases F0–Fn: construir fase a fase</h3>
+          <p>Las decide tu <span class="mono">SPEC.md</span>, no una plantilla. Cada fase se cierra con checkpoint y con su <span class="mono">TASK-Fx.md</span>; saltarse una bloquea las siguientes.</p>
+          <div class="rail">
+            <p class="rail-title"><code>PROGRESS.md · fases de ejecución (ejemplo)</code></p>
+            <div class="stations" role="list" aria-label="Fases F0 a F8 de ejemplo">
+              <div class="station" role="listitem"><span class="dot" aria-hidden="true"></span><span class="id">F0</span><span class="lbl">Repo + CI</span></div>
+              <div class="station" role="listitem"><span class="dot" aria-hidden="true"></span><span class="id">F1</span><span class="lbl">Datos</span></div>
+              <div class="station" role="listitem"><span class="dot" aria-hidden="true"></span><span class="id">F2</span><span class="lbl">Backend</span></div>
+              <div class="station" role="listitem"><span class="dot" aria-hidden="true"></span><span class="id">F3</span><span class="lbl">Frontend</span></div>
+              <div class="station" role="listitem"><span class="dot" aria-hidden="true"></span><span class="id">Fn</span><span class="lbl">QA · Deploy</span></div>
+            </div>
+          </div>
+        </article>
+
+        <article class="motor" data-reveal>
+          <span class="signal signal--go"><span class="lamp" aria-hidden="true"></span>Motor 3 · Ciclo de tarea</span>
+          <h3>El ciclo A–L: disciplina dentro de cada fase</h3>
+          <p>Auditar antes de tocar, declarar hipótesis antes de asumir, y entregar un informe verificable. Las fases J2 (seguridad) y H2 (visibilidad) se inyectan solo si la tarea las necesita, con el contenido vivo de tus checklists.</p>
+          <div class="cycle" aria-label="Fases del ciclo de tarea">
+            <span>A · Auditoría</span><span>B · Diseño</span><span>C · Hipótesis</span><span>E · Código</span><span>F · Edge cases</span><span>I · Tests</span><span class="is-hot">J2 · Seguridad</span><span class="is-hot">H2 · SEO/AEO/GEO</span><span>K · Validación</span><span>L · Informe</span>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <hr class="track" aria-hidden="true">
+
+  <!-- ============ REGLAS CON DIENTES ============ -->
+  <section id="dientes" aria-labelledby="dientes-h2">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="kicker">La diferencia</p>
+        <h2 id="dientes-h2">Otros toolkits predicen. Este impone.</h2>
+        <p class="lede">En las herramientas de la categoría, el checklist de seguridad lo marca el agente «bajo palabra». Aquí, desde la v2, cada regla clave es una comprobación que rompe el build. El informe del agente deja de ser la evidencia; pasa a ser decoración.</p>
+      </div>
+      <div class="tablewrap" data-reveal>
+        <table>
+          <caption class="kicker" style="clip:rect(0 0 0 0);position:absolute">Reglas de oro y su mecanismo de cumplimiento</caption>
+          <thead>
+            <tr><th scope="col">Regla de oro</th><th scope="col">Antes · convención</th><th scope="col">Ahora · mecanismo</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><strong>No cerrar fases con dependencias abiertas</strong></td><td class="before">El agente promete no hacerlo</td><td class="after"><span class="mono">progress.json</span> validado: cerrar F2 con F1 abierta rompe el build</td></tr>
+            <tr><td><strong>Nada de fases sin Definition of Done</strong></td><td class="before">Checklist marcado a mano</td><td class="after">Toda fase cerrada exige su checkpoint de contexto registrado</td></tr>
+            <tr><td><strong>Ninguna fase sin su TASK-Fx.md</strong></td><td class="before">Recomendación en el protocolo</td><td class="after">El validador comprueba el archivo por cada fase F cerrada</td></tr>
+            <tr><td><strong>Sin secretos en el repositorio</strong></td><td class="before">Revisión humana puntual</td><td class="after"><span class="mono">gitleaks</span> escanea todo el historial en cada push</td></tr>
+            <tr><td><strong>Dependencias sin CVEs conocidos</strong></td><td class="before">Confianza del agente</td><td class="after"><span class="mono">npm audit</span> / <span class="mono">pip-audit</span> como job de CI según stack</td></tr>
+            <tr><td><strong>Aprobaciones humanas rastreables</strong></td><td class="before">Una línea en un documento</td><td class="after">Sello <span class="mono">APPROVAL-ID</span>: lo citado debe existir, lo incompleto rompe</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <hr class="track" aria-hidden="true">
+
+  <!-- ============ CIFRAS ============ -->
+  <section aria-labelledby="cifras-h2">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="kicker">El kit, en cifras verificables</p>
+        <h2 id="cifras-h2">Peso ligero, control pesado.</h2>
+      </div>
+      <div class="metrics" data-reveal>
+        <div class="metric"><div class="n"><em>0</em></div><div class="l">Dependencias externas</div></div>
+        <div class="metric"><div class="n">49</div><div class="l">Tests del propio kit</div></div>
+        <div class="metric"><div class="n">8</div><div class="l">Reglas de oro</div></div>
+        <div class="metric"><div class="n">4</div><div class="l">Reglas con enforcement</div></div>
+        <div class="metric"><div class="n">100%</div><div class="l">Local · sin telemetría</div></div>
+        <div class="metric"><div class="n">v2.0.0</div><div class="l">Con CI generado</div></div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="track" aria-hidden="true">
+
+  <!-- ============ EL PAISAJE ============ -->
+  <section id="paisaje" aria-labelledby="paisaje-h2">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="kicker">Estudio de mercado · septiembre 2026</p>
+        <h2 id="paisaje-h2">No estás solo en esta vía. Pero esta estación, sí.</h2>
+        <p class="lede">El spec-driven development es la tendencia dominante del año, con actores de peso. Reconocerlos es lo honesto; leer la tabla entera es entender dónde está el hueco.</p>
+      </div>
+      <div class="tablewrap" data-reveal>
+        <table>
+          <thead>
+            <tr><th scope="col">Herramienta</th><th scope="col">Qué es</th><th scope="col">Su punto fuerte</th><th scope="col">Lo que no hace por ti</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><strong>GitHub Spec Kit</strong></td><td>Spec-driven development con slash-commands para Copilot, Claude Code y Gemini CLI</td><td>Sello GitHub, comunidad y extensibilidad</td><td>Enforcement de seguridad; gobernanza de Skills/MCP; español</td></tr>
+            <tr><td><strong>Amazon Kiro</strong></td><td>IDE agéntico: requisitos EARS → diseño → tareas con agentes paralelos</td><td>Producto pulido, hooks de calidad</td><td>Te ata a su IDE y su nube; proceso cerrado, no auditable</td></tr>
+            <tr><td><strong>BMAD Method</strong></td><td>Framework de «personas» agénticas (PM, arquitecto, dev, QA, UX)</td><td>Cobertura completa de roles ágiles</td><td>Mucha ceremonia; el checklist sigue confiando en el agente</td></tr>
+            <tr><td><strong>Task Master</strong></td><td>CLI que convierte un PRD en grafo de tareas con dependencias</td><td>Descomposición simple y popular</td><td>Solo trocea tareas: ni entrevista, ni seguridad, ni CI</td></tr>
+            <tr><td><strong>AGENTS.md</strong></td><td>Estándar abierto de contexto de proyecto (60k+ proyectos)</td><td>Portable entre 20+ herramientas</td><td>Es un convenio de formato, no un método ni un enforcement</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="lede" style="margin-top:1.4rem;font-size:.98rem">El hueco que queda libre y que este kit ocupa: <strong>proceso SDD + enforcement mecánico en CI + gobernanza de capacidades + español + cero dependencias, todo local y auditable en una tarde.</strong> Fuentes y detalle completo en el <a href="../ESTUDIO_MERCADO.md">estudio de mercado</a>.</p>
+    </div>
+  </section>
+
+  <hr class="track" aria-hidden="true">
+
+  <!-- ============ FAQ ============ -->
+  <section id="faq" aria-labelledby="faq-h2">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="kicker">Preguntas directas, respuestas directas</p>
+        <h2 id="faq-h2">Lo que preguntarías antes de instalar.</h2>
+      </div>
+      <div class="faq">
+        <details>
+          <summary>¿Qué es FIA Harness?<span class="sig" aria-hidden="true">01</span></summary>
+          <div class="answer"><strong>FIA Harness es un kit de archivos y scripts que convierte cualquier agente de IA en un proceso de ingeniería disciplinado.</strong> Especificación antes que código, seguridad por diseño y reglas de oro que el propio sistema impone mecánicamente en el CI. Funciona con Markdown y dos scripts de Python: nada más.</div>
+        </details>
+        <details>
+          <summary>¿Qué impide que el agente se salte las reglas?<span class="sig" aria-hidden="true">02</span></summary>
+          <div class="answer"><strong>El CI generado por el kit valida el estado en cada push.</strong> Una fase cerrada sin checkpoint o sin su tarea, una dependencia abierta, un secreto filtrado o una aprobación no registrada rompen el build y bloquean el merge. Sin GitHub, los mismos comandos validan en local.</div>
+        </details>
+        <details>
+          <summary>¿Necesito instalar dependencias o crear cuentas?<span class="sig" aria-hidden="true">03</span></summary>
+          <div class="answer"><strong>No.</strong> El kit es Python 3.8+ y Markdown: cero dependencias externas, cero cuentas, cero telemetría. Todo el estado es legible y auditable por una persona en una tarde.</div>
+        </details>
+        <details>
+          <summary>¿Funciona con mi agente de IA?<span class="sig" aria-hidden="true">04</span></summary>
+          <div class="answer"><strong>Sí: el kit es agnóstico del modelo y de la herramienta.</strong> Claude Code, Codex, Copilot, Gemini CLI, Cursor o cualquier agente capaz de leer archivos y ejecutar comandos puede operarlo; tú eliges el motor, el enclavamiento es el mismo.</div>
+        </details>
+        <details>
+          <summary>¿No es burocracia para un proyecto pequeño?<span class="sig" aria-hidden="true">05</span></summary>
+          <div class="answer"><strong>El kit tiene dos modos: Completo y Lite.</strong> El Modo Lite reduce documentación y ceremonia para prototipos, pero nunca reduce seguridad, aprobación humana ni validación. Y si aparece riesgo (pagos, auth, migraciones), la promoción al modo Completo es obligatoria y conserva el trabajo hecho.</div>
+        </details>
+        <details>
+          <summary>¿Cuánto cuesta?<span class="sig" aria-hidden="true">06</span></summary>
+          <div class="answer"><strong>Nada: es un kit propio, local, sin licencias de por medio.</strong> El coste real es la disciplina de proceso que exige; el beneficio, que los proyectos no se te derrumban en el mes tres.</div>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <hr class="track" aria-hidden="true">
+
+  <!-- ============ ARRANQUE ============ -->
+  <section id="arranque" aria-labelledby="arranque-h2">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="kicker">Próxima estación</p>
+        <h2 id="arranque-h2">Arranca en 4 pasos.</h2>
+      </div>
+      <div class="start-grid">
+        <ol class="steps">
+          <li><span class="n" aria-hidden="true">1</span><h3>Prepara el proyecto nuevo</h3><p>Las 8 plantillas del kit en <span class="mono">/docs</span>, los dos scripts en la raíz y tu documento de negocio como <span class="mono">PRD.md</span>.</p></li>
+          <li><span class="n" aria-hidden="true">2</span><h3>Bootstrap</h3><p>Un comando genera el estado, las señales y el CI de reglas de oro. Fase M0 en verde.</p></li>
+          <li><span class="n" aria-hidden="true">3</span><h3>El agente te entrevista</h3><p>Lee el contexto y pregunta antes de programar: stack, seguridad, visibilidad. Nada de código todavía.</p></li>
+          <li><span class="n" aria-hidden="true">4</span><h3>Aprueba y compila el estado</h3><p>Apruebas la especificación, pegas el plan de fases y cada tarea se genera con sus checklists vivos.</p></li>
+        </ol>
+        <div>
+          <div class="code" role="img" aria-label="Comandos de arranque del kit">
+<span class="cmt"># 1 · plantillas en /docs + PRD.md en la raíz</span>
+python bootstrap.py
+
+<span class="cmt"># 2 · tu agente lee CONTEXT.md y entrevista (M1)</span>
+
+<span class="cmt"># 3 · aprueba SPEC y compila el estado</span>
+python task_generator.py --sync
+
+<span class="cmt"># 4 · genera la tarea de la fase pendiente</span>
+python task_generator.py
+<span class="ok">🎉 TASK-F0.md generado con checklists vivos</span>
+          </div>
+          <p style="margin-top:1.2rem"><a class="btn btn--primary" href="#top">Volver arriba y empezar</a></p>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer id="top">
+  <div class="wrap">
+    <div class="foot-grid">
+      <div>
+        <p style="margin:0 0 .4rem;font-weight:700">FIA Harness</p>
+        <p style="margin:0;max-width:34ch;color:var(--color-content-muted)">El enclavamiento de los agentes de IA: especificación antes que código, reglas que se imponen mecánicamente.</p>
+      </div>
+      <nav aria-label="Documentación del kit">
+        <a href="../README.md">README del kit</a>
+        <a href="../INICIO_PROYECTO.md">Protocolo completo</a>
+        <a href="../ESTUDIO_MERCADO.md">Estudio de mercado</a>
+        <a href="DESIGN_DIRECTION.md">Design DNA (UI_UX)</a>
+        <a href="llms.txt">llms.txt — mapa para agentes</a>
+      </nav>
+    </div>
+    <div class="foot-note">
+      <span>Hecho con el propio FIA Harness v2.0.0</span>
+      <span>Sin cookies · Sin telemetría · Sin JS de terceros</span>
+      <span>Estudio de mercado: septiembre 2026</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* Motion system (DESIGN_DIRECTION §4): IntersectionObserver + clase is-live.
+   Fallback: sin JS o con prefers-reduced-motion, los estados finales son estáticos vía CSS. */
+(function () {
+  var reduced = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var targets = document.querySelectorAll("[data-reveal]");
+  var route = document.getElementById("route");
+  function show(el) { el.classList.add("is-live"); }
+  if (reduced || !("IntersectionObserver" in window)) {
+    targets.forEach ? targets.forEach(show) : Array.prototype.forEach.call(targets, show);
+    if (route) show(route);
+    return;
+  }
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (entry) {
+      if (entry.isIntersecting) { show(entry.target); io.unobserve(entry.target); }
+    });
+  }, { threshold: 0.25 });
+  Array.prototype.forEach.call(targets, function (el) { io.observe(el); });
+  if (route) io.observe(route);
+})();
+</script>
+</body>
+</html>

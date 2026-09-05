@@ -1,0 +1,111 @@
+================================================================================
+SÍNTESIS EJECUTIVA — LECTURA RÁPIDA (no es la fuente de verdad)
+La fuente de verdad operativa del protocolo es INICIO_PROYECTO.md y los documentos
+que referencia (SECURITY.md, SKILLS_MCP.md, UI_UX_EXCLUSIVA.md, AEO_GEO_SEO.md,
+QUICKSTART_LITE.md). Este resumen no se actualiza con cada cambio: si hay
+cualquier divergencia, prevalece INICIO_PROYECTO.md.
+Última sincronización con la fuente: 2026-09-05
+================================================================================
+
+Protocolo de Gestión y Visibilidad de Proyectos: Arquitectura de Control con IA
+
+Resumen Ejecutivo
+
+El presente documento sintetiza un protocolo técnico robusto diseñado para la ejecución de proyectos de desarrollo asistidos por IA, priorizando la estructura, la seguridad y la visibilidad estratégica. El núcleo del sistema reside en el concepto de "Harness de IA", una infraestructura que garantiza un entorno controlado mediante la gestión selectiva del contexto, bucles de retroalimentación automáticos y capas de seguridad obligatorias.
+
+Los pilares fundamentales de este protocolo son:
+
+1. Priorización de la Especificación sobre el Código: Prohibición estricta de escribir código de producción sin un PRD, una entrevista técnica y un plan de fases aprobado.
+2. Seguridad por Diseño: La seguridad (SECURITY.md) no es opcional ni se pospone; se integra desde el diseño de la base de datos (RLS) y se verifica en cada fase.
+3. Optimización Multidimensional de Visibilidad: Un enfoque tripartito que abarca SEO (buscadores), AEO (motores de respuesta) y GEO (motores generativos).
+4. Gobernanza de Capacidades: Control total sobre el uso de herramientas externas (Skills/MCP) mediante aprobación humana obligatoria y verificación de versiones en Context7.
+
+1. El Sistema de Harness y Gestión de Contexto
+
+El Harness de IA actúa como el entorno operativo del modelo de lenguaje, sustituyendo la improvisación por procesos repetibles y seguros. Se compone de cuatro dimensiones críticas:
+
+Componente	Función Principal	Implementación
+Gestión de Contexto	Evitar el desbordamiento de tokens y la pérdida de foco.	Uso de archivos de control (CONTEXT.md, SPEC.md, PROGRESS.md) que segmentan la información.
+Bucles de Retroalimentación	Garantizar la calidad técnica inmediata.	Fase K de cada tarea: ejecución de tests, typecheck, lint y build antes del cierre.
+Capa de Seguridad	Prevenir acciones destructivas y fugas de datos.	Fase J ("No hacer") y cumplimiento de SECURITY.md.
+Autogestión de Capacidades	Controlar el acceso a herramientas externas.	Protocolo SKILLS_MCP.md para búsqueda y activación de servidores MCP.
+
+Regla de Oro: Nunca se reenvía el historial completo del proyecto. Cada fase carga únicamente el contexto mínimo necesario para cumplir su objetivo específico.
+
+2. Estrategia de Visibilidad Avanzada (SEO, AEO, GEO)
+
+El protocolo define tres tipos de optimización para asegurar que el contenido sea accesible tanto para humanos como para diversos tipos de algoritmos:
+
+* SEO (Search Engine Optimization): Enfoque tradicional para posicionar en Google/Bing. Requiere HTML semántico, meta-etiquetas únicas y rendimiento técnico (Core Web Vitals).
+* AEO (Answer Engine Optimization): Optimización para ser la respuesta directa en asistentes de voz o featured snippets. Utiliza el formato "respuesta directa primero, desarrollo después" y marcado FAQPage.
+* GEO (Generative Engine Optimization): Optimización para ser citado por modelos como ChatGPT, Perplexity o Claude. Exige contenido citable, datos verificables y la inclusión del archivo llms.txt en la raíz del sitio.
+
+Checklist Transversal de Visibilidad
+
+* HTML semántico (H1 único, jerarquía h2/h3).
+* Datos estructurados (Schema.org) según el tipo de página.
+* URLs canónicas y sitemap.xml actualizado.
+* Imágenes con texto alternativo descriptivo.
+
+3. Seguridad Estructural y Gestión de Datos
+
+La seguridad es un componente obligatorio de cada proyecto. No se permite cerrar ninguna tarea que afecte a la infraestructura o los datos sin validar el checklist de SECURITY.md.
+
+Áreas Críticas de Control:
+
+1. Autorización (AuthZ): Implementación de RLS (Row Level Security) en todas las tablas con datos de usuario. Uso del principio de mínimo privilegio (la aplicación nunca usa el rol de superusuario).
+2. Autenticación (AuthN): Hashing robusto (bcrypt/argon2), gestión de sesiones con rotación de tokens y 2FA obligatorio para roles administrativos.
+3. Gestión de Secretos: Prohibición absoluta de credenciales hardcodeadas. Uso de variables de entorno y gestores de secretos de plataforma.
+4. Hardening de Servidor: Configuración de firewall, restricción de SSH por clave pública y deshabilitación del login de root.
+
+4. Gobernanza de Capacidades (Skills y MCP)
+
+El sistema impone un control estricto sobre las capacidades del agente para interactuar con el mundo exterior.
+
+* Aprobación Humana: Es un "gate" irrompible. No se puede buscar, instalar o activar ninguna herramienta (Skill o MCP) sin permiso explícito. El silencio no constituye autorización.
+* Context7: Fuente de verdad para verificar versiones estables de librerías, SDKs y APIs. Evita que el LLM utilice versiones obsoletas o inventadas basadas en su entrenamiento previo.
+* Mínimo Privilegio: Cada conector o Skill recibe acceso solo en modo lectura por defecto y para rutas/dominios limitados.
+
+5. Diseño UI/UX Exclusivo
+
+Para evitar interfaces genéricas o clonadas, el protocolo exige la creación de un Design DNA propio antes de cualquier implementación visual.
+
+* Metodología: Análisis de referencias para extraer principios, no para copiar layouts.
+* Componentes Clave: Definición de la tesis visual, metáfora central, gramática de layout y sistema de movimiento (motion system).
+* Auditoría Anti-Clon: Verificación obligatoria para asegurar que la interfaz no dependa de patrones genéricos identificables de terceros.
+* Accesibilidad y Rendimiento: Definición de contrastes, navegación por teclado y presupuesto de rendimiento (peso de assets) desde la fase de diseño.
+
+6. Operatividad: Ciclo de Tareas y Automatización
+
+El trabajo se divide en fases pequeñas y verificables ejecutadas mediante plantillas estructuradas (TASK_TEMPLATE.md).
+
+Estructura de una Tarea (TASK-Fx.md):
+
+* Fase A (Auditoría): Inspección del código existente antes de modificar nada.
+* Fase B/C (Diseño e Hipótesis): Declaración de decisiones técnicas antes de la implementación.
+* Fase E (Implementación): Cambio mínimo necesario.
+* Fase J (No hacer): Restricciones explícitas para evitar el "scope creep".
+* Fase K (Validación): Pipeline de tests y builds.
+
+Automatización con task_generator.py
+
+Para reducir la fricción documental, se utiliza un script que:
+
+1. Detecta la siguiente fase pendiente en PROGRESS.md.
+2. Analiza semánticamente el objetivo (si detecta "base de datos", inyecta el checklist de seguridad).
+3. Genera automáticamente el archivo TASK-Fx.md con los checklists pertinentes de SEO, Seguridad y UX.
+
+7. Escalabilidad: Modo Lite vs. Modo Completo
+
+El protocolo permite flexibilidad según el riesgo del proyecto mediante el QUICKSTART_LITE.md:
+
+* Modo Lite: Para prototipos o funcionalidades reversibles y de bajo riesgo. Reduce la documentación pero mantiene la seguridad y la aprobación humana.
+* Promoción Obligatoria: Si el proyecto Lite comienza a manejar pagos, datos sensibles (PII), autenticación compleja o cambios críticos en la base de datos, debe migrar inmediatamente al Modo Completo.
+
+8. Reglas de Oro del Protocolo
+
+1. Nunca codificar sin una especificación (SPEC.md) aprobada.
+2. La seguridad no se improvisa: se diseña en la Fase 1 y se verifica en cada tarea.
+3. Cero asunciones en silencio: toda duda se resuelve mediante preguntas al responsable.
+4. No se instalan dependencias ni Skills sin aprobación humana previa.
+5. El contenido determina la jerarquía: no se diseñan "cajas vacías" sin datos reales.

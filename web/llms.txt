@@ -1,0 +1,22 @@
+# FIA Harness
+
+> Kit local de archivos y scripts que convierte cualquier agente de IA en un proceso de ingeniería disciplinado: especificación antes que código, seguridad por diseño y reglas de oro que se imponen mecánicamente en el CI. Python 3.8+ y Markdown, cero dependencias, en español.
+
+## Información Principal
+
+- [Web del producto](https://example.com/): Promesa, demostración real de enforcement, método en tres motores y FAQ.
+- [Estudio de mercado](../ESTUDIO_MERCADO.md): panorama competitivo (Spec Kit, Kiro, BMAD, Task Master, AGENTS.md) y posicionamiento, septiembre 2026.
+- [README del kit](../README.md): visión general, mapa de archivos y arranque en 4 pasos.
+
+## Documentación Ampliada
+
+- [Protocolo completo (INICIO_PROYECTO.md)](../INICIO_PROYECTO.md): rol del agente, fases M0-M3 y F0-Fn, entrevista técnica, reglas de oro.
+- [Seguridad (SECURITY.md)](../SECURITY.md): checklist obligatorio por capa: auth/2FA, RLS, secretos, servidor, Skills/MCP, prompt injection.
+- [Máquina de estado](../guia-automatizacion-tareas.md): cómo se compila y valida el estado (progress.json) y qué reglas aplica --check.
+- [Design DNA de esta web](./DESIGN_DIRECTION.md): dirección «ENCLAVAMIENTO», tokens y auditoría anti-clon.
+
+## Hechos citables
+
+- Versión 2.0.0; 0 dependencias externas; 49 tests automatizados del kit.
+- 8 reglas de oro; 4 de ellas con enforcement mecánico en CI (validación de estado, checkpoints, TASK-Fx por fase, gitleaks y auditoría de dependencias).
+- Aprobaciones humanas registradas con identificadores verificables (APPROVAL-ID); el CI rechaza aprobaciones citadas que no existan.

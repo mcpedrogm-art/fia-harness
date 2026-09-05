@@ -1,0 +1,54 @@
+Paso a Paso para añadir tu PRD al Flujo
+
+0. Antes de empezar
+Este archivo es la guía rápida de arranque. La fuente de verdad del protocolo es INICIO_PROYECTO.md y, para dudas sobre archivos y flujo, README.md. Si este texto y aquellos divergen, mandan ellos.
+
+1. Ubicación y Nombre Estándar
+Guarda el documento que diseñaste con tu cliente en la raíz de la carpeta de tu nuevo proyecto. El sistema detecta automáticamente, en este orden:
+PRD.md / prd.md · MVP.md / mvp.md · brief.md / BRIEF.md · requisitos.md / REQUISITOS.md
+Si no existe ninguno, el bootstrap usa como pista el único .md de la raíz que no sea un archivo de control del harness: nunca tomará CONTEXT.md, PROGRESS.md, README.md, CHANGELOG.md, las plantillas del harness ni las tareas TASK-*.md como PRD.
+
+2. Colocación del kit en el proyecto nuevo
+Asegúrate de que la carpeta /docs de tu nuevo proyecto contiene las plantillas maestras del kit:
+INICIO_PROYECTO.md, SECURITY.md, AEO_GEO_SEO.md, UI_UX_EXCLUSIVA.md, SKILLS_MCP.md, TASK_TEMPLATE.md, TASK_LITE_TEMPLATE.md y QUICKSTART_LITE.md
+Copia TAMBIEN los dos scripts a la raíz del proyecto: bootstrap.py y task_generator.py (el segundo es necesario para compilar el estado y para el CI que se genera en el paso 3).
+Si tu proyecto será de búsqueda semántica / RAG (embeddings, documentos, memoria a largo plazo), copia también RAG_VECTOR_EXTENSION.md dentro de /docs: el bootstrap lo activará solo si el PRD lo menciona, y si falta te avisará expresamente.
+
+3. Ejecución de bootstrap.py (Fase M0)
+Ejecuta el script inicializador desde la raíz del proyecto:
+   python bootstrap.py      (Windows)
+   python3 bootstrap.py     (macOS / Linux)
+El script:
+- Crea la estructura de carpetas (src, tests, docs, infra).
+- Copia y activa las plantillas de /docs en la raíz, sin sobrescribir nada existente.
+- Extrae del PRD las secciones de negocio (problema, usuario objetivo, funcionalidades must-have, fuera de alcance) y las vuelca en CONTEXT.md. OJO: extrae el texto tal cual, no lo resume; si una sección del PRD es larga, llegará larga.
+- Marca en el propio CONTEXT.md (con "⚠️ Sin confirmar") y en consola los campos cuyo encabezado no haya encontrado en el PRD, para que los completes antes de aprobar la Fase 1.
+- Genera PROGRESS.md con las fases de proceso: M0 (bootstrap) cerrada y M1-M3 (entrevista, SPEC, plan de fases) pendientes. La tabla de fases de ejecución F0-Fn NO se adivina: se añade en la Fase M3, derivada de SPEC.md.
+- Genera progress.json: el estado compilado y validado que el CI verifica en cada push/PR.
+- Emite .github/workflows/harness.yml: convierte las Reglas de Oro en checks de merge (gitleaks, auditoría de dependencias segun stack, validacion del estado con task_generator.py --check).
+- Genera DECISIONS.md con el ADR-000 inicial y la sección de Aprobaciones (APPROVAL-ID).
+- Si el PRD menciona RAG/búsqueda semántica, activa RAG_VECTOR_EXTENSION.md.
+
+4. Arranque del Agente de IA (Fase M1)
+Abre tu agente de IA (ya sea en tu entorno local o en tu plataforma de desarrollo) y dale acceso a la carpeta del proyecto. El agente iniciará su trabajo leyendo directamente el archivo CONTEXT.md
+Al leer el prompt de arranque inyectado en CONTEXT.md, el agente entenderá de inmediato que no debe escribir código todavía
+. En su lugar, iniciará la Fase M1: Entrevista de Descubrimiento Técnico, haciéndote las preguntas necesarias para completar SECURITY.md y AEO_GEO_SEO.md
+
+5. Encapsulamiento del PRD para el Desarrollo Diario
+Una vez que completes la entrevista técnica y el agente genere la especificación técnica en SPEC.md y el plan de fases en PROGRESS.md
+:
+El PRD original ya no se envía al agente
+.
+En cada fase de desarrollo posterior, el agente solo cargará el CONTEXT.md (tu PRD resumido), la sección relevante de SPEC.md, el estado en PROGRESS.md y la tarea activa TASK-Fx.md
+. Esto mantiene el contexto limpio, barato y 100% enfocado en el código que se está escribiendo.
+
+6. Generación de tareas y control de estado
+Cuando la Fase M3 haya añadido la tabla de fases F0-Fn a PROGRESS.md, compila y valida el estado:
+   python task_generator.py --sync
+Genera la tarea de la fase activa:
+   python task_generator.py
+Comprueba el estado en cualquier momento (es el mismo comando que ejecuta el CI):
+   python task_generator.py --check
+Registra una aprobación humana sellada en DECISIONS.md (cítala luego en el informe de la TASK, Fase L punto 18):
+   python task_generator.py --approval "accion aprobada" --phase F2 --ref "chat/PR"
+El generador inyecta los checklists reales de tus documentos vivos y rechaza estados incoherentes: cerrar una fase sin su checkpoint, sin su TASK-Fx.md o con dependencias abiertas no compila. Detalles en guia-automatizacion-tareas.md; tests del kit: python -m unittest discover tests -v
