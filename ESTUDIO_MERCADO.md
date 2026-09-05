@@ -33,6 +33,21 @@
 4. **Español nativo:** toda la categoría relevante está en inglés; el mercado hispanohablante (LATAM + España, ~600M hablantes) está desatendido en este nicho.
 5. **Capas que nadie incluye:** visibilidad SEO/AEO/GEO como checklist por fase, dirección UI/UX anti-clon con Design DNA, y módulo RAG condicional.
 
+### 4.1 Matriz comparativa por capacidades (septiembre 2026)
+
+Leyenda: ✓ incluido de fábrica · ~ parcial o limitado a su propio producto · ✗ no forma parte de su propuesta de valor.
+
+| Capacidad | Spec Kit | Kiro | BMAD | Task Master | AGENTS.md | **FIA Harness** |
+|---|:---:|:---:|:---:|:---:|:---:|:---:|
+| Proceso SDD por fases (spec antes de código) | ✓ | ✓ | ✓ | ~ | ✗ | **✓** |
+| Enforcement en CI: violar una regla rompe el build | ✗ | ~ | ✗ | ✗ | ✗ | **✓** |
+| Estado del proyecto validado por máquina | ✗ | ~ | ✗ | ~ | ✗ | **✓** |
+| Gobernanza de Skills/MCP con aprobaciones verificables | ✗ | ~ | ✗ | ✗ | ✗ | **✓** |
+| Local, cero dependencias, auditable | ~ | ✗ | ~ | ~ | ✓ | **✓** |
+| Español nativo (docs, plantillas y mensajes) | ✗ | ✗ | ✗ | ✗ | ✗ | **✓** |
+
+Notas de honestidad: Kiro "~ enforcement" son sus hooks de calidad, que viven en su IDE y validan código, no el estado del proceso ni las aprobaciones de capacidades; Task Master "~ estado" es el grafo de tareas interno, sin reglas de cierre ni dependencias de proceso; BMAD "~ local" instala por npm con dependencias.
+
 ## 5. Debilidades honestas frente a la competencia
 
 - **Sin comunidad ni distribución:** Spec Kit tiene a GitHub detrás; Task Master, miles de estrellas. FIA Harness hoy es un proyecto personal sin repo público.
@@ -47,6 +62,12 @@
 - **No competir** con Spec Kit en comunidad ni con Kiro en producto pulido: competir en **rigor ejecutable + soberanía (local) + español**.
 - Segmento diana: desarrolladores individuales y estudios pequeños hispanohablantes que ya usan agentes y les ha estallado algún proyecto sin especificación.
 - Canal natural: GitHub público + contenido en español sobre spec-driven development (long-tail AEO: "qué es spec-driven development", "cómo evitar que la IA rompa producción").
+
+**El hueco no es accidental; se sostiene en tres razones estructurales:**
+
+1. **Compiten en producto, no en gobernanza.** La carrera de los grandes es por IDE, integraciones y comunidad. El control de capacidades del agente (qué Skills o MCP puede buscar, instalar y conectar, con qué permisos y con qué rastro) no es su prioridad de hoja de ruta.
+2. **El enforcement exige mentalidad de plataforma, no de plantilla.** Spec Kit y BMAD nacen como documentos y comandos: generan el trabajo pero no lo verifican. Un check de CI que valida una máquina de estados de proyecto es infraestructura, y nadie de la categoría la ha empaquetado.
+3. **El español y la soberanía local no son sus mercados.** Inglés-first y nube-first: atienden a equipos globales sobre su plataforma. El segmento hispanohablante individual y de estudio pequeño, que quiere auditarlo todo sin cuentas ni telemetría, queda fuera de su radar.
 
 ## 7. Conclusión
 

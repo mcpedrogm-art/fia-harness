@@ -224,7 +224,15 @@ td .after::before{content:"● ";color:var(--color-signal-green);font-weight:700
 .metric .n em{font-style:normal;color:var(--color-signal-green)}
 .metric .l{font-family:var(--type-label);font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:var(--color-content-muted);margin-top:.35rem}
 
-/* ---------- FAQ ---------- */
+.legend{font-family:var(--type-label);font-size:.75rem;color:var(--color-content-muted);margin-top:.7rem}
+.mark-yes{color:var(--color-signal-green);font-weight:700;font-family:var(--type-label)}
+.mark-mid{color:#A87405;font-weight:700;font-family:var(--type-label)}
+.mark-no{color:var(--color-content-muted);font-weight:700;font-family:var(--type-label)}
+.fia-col{background:rgba(31,157,87,.09)}
+.why{margin-top:2.4rem;background:var(--color-surface-raised);border:1px solid var(--color-line);border-radius:var(--radius-surface);padding:clamp(1.3rem,3vw,2rem);box-shadow:var(--shadow-ambient)}
+.why h3{margin:0 0 .9rem;font-size:1.2rem}
+.why ol{margin:0;padding-left:1.3rem;display:grid;gap:.85rem;color:var(--color-content-muted)}
+.why li strong{color:var(--color-content-primary)}
 .faq{display:grid;gap:.7rem;max-width:52rem}
 details{background:var(--color-surface-raised);border:1px solid var(--color-line);border-radius:var(--radius-control);padding:0}
 summary{cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center;gap:1rem;padding:1.05rem 1.2rem;font-weight:700}
@@ -285,7 +293,7 @@ footer{border-top:3px double var(--color-line-strong);padding-block:2.6rem 3rem;
     <div class="wrap">
       <p class="kicker">Kit de ingeniería con agentes de IA · 0 dependencias · Español</p>
       <h1 id="hero-h1">El sistema operativo para construir software con agentes de IA.</h1>
-      <p class="lede">Especificación antes que código. Seguridad por diseño. Y desde la v2, las reglas de oro no son consejos: son checks de merge que ningún agente puede saltarse.</p>
+      <p class="lede">Especificación antes que código. Seguridad por diseño. Y reglas de oro que no son consejos: son checks de merge que ningún agente puede saltarse.</p>
       <div class="hero-ctas">
         <a class="btn btn--primary" href="#arranque">Arranca en 4 pasos</a>
         <a class="btn btn--ghost" href="#dientes">Ver las reglas con dientes</a>
@@ -312,7 +320,7 @@ footer{border-top:3px double var(--color-line-strong);padding-block:2.6rem 3rem;
     <div class="wrap">
       <p class="kicker">Prueba real · capturada del kit, no maquillada</p>
       <h2 id="tunnel-h2">Un contrato social no detiene a nadie.<br>Un enclavamiento sí.</h2>
-      <p class="lede">Esto es la salida real de <span class="mono">task_generator.py --check</span> durante la construcción de la v2: primero el estado verde del CI; luego un agente intenta cerrar la fase F1 sin su tarea ni su checkpoint. Observa quién gana.</p>
+      <p class="lede">Esto es la salida real de <span class="mono">task_generator.py --check</span>, capturada durante la construcción del propio kit: primero el estado verde del CI; luego un agente intenta cerrar la fase F1 sin su tarea ni su checkpoint. Observa quién gana.</p>
 
       <div class="ci-log" role="img" aria-label="Registro de CI: el chequeo en verde y un intento de cerrar la fase F1 sin evidencia, bloqueado con siete errores">
 <pre><span class="cmd">$ python task_generator.py --check</span>
@@ -398,7 +406,7 @@ footer{border-top:3px double var(--color-line-strong);padding-block:2.6rem 3rem;
       <div class="section-head">
         <p class="kicker">La diferencia</p>
         <h2 id="dientes-h2">Otros toolkits predicen. Este impone.</h2>
-        <p class="lede">En las herramientas de la categoría, el checklist de seguridad lo marca el agente «bajo palabra». Aquí, desde la v2, cada regla clave es una comprobación que rompe el build. El informe del agente deja de ser la evidencia; pasa a ser decoración.</p>
+        <p class="lede">En las herramientas de la categoría, el checklist de seguridad lo marca el agente «bajo palabra». Aquí cada regla clave es una comprobación que rompe el build: el informe del agente deja de ser la evidencia; pasa a ser decoración.</p>
       </div>
       <div class="tablewrap" data-reveal>
         <table>
@@ -463,7 +471,37 @@ footer{border-top:3px double var(--color-line-strong);padding-block:2.6rem 3rem;
           </tbody>
         </table>
       </div>
-      <p class="lede" style="margin-top:1.4rem;font-size:.98rem">El hueco que queda libre y que este kit ocupa: <strong>proceso SDD + enforcement mecánico en CI + gobernanza de capacidades + español + cero dependencias, todo local y auditable en una tarde.</strong> Fuentes y detalle completo en el <a href="../ESTUDIO_MERCADO.md">estudio de mercado</a>.</p>
+      <div class="section-head" style="margin-top:2.8rem;margin-bottom:1.2rem">
+        <p class="kicker">Comparativa por capacidades</p>
+        <h3 style="font-size:1.3rem;margin:.3rem 0 0;letter-spacing:-.01em">Lo que cada herramienta hace — y deja de hacer — por ti.</h3>
+      </div>
+      <div class="tablewrap" data-reveal>
+        <table>
+          <thead>
+            <tr><th scope="col">Capacidad</th><th scope="col">Spec Kit</th><th scope="col">Kiro</th><th scope="col">BMAD</th><th scope="col">Task Master</th><th scope="col">AGENTS.md</th><th scope="col" class="fia-col">FIA Harness</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><strong>Proceso SDD por fases</strong><br><span style="font-size:.85rem;color:var(--color-content-muted)">especificación antes de código</span></td><td class="mark-yes">✓</td><td class="mark-yes">✓</td><td class="mark-yes">✓</td><td class="mark-mid">~</td><td class="mark-no">✗</td><td class="mark-yes fia-col">✓</td></tr>
+            <tr><td><strong>Enforcement en CI</strong><br><span style="font-size:.85rem;color:var(--color-content-muted)">violar una regla rompe el build</span></td><td class="mark-no">✗</td><td class="mark-mid">~</td><td class="mark-no">✗</td><td class="mark-no">✗</td><td class="mark-no">✗</td><td class="mark-yes fia-col">✓</td></tr>
+            <tr><td><strong>Estado validado por máquina</strong><br><span style="font-size:.85rem;color:var(--color-content-muted)">fases, dependencias y evidencia</span></td><td class="mark-no">✗</td><td class="mark-mid">~</td><td class="mark-no">✗</td><td class="mark-mid">~</td><td class="mark-no">✗</td><td class="mark-yes fia-col">✓</td></tr>
+            <tr><td><strong>Gobernanza de Skills/MCP</strong><br><span style="font-size:.85rem;color:var(--color-content-muted)">aprobaciones humanas verificables</span></td><td class="mark-no">✗</td><td class="mark-mid">~</td><td class="mark-no">✗</td><td class="mark-no">✗</td><td class="mark-no">✗</td><td class="mark-yes fia-col">✓</td></tr>
+            <tr><td><strong>Local, cero dependencias</strong><br><span style="font-size:.85rem;color:var(--color-content-muted)">auditable sin cuentas ni nube</span></td><td class="mark-mid">~</td><td class="mark-no">✗</td><td class="mark-mid">~</td><td class="mark-mid">~</td><td class="mark-yes">✓</td><td class="mark-yes fia-col">✓</td></tr>
+            <tr><td><strong>Español nativo</strong><br><span style="font-size:.85rem;color:var(--color-content-muted)">docs, plantillas y mensajes</span></td><td class="mark-no">✗</td><td class="mark-no">✗</td><td class="mark-no">✗</td><td class="mark-no">✗</td><td class="mark-no">✗</td><td class="mark-yes fia-col">✓</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="legend">✓ incluido de fábrica · ~ parcial o limitado a su propio producto · ✗ no forma parte de su propuesta de valor</p>
+
+      <div class="why" data-reveal>
+        <h3>¿Por qué sigue existiendo ese hueco?</h3>
+        <ol>
+          <li><strong>Compiten en producto, no en gobernanza.</strong> La carrera de los grandes es por IDE, integraciones y comunidad. El control de capacidades del agente — qué Skills o MCP puede buscar, instalar y conectar, con qué permisos y con qué rastro — no es su prioridad de hoja de ruta; en este kit es un pilar desde el primer documento.</li>
+          <li><strong>El enforcement exige mentalidad de plataforma, no de plantilla.</strong> Spec Kit y BMAD nacen como documentos y comandos: muy buenos para generar el trabajo, nada para verificarlo. Un check de CI que valida una máquina de estados de proyecto es infraestructura, y nadie de la categoría la ha empaquetado.</li>
+          <li><strong>El español y la soberanía local no son sus mercados.</strong> Inglés-first y nube-first: los rivales atienden a equipos globales sobre su plataforma. El segmento hispanohablante individual y de estudio pequeño, que quiere auditarlo todo sin cuentas ni telemetría, se queda fuera de su radar.</li>
+        </ol>
+      </div>
+
+      <p class="lede" style="margin-top:1.6rem;font-size:.98rem">Por eso el hueco que este kit ocupa es concreto y defendible: <strong>proceso SDD + enforcement mecánico en CI + gobernanza de capacidades + español + cero dependencias, local y auditable en una tarde.</strong> Fuentes y detalle completo en el <a href="../ESTUDIO_MERCADO.md">estudio de mercado</a>.</p>
     </div>
   </section>
 
