@@ -384,3 +384,11 @@ honestas incluidas.
 detectados y corregidos (bloque de código sin `white-space: pre`; errata
 "Otras/Otros toolkits"). Sin imágenes externas ni JS de terceros; fuentes con
 fallback de sistema.
+
+## 23. Retirada de la web del kit (2026-09-06)
+
+Por decisión del responsable, la carpeta `web/` (landing del producto,
+`DESIGN_DIRECTION.md` y `llms.txt`) sale del proyecto: no forma parte del
+kit funcional. Las entradas 21-22 de este changelog se conservan como
+registro histórico de lo que se construyó y cómo se verificó. Las
+referencias a `web/` restantes en este archivo son solo históricas.
