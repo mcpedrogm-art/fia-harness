@@ -15,3 +15,19 @@ jobs:
           python-version: "3.11"
       - name: Ejecutar suite
         run: python -m unittest discover tests -v
+
+  dogfood:
+    name: Autoaplicación (el kit se gobierna a sí mismo)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: fia-harness init en proyecto temporal
+        run: python -m fia_harness.cli init -d _dogfood
+      - name: Bootstrap + estado validado (--check)
+        working-directory: _dogfood
+        run: |
+          python bootstrap.py
+          python task_generator.py --check

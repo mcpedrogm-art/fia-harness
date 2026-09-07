@@ -417,3 +417,14 @@ investigación vive ahora fuera del repo (web y planificación).
 **Verificación:** wheel construido e instalado en un venv limpio;
 `fia-harness init` ejecutado sobre carpeta temporal; `bootstrap.py` +
 `task_generator.py --check` en verde sobre el proyecto generado.
+
+## 26. Dogfooding en CI y README bilingüe (2026-09-07)
+
+- Nuevo job `dogfood` en `.github/workflows/tests.yml`: en cada push, el CI
+  ejecuta `fia-harness init` sobre un proyecto temporal, lo arranca con
+  `bootstrap.py` y valida su estado con `task_generator.py --check`. El kit se
+  gobierna a sí mismo, mecánicamente, no de palabra.
+- `README.md` pasa a **inglés** (principal, cara pública de PyPI y GitHub) con
+  badges (CI, PyPI, Python, licencia), sección de demo y dogfooding; la versión
+  española se conserva como `README.es.md` y enlaza de vuelta.
+- `pyproject.toml` sigue apuntando a `README.md` como descripción de PyPI.
