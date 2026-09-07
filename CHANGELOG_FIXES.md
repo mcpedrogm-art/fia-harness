@@ -392,3 +392,10 @@ Por decisión del responsable, la carpeta `web/` (landing del producto,
 kit funcional. Las entradas 21-22 de este changelog se conservan como
 registro histórico de lo que se construyó y cómo se verificó. Las
 referencias a `web/` restantes en este archivo son solo históricas.
+
+## 24. Retirada del estudio de mercado del kit (2026-09-06)
+
+Por decisión del responsable, `ESTUDIO_MERCADO.md` (barrido de competidores
+y posicionamiento) sale del repositorio: es material de negocio/web, no parte
+del kit funcional. Se conserva la entrada 21 como registro histórico; la
+investigación vive ahora fuera del repo (web y planificación).
