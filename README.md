@@ -83,6 +83,8 @@ Las fases H2 (Visibilidad) y J2 (Seguridad) **se inyectan automáticamente solo 
 
 ## 🚀 Arranque en 4 pasos
 
+> ⚡ **O en un solo comando (PyPI):** `uvx fia-harness init` (o `pipx run fia-harness init`) monta el proyecto nuevo automáticamente — plantillas en `/docs`, scripts en la raíz y `PRD.md` de partida. Salta al paso 2.
+
 ```text
 1. Prepara el proyecto nuevo
    ├── bootstrap.py + task_generator.py en la raíz
@@ -113,6 +115,7 @@ Las fases H2 (Visibilidad) y J2 (Seguridad) **se inyectan automáticamente solo 
 | 🧭 `INICIO_PROYECTO.md` | **Fuente de verdad del protocolo**: rol del agente, fases, entrevista técnica, reglas de oro |
 | ⚙️ `bootstrap.py` | Inicializador (M0): lee el PRD, genera `CONTEXT.md`/`PROGRESS.md`/`progress.json`/`DECISIONS.md`, activa plantillas y RAG si procede, y emite el CI de reglas de oro |
 | 🤖 `task_generator.py` | Genera cada `TASK-Fx.md`, compila/valida el estado (`--sync`, `--check`) y registra aprobaciones (`--approval`) |
+| 📦 `fia_harness/` + `pyproject.toml` | Paquete PyPI: `fia-harness init` (CLI instalador). Las copias de scripts/plantillas del paquete están vigiladas por tests de sincronización |
 | 🗃️ `progress.json` | Estado compilado y validado del proyecto: la máquina de verdad que lee el CI |
 | 📋 `TASK_TEMPLATE.md` | Plantilla maestra de tarea (ciclo completo A–L, 20 puntos de informe) |
 | ⚡ `TASK_LITE_TEMPLATE.md` | Plantilla de tarea rápida para el Modo Lite |

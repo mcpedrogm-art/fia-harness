@@ -43,7 +43,7 @@ accepted — a smaller, sharper kit is the goal.
 
 ## Pull request checklist
 
-- [ ] Tests pass locally (49 tests, `python -m unittest discover tests -v`).
+- [ ] Tests pass locally (56 tests, `python -m unittest discover tests -v`).
 - [ ] New behavior has a test. No test, no merge.
 - [ ] No unrelated changes mixed in the same PR.
 - [ ] Commit messages follow the repo style (Spanish, imperative, concise).

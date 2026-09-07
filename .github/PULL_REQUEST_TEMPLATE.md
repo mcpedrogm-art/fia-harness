@@ -7,7 +7,7 @@
      and, if behavior changed, a before/after snippet. -->
 
 ## Scope
-- [ ] Tests pass locally (49 tests).
+- [ ] Tests pass locally (56 tests).
 - [ ] New behavior has a test. No test, no merge.
 - [ ] No unrelated changes mixed in.
 - [ ] No secrets, no debug leftovers, no new dependency (unless discussed).

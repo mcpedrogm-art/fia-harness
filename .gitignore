@@ -4,6 +4,11 @@ __pycache__/
 .venv/
 venv/
 
+# Empaquetado PyPI
+dist/
+build/
+*.egg-info/
+
 # Entornos locales (el kit jamás debe llevar secretos al repo)
 .env
 .env.*

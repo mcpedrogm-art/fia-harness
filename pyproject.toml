@@ -1,0 +1,46 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "fia-harness"
+version = "2.0.0"
+description = "FIA Harness: spec-driven development kit for AI agents with machine-validated state and CI enforcement. Stdlib-only, no cloud, no telemetry."
+readme = "README.md"
+requires-python = ">=3.8"
+license = "MIT"
+authors = [
+  { name = "PGMIA (Pedro D. García Miranda)" },
+]
+keywords = [
+  "spec-driven-development",
+  "ai-agents",
+  "sdd",
+  "harness",
+  "governance",
+  "enforcement",
+  "local-first",
+]
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "Operating System :: OS Independent",
+  "Topic :: Software Development",
+]
+
+[project.urls]
+Homepage = "https://github.com/mcpedrogm-art/fia-harness"
+Repository = "https://github.com/mcpedrogm-art/fia-harness"
+Demo = "https://github.com/mcpedrogm-art/fia-harness-demo"
+
+[project.scripts]
+fia-harness = "fia_harness.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["fia_harness*"]
+
+[tool.setuptools.package-data]
+fia_harness = [
+  "data/scripts/*.py",
+  "data/templates/*.md",
+  "data/rag/*.md",
+]

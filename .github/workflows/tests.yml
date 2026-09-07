@@ -6,7 +6,7 @@ on:
 
 jobs:
   unittest:
-    name: Suite del harness (32+ tests)
+    name: Suite del harness (56 tests)
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4

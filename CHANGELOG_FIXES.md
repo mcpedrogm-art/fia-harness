@@ -399,3 +399,21 @@ Por decisión del responsable, `ESTUDIO_MERCADO.md` (barrido de competidores
 y posicionamiento) sale del repositorio: es material de negocio/web, no parte
 del kit funcional. Se conserva la entrada 21 como registro histórico; la
 investigación vive ahora fuera del repo (web y planificación).
+
+## 25. Empaquetado PyPI: `fia-harness init` (2026-09-07)
+
+- `pyproject.toml` (PEP 621/639): paquete `fia-harness`, stdlib-only,
+  Python 3.8+, licencia MIT, sin dependencias.
+- Paquete `fia_harness/` con CLI `fia-harness init`: monta un proyecto nuevo
+  (plantillas en `/docs`, los dos scripts en la raíz y `PRD.md` de partida)
+  sin clonar el kit. Idempotente: nunca sobrescribe lo que ya existe.
+- Las copias internas del paquete (scripts y plantillas) están vigiladas por
+  tests de sincronización: el CI rompe si divergen de la raíz del repo.
+- Fix real de Windows: `bootstrap.py`, `task_generator.py` y el CLI reconfiguren
+  stdout/stderr a UTF-8 en consolas `cp1252` (los emojis ✅/🚀/❌ reventaban con
+  `UnicodeEncodeError` en Windows sin `PYTHONIOENCODING`). Cubierto con test.
+- Suite: de 49 a 56 tests (sincronización del paquete + init e2e + consola cp1252).
+
+**Verificación:** wheel construido e instalado en un venv limpio;
+`fia-harness init` ejecutado sobre carpeta temporal; `bootstrap.py` +
+`task_generator.py --check` en verde sobre el proyecto generado.
