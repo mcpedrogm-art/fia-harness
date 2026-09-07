@@ -1,5 +1,11 @@
 # SECURITY.md — Especificación y checklist de seguridad del proyecto
 
+> **Uso:** este documento es una **plantilla que el kit entrega a cada
+> proyecto**: se copia al arrancar y se rellena con las decisiones de
+> seguridad de ESE proyecto. Si buscas la política de seguridad del
+> repositorio de FIA Harness (cómo reportar una vulnerabilidad del propio
+> kit), esa vive en `.github/SECURITY.md`.
+
 **Estado: OBLIGATORIO en todo proyecto**, a diferencia de `AEO_GEO_SEO.md` (que solo aplica si hay superficie pública). Todo proyecto tiene datos, usuarios o infraestructura que proteger. Este documento se completa en la Fase 1.6 de `INICIO_PROYECTO.md`, se resume en `SPEC.md`, y cada `TASK-XXX.md` que toque datos, autenticación o infraestructura debe pasar su checklist correspondiente (Fase J2 de `TASK_TEMPLATE.md`) antes de cerrarse.
 
 **Principio rector:** la seguridad no se improvisa "cuando dé tiempo". Se decide en la entrevista técnica, se diseña en `SPEC.md`, y se verifica en cada fase que la toque — no se pospone a un audit final.
