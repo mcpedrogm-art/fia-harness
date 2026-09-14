@@ -32,9 +32,10 @@ con `DECISIONS.md` del propio sistema.
 
 5. **Infraestructura de release y CI.** `.github/workflows/release.yml` publica en
    PyPI al etiquetar `v*` mediante Trusted Publishing (OIDC, sin secretos) tras
-   correr la suite. `tests.yml` pasa a una **matriz multiplataforma**
-   (ubuntu/windows/macos × Python 3.10/3.11/3.12) para detectar regresiones de
-   codificación y rutas en cada SO.
+   correr la suite, y **crea el GitHub Release** con las notas extraídas de este
+   changelog (evita que tag, PyPI y Release se desincronicen). `tests.yml` pasa a
+   una **matriz multiplataforma** (ubuntu/windows/macos × Python 3.10/3.11/3.12)
+   para detectar regresiones de codificación y rutas en cada SO.
 
 6. **`--stats` y `MODELOS.md` (C4).** `task_generator.py --stats` resume el estado
    del proyecto (fases, checkpoints, aprobaciones, sellos, snapshots) desde

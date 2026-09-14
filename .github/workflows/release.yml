@@ -1,9 +1,10 @@
 name: Release
 
-# Publica en PyPI al empujar una etiqueta de versión (v*.*.*).
-# La versión se lee de pyproject.toml: la etiqueta debe coincidir (p. ej. v2.2.0
-# con version = "2.2.0"). Usa Trusted Publishing (OIDC): no hace falta ningún
-# token ni secreto en el repo. Requiere configurar el publisher en PyPI una vez.
+# Publica en PyPI al empujar una etiqueta de versión (v*.*.*) y crea el GitHub
+# Release correspondiente. La versión se lee de pyproject.toml: la etiqueta debe
+# coincidir (p. ej. v2.2.0 con version = "2.2.0"). Usa Trusted Publishing (OIDC):
+# no hace falta ningún token ni secreto en el repo. Requiere configurar el
+# publisher en PyPI una vez.
 
 on:
   push:
@@ -15,10 +16,11 @@ permissions:
 
 jobs:
   release:
-    name: Tests, build y publicación en PyPI
+    name: Tests, build, PyPI y GitHub Release
     runs-on: ubuntu-latest
     permissions:
-      id-token: write  # Trusted Publishing (OIDC)
+      id-token: write   # Trusted Publishing (OIDC)
+      contents: write   # crear el GitHub Release
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -32,3 +34,17 @@ jobs:
           python -m build
       - name: Publicar en PyPI
         uses: pypa/gh-action-pypi-publish@release/v1
+      - name: Crear GitHub Release (notas desde CHANGELOG_FIXES.md)
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          version="${GITHUB_REF_NAME#v}"
+          awk -v h="## v${version}" 'index($0,h)==1{s=1} s && $0=="---"{exit} s{print}' \
+            CHANGELOG_FIXES.md > /tmp/notes.md
+          if [ ! -s /tmp/notes.md ]; then
+            echo "Ver CHANGELOG_FIXES.md para el detalle de ${GITHUB_REF_NAME}." > /tmp/notes.md
+          fi
+          gh release create "$GITHUB_REF_NAME" \
+            --title "FIA Harness $GITHUB_REF_NAME" \
+            --notes-file /tmp/notes.md \
+            --verify-tag
