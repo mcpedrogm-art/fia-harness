@@ -5,6 +5,41 @@ con `DECISIONS.md` del propio sistema.
 
 ---
 
+## v2.1.0 — Cierres de interlock (fail-closed, sellos, snapshot y evidencia)
+
+Cuatro cierres para que el enforcement no dependa de la buena fe del agente, más
+gobernanza nativa del agente (`AGENTS.md`) y paridad de README. Cada cierre va con
+sus tests en `tests/test_harness.py`.
+
+1. **`--check` fail-closed sin `progress.json`** (`cmd_check`). Antes, borrar el
+   artefacto dejaba el CI verde (solo un aviso por stderr). Ahora falla con exit 1;
+   validar solo el MD exige el flag explícito `--state-optional`.
+   *Tests:* `MissingStateFileTests`.
+
+2. **Sellado de documentos normativos** (`sealed_docs` + `--seal`). `bootstrap.py`
+   sella `INICIO_PROYECTO.md`/`SECURITY.md`/`TASK_TEMPLATE.md` (SHA-256) en M0;
+   `--check` detecta si se editaron o des-sellaron en silencio. `state_fingerprint`
+   excluye `sealed_docs` y lo valida aparte. *Tests:* `SealDocsTests`.
+
+3. **Snapshot criptográfico de `SPEC.md`** (`spec_hashes`). `--approval` congela el
+   hash de `SPEC.md` al aprobar M2 o ampliar alcance; `--check` falla si la spec
+   cambió sin nueva aprobación. Lista append-only `[{sha256, ref, date, phase}]`.
+   *Tests:* `SpecSnapshotTests`. (La autoría git queda como opción futura.)
+
+4. **Evidencia cruda en el checkpoint**. Una fase F no puede cerrarse con prosa
+   sola: su checkpoint debe incluir un bloque de código con la salida de validación
+   o `Evidencia: <archivo>`. El parser de checkpoints captura el bloque cercado.
+   *Tests:* `EvidenceCheckpointTests`.
+
+5. **`AGENTS.md`** (nuevo): gobernanza nativa del agente (arranque, entrevista 3×3,
+   guardarraíl de aprobación, enmienda de PRD), con `INICIO_PROYECTO.md` como fuente
+   de verdad. Se empaqueta e `init` lo copia a `docs/`.
+
+6. **Paridad de README** (`ReadmeParityTests`): mismo número de secciones H2 en
+   `README.md` y `README.es.md` (se añadieron las secciones que faltaban en ES).
+
+---
+
 ## 1. `task_generator.py` no leía la tabla real de `PROGRESS.md`
 
 **Síntoma:** `extract_phase_info()` comparaba `parts[0] == phase` (p. ej. `"F1"`),

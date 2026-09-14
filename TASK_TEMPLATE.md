@@ -312,6 +312,20 @@ Indicar si se ha consolidado el estado, dónde queda el histórico archivado y q
 
 No inventes resultados de pruebas que no puedas ejecutar realmente.
 
+> 🔒 **Evidencia cruda obligatoria (v2.1):** al cerrar la fase, el checkpoint de
+> `PROGRESS.md` debe incluir la **salida cruda** de los comandos de validación
+> dentro de un bloque de código, o una línea `Evidencia: <archivo>` que apunte a un
+> archivo no vacío. `task_generator.py --check` rechaza una fase F cerrada sin esa
+> evidencia. Ejemplo:
+>
+> ```
+> - **F1:** Backend core validado.
+>     ```
+>     $ pytest -q
+>     12 passed in 2.11s
+>     ```
+> ```
+
 ---
 
 # REGLA FINAL

@@ -16,3 +16,6 @@ build/
 # Sistema operativo
 Thumbs.db
 .DS_Store
+
+# Documento de trabajo local (no forma parte del producto)
+PLAN_V2.1_ENFORCEMENT.md

@@ -16,6 +16,36 @@
 
 ---
 
+## ⚡ Instalación en un comando
+
+```bash
+uvx fia-harness init        # o: pipx run fia-harness init
+```
+
+Monta un proyecto nuevo al instante: las plantillas del kit en `/docs`, los dos
+scripts en la raíz y un `PRD.md` de partida. Luego `python bootstrap.py` y estás
+sobre raíles. ¿Prefieres clonar? Este repo es una **plantilla de GitHub** — pulsa
+*Use this template*.
+
+---
+
+## 🎬 Mira cómo el interlock atrapa al agente (60 segundos)
+
+Las reglas aquí no son consejo — son **checks de merge** que ningún agente puede
+saltarse. No nos creas: el repo
+**[`fia-harness-demo`](https://github.com/mcpedrogm-art/fia-harness-demo)** es un
+proyecto pequeño y real cuyo CI bloquea a un agente tramposo que intenta cerrar una
+fase sin su archivo de tarea o checkpoint:
+
+```bash
+git clone https://github.com/mcpedrogm-art/fia-harness-demo.git && cd fia-harness-demo
+python task_generator.py --check     # ✅ verde
+copy PROGRESS.F2_tampered.md PROGRESS.md
+python task_generator.py --check     # ❌ exit 1 — el merge queda bloqueado
+```
+
+---
+
 ## 🗺️ El sistema en un vistazo
 
 ```mermaid
@@ -204,6 +234,18 @@ python task_generator.py --approval "instalar Skill X v1.2" --phase F2 --ref "ch
 
 ---
 
+## 🐕 Dogfooding
+
+Este repositorio se gobierna con el kit que distribuye:
+
+- El badge de arriba es el CI de este propio repo: **56 tests** más un job de
+  **auto-aplicación** que ejecuta `fia-harness init` → `bootstrap.py` → `--check`
+  sobre un proyecto temporal nuevo en cada push.
+- El repo [`fia-harness-demo`](https://github.com/mcpedrogm-art/fia-harness-demo)
+  se genera con el kit y su CI de reglas de oro atrapa al agente tramposo en vivo.
+
+---
+
 ## ✅ Verificar el kit
 
 ```bash
@@ -231,3 +273,10 @@ python task_generator.py --check
 | `PROTOCOLO DE GESTION....txt` | Síntesis ejecutiva (lectura rápida, no se actualiza con cada cambio) |
 | `Guia_arranque_del_proyecto.pdf` | Snapshot estático de la guía para lectura cómoda |
 | `CHANGELOG_FIXES.md` | Qué se corrigió, por qué y cómo se verificó |
+
+---
+
+## 📄 Licencia
+
+MIT — ver [LICENSE](LICENSE). El kit es tuyo: local, auditable, sin nube, sin
+telemetría, sin cuentas.

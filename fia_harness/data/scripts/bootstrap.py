@@ -21,7 +21,7 @@ import sys
 import shutil
 from pathlib import Path
 
-HARNESS_VERSION = "2.0.0"
+HARNESS_VERSION = "2.1.0"
 
 # Configuración de archivos de control obligatorios del Harness
 REQUIRED_TEMPLATES = {
@@ -32,7 +32,8 @@ REQUIRED_TEMPLATES = {
     "SKILLS_MCP.md": "SKILLS_MCP.md",
     "TASK_TEMPLATE.md": "TASK_TEMPLATE.md",
     "TASK_LITE_TEMPLATE.md": "TASK_LITE_TEMPLATE.md",
-    "QUICKSTART_LITE.md": "QUICKSTART_LITE.md"
+    "QUICKSTART_LITE.md": "QUICKSTART_LITE.md",
+    "AGENTS.md": "AGENTS.md"
 }
 
 # Carpetas del proyecto estándar
@@ -355,7 +356,12 @@ def generate_state_file(root_dir: Path, progress_path: Path):
 
     state = tg.compile_state_from_md(progress_path.read_text(encoding="utf-8"),
                                      updated=datetime.date.today().isoformat())
-    errors = tg.validate_state(state, root_dir)
+    # Sellar los documentos normativos (SHA-256) desde M0: el CI los verifica en
+    # cada --check para que el agente no pueda relajar sus propias reglas en silencio.
+    state["sealed_docs"] = tg.compute_doc_hashes(root_dir, tg.REQUIRED_SEALED)
+    errors = (tg.validate_state(state, root_dir)
+              + tg.validate_sealed_docs(state, root_dir)
+              + tg.validate_spec_snapshot(state, root_dir))
     if errors:
         for error in errors:
             print(f"   [⚠️] {error}", file=sys.stderr)

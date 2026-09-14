@@ -262,7 +262,7 @@ Ninguna fase se ejecuta como instrucción libre. Antes de empezar F0, F1, F2... 
 6. Si la fase crea o modifica UI/UX, aplica `UI_UX_EXCLUSIVA.md`, consigue aprobación del Design DNA y registra la decisión antes de implementar.
 7. Si el proyecto es pequeño y de bajo riesgo, puede usar `QUICKSTART_LITE.md` y `TASK_LITE_TEMPLATE.md`; si aparece cualquier criterio de promoción, debe pasar al flujo completo.
 8. Ejecuta la fase siguiendo exactamente las fases A-L de `TASK_TEMPLATE.md`, o el flujo cerrado de `TASK_LITE_TEMPLATE.md` cuando el Modo Lite esté aprobado.
-9. El informe final de la TASK (Fase L) es lo que se resume en `PROGRESS.md` como checkpoint de contexto — no el razonamiento intermedio.
+9. El informe final de la TASK (Fase L) es lo que se resume en `PROGRESS.md` como checkpoint de contexto — no el razonamiento intermedio. El checkpoint de una fase F cerrada debe incluir la **evidencia cruda** de validación (bloque de código con la salida de tests/build, o `Evidencia: <archivo>`): `task_generator.py --check` lo exige.
 
 > 📌 Regla: **una fase del plan = una `TASK-XXX.md` = un ciclo completo de auditoría → implementación → validación → informe.**
 

@@ -26,6 +26,7 @@ ROOT = Path(__file__).resolve().parent.parent
 TEMPLATE_FILES = [
     "INICIO_PROYECTO.md", "SECURITY.md", "AEO_GEO_SEO.md", "UI_UX_EXCLUSIVA.md",
     "SKILLS_MCP.md", "TASK_TEMPLATE.md", "TASK_LITE_TEMPLATE.md", "QUICKSTART_LITE.md",
+    "AGENTS.md",
 ]
 
 
@@ -295,7 +296,8 @@ class StateCompileTests(unittest.TestCase):
         self.assertEqual([p["id"] for p in state["execution_phases"]], ["F0", "F1", "F2"])
         self.assertEqual(state["execution_phases"][1]["status"], "pending")
         self.assertEqual(state["checkpoints"],
-                         [{"phase": "M0", "summary": "Arranque completado."}])
+                         [{"phase": "M0", "summary": "Arranque completado.",
+                           "evidence": "", "evidence_file": None}])
 
     def test_texto_libre_en_dependencias_no_se_valida_como_fase(self):
         tabla = ("| Fase | Objetivo | Entregable | Depende de | Estado |\n"
@@ -541,7 +543,11 @@ class EndToEndTests(unittest.TestCase):
             "- **M1:** Entrevista completada; SECURITY.md y AEO_GEO_SEO.md rellenados.\n"
             "- **M2:** SPEC.md redactado y aprobado por el humano.\n"
             "- **M3:** Plan de fases F0-F3 derivado de SPEC.md.\n"
-            "- **F0:** Repo inicial funcionando y CI básico en verde.\n")
+            "- **F0:** Repo inicial funcionando y CI básico en verde.\n"
+            "    ```\n"
+            "    $ python -m unittest discover tests -v\n"
+            "    OK\n"
+            "    ```\n")
         (self.dir / "PROGRESS.md").write_text(progreso, encoding="utf-8")
 
         result = self._run("task_generator.py")
@@ -570,6 +576,133 @@ class EndToEndTests(unittest.TestCase):
         result = self._run("task_generator.py", "--phase", "F99")
         self.assertEqual(result.returncode, 1)
         self.assertIn("no aparece", result.stderr)
+
+
+class MissingStateFileTests(unittest.TestCase):
+    def setUp(self):
+        tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(tmp.cleanup)
+        self.dir = Path(tmp.name)
+        _write(self.dir / "PROGRESS.md", VALID_STATE_MD)
+
+    def test_check_falla_sin_state_file(self):
+        with self.assertRaises(SystemExit) as ctx:
+            task_generator.cmd_check(self.dir)
+        self.assertEqual(ctx.exception.code, 1)
+
+    def test_check_state_optional_valida_solo_md(self):
+        out = io.StringIO()
+        with contextlib.redirect_stdout(out):
+            task_generator.cmd_check(self.dir, state_optional=True)
+        self.assertIn("válido", out.getvalue())
+
+
+class SealDocsTests(unittest.TestCase):
+    def setUp(self):
+        tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(tmp.cleanup)
+        self.dir = Path(tmp.name)
+        _write(self.dir / "PROGRESS.md", VALID_STATE_MD)
+        for name in task_generator.REQUIRED_SEALED:
+            _write(self.dir / name, f"# {name}\ncontenido v1\n")
+
+    def test_seal_y_check_ok(self):
+        task_generator.cmd_seal(self.dir, [])
+        self.assertTrue((self.dir / "progress.json").exists())
+        out = io.StringIO()
+        with contextlib.redirect_stdout(out):
+            task_generator.cmd_check(self.dir)
+        self.assertIn("válido", out.getvalue())
+
+    def test_doc_alterado_tras_sello_falla(self):
+        task_generator.cmd_seal(self.dir, [])
+        _write(self.dir / "SECURITY.md", "# SECURITY.md\ncontenido alterado\n")
+        with self.assertRaises(SystemExit) as ctx:
+            task_generator.cmd_check(self.dir)
+        self.assertEqual(ctx.exception.code, 1)
+
+    def test_seal_requerido_ausente_falla(self):
+        task_generator.cmd_seal(self.dir, [])
+        state = json.loads((self.dir / "progress.json").read_text(encoding="utf-8"))
+        del state["sealed_docs"]["SECURITY.md"]
+        (self.dir / "progress.json").write_text(
+            json.dumps(state, ensure_ascii=False), encoding="utf-8")
+        with self.assertRaises(SystemExit) as ctx:
+            task_generator.cmd_check(self.dir)
+        self.assertEqual(ctx.exception.code, 1)
+
+
+class SpecSnapshotTests(unittest.TestCase):
+    def setUp(self):
+        tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(tmp.cleanup)
+        self.dir = Path(tmp.name)
+        _write(self.dir / "PROGRESS.md", VALID_STATE_MD)
+        _write(self.dir / "DECISIONS.md", "# DECISIONS.md\n\n## Aprobaciones\n")
+        _write(self.dir / "SPEC.md", "# SPEC\nversion 1\n")
+
+    def test_approval_congela_hash_spec(self):
+        task_generator.cmd_approval(self.dir, "aprobar spec", "M2", "chat 1", "Humano")
+        state = json.loads((self.dir / "progress.json").read_text(encoding="utf-8"))
+        self.assertEqual(len(state["spec_hashes"]), 1)
+        self.assertEqual(state["spec_hashes"][0]["sha256"],
+                         task_generator.sha256_hex((self.dir / "SPEC.md").read_bytes()))
+
+    def test_check_spec_alterado_sin_aprobacion_falla(self):
+        task_generator.cmd_approval(self.dir, "aprobar spec", "M2", "chat 1", "Humano")
+        _write(self.dir / "SPEC.md", "# SPEC\nversion 2 alterada\n")
+        with self.assertRaises(SystemExit) as ctx:
+            task_generator.cmd_check(self.dir)
+        self.assertEqual(ctx.exception.code, 1)
+
+    def test_reaprobacion_spec_actualiza_hash_y_pasa_check(self):
+        task_generator.cmd_approval(self.dir, "aprobar spec", "M2", "chat 1", "Humano")
+        _write(self.dir / "SPEC.md", "# SPEC\nversion 2 ampliada\n")
+        task_generator.cmd_approval(self.dir, "ampliar alcance", "M2", "chat 2", "Humano")
+        out = io.StringIO()
+        with contextlib.redirect_stdout(out):
+            task_generator.cmd_check(self.dir)
+        self.assertIn("válido", out.getvalue())
+
+
+class EvidenceCheckpointTests(unittest.TestCase):
+    def setUp(self):
+        tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(tmp.cleanup)
+        self.dir = Path(tmp.name)
+
+    def _md_f0_done(self, extra=""):
+        md = VALID_STATE_MD.replace(
+            "| F0 | Bootstrap del repo | Repo funcionando | SPEC aprobado | [ ] Pendiente |",
+            "| F0 | Bootstrap del repo | Repo funcionando | SPEC aprobado | [x] Listo |")
+        return md.replace(
+            "## Checkpoints de Contexto Recientes\n- **M0:** Arranque completado.\n",
+            "## Checkpoints de Contexto Recientes\n- **M0:** Arranque completado.\n"
+            "- **F0:** Repo funcionando.\n" + extra)
+
+    def test_checkpoint_sin_evidencia_cruda_falla(self):
+        md = self._md_f0_done()
+        _write(self.dir / "PROGRESS.md", md)
+        _write(self.dir / "TASK-F0.md", "# TASK-F0\nInforme.\n")
+        errors = task_generator.validate_state(
+            task_generator.compile_state_from_md(md), self.dir)
+        self.assertTrue(any("evidencia" in e for e in errors), errors)
+
+    def test_checkpoint_con_evidencia_cruda_pasa(self):
+        md = self._md_f0_done("    ```\n    $ pytest -q\n    12 passed\n    ```\n")
+        _write(self.dir / "PROGRESS.md", md)
+        _write(self.dir / "TASK-F0.md", "# TASK-F0\nInforme.\n")
+        errors = task_generator.validate_state(
+            task_generator.compile_state_from_md(md), self.dir)
+        self.assertFalse(any("evidencia" in e for e in errors), errors)
+
+
+class ReadmeParityTests(unittest.TestCase):
+    def test_mismo_numero_de_secciones_h2(self):
+        en = (ROOT / "README.md").read_text(encoding="utf-8")
+        es = (ROOT / "README.es.md").read_text(encoding="utf-8")
+        h2 = re.compile(r"^##\s+", re.MULTILINE)
+        self.assertEqual(len(h2.findall(en)), len(h2.findall(es)))
 
 
 if __name__ == "__main__":

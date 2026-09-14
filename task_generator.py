@@ -40,6 +40,7 @@ DECISIONS.md). Nuevos comandos:
 """
 
 import datetime
+import hashlib
 import json
 import re
 import sys
@@ -50,6 +51,12 @@ STATE_FILE = "progress.json"
 SCHEMA_NAME = "harness-state/1"
 STATUS_VALUES = ("pending", "in_progress", "blocked", "done")
 STATUS_SYMBOLS = {"x": "done", "X": "done", "~": "in_progress", "!": "blocked"}
+# Documentos normativos que el CI exige sellados (SHA-256 en progress.json).
+# Si el agente los edita para relajar sus propias reglas, --check lo detecta.
+REQUIRED_SEALED = ["INICIO_PROYECTO.md", "SECURITY.md", "TASK_TEMPLATE.md"]
+# Campos del estado que NO derivan de PROGRESS.md (se conservan entre --sync y
+# se excluyen del fingerprint de deriva): se validan aparte.
+_VOLATILE_KEYS = ("updated", "sealed_docs", "spec_hashes", "approvers")
 PHASE_ID_RE = re.compile(r"^[MF]\d+$")
 APPROVAL_REF_RE = re.compile(r"APPROVAL-(\d+)")
 APPROVAL_ENTRY_RE = re.compile(r"\*\*APPROVAL-(\d+)\*\*")
@@ -301,19 +308,50 @@ def _split_dependencies(raw: str):
 
 def _extract_checkpoints(md_text: str):
     """Extrae los checkpoints de contexto (- **F1 (...):** resumen) de las secciones
-    de checkpoints de PROGRESS.md. Son la evidencia del Definition of Done."""
+    de checkpoints de PROGRESS.md. Son la evidencia del Definition of Done.
+
+    Cada checkpoint puede llevar, debajo, un bloque de código cercado (``` ... ```)
+    con la salida cruda de validación (tests/build/lint) o una línea
+    `Evidencia: <archivo>` que apunte a un archivo de evidencia. Ambos se capturan
+    en los campos `evidence` y `evidence_file` respectivamente."""
     checkpoints, in_section = [], False
-    for line in md_text.split("\n"):
+    lines = md_text.split("\n")
+    i, current = 0, None
+    while i < len(lines):
+        line = lines[i]
         header = re.match(r"^(#+)\s+(.*)", line)
         if header:
             in_section = "checkpoint" in header.group(2).lower()
+            current = None
+            i += 1
             continue
         if not in_section:
+            i += 1
             continue
         match = CHECKPOINT_LINE_RE.match(line)
         if match:
-            checkpoints.append({"phase": match.group(1).upper(),
-                                "summary": match.group(2).strip()})
+            current = {"phase": match.group(1).upper(),
+                       "summary": match.group(2).strip(),
+                       "evidence": "", "evidence_file": None}
+            checkpoints.append(current)
+            i += 1
+            continue
+        if current is not None:
+            if re.match(r"^\s*```", line):
+                buf = []
+                i += 1
+                while i < len(lines) and not re.match(r"^\s*```", lines[i]):
+                    buf.append(lines[i].strip())
+                    i += 1
+                i += 1  # consume la valla de cierre
+                current["evidence"] = "\n".join(buf).strip()
+                continue
+            ev = re.match(r"^\s*Evidencia\s*:\s*(.+)$", line)
+            if ev:
+                current["evidence_file"] = ev.group(1).strip()
+            i += 1
+            continue
+        i += 1
     return checkpoints
 
 
@@ -347,9 +385,94 @@ def compile_state_from_md(md_text: str, updated: str = None) -> dict:
 
 
 def state_fingerprint(state: dict) -> str:
-    """Huella canónica del estado, ignorando metadatos volátiles ('updated')."""
-    relevant = {k: v for k, v in state.items() if k != "updated"}
+    """Huella canónica del estado, ignorando campos no derivables del Markdown
+    ('updated', 'sealed_docs', 'spec_hashes', 'approvers')."""
+    relevant = {k: v for k, v in state.items() if k not in _VOLATILE_KEYS}
     return json.dumps(relevant, sort_keys=True, ensure_ascii=False)
+
+
+def sha256_hex(data: bytes) -> str:
+    return hashlib.sha256(data).hexdigest()
+
+
+def compute_doc_hashes(project_dir: Path, names) -> dict:
+    """Devuelve {nombre: sha256} de los documentos existentes del proyecto."""
+    hashes = {}
+    for name in names:
+        path = project_dir / name
+        if path.exists():
+            hashes[name] = sha256_hex(path.read_bytes())
+    return hashes
+
+
+def validate_sealed_docs(state: dict, project_dir: Path):
+    """Los documentos normativos sellados no pueden haber cambiado sin un nuevo
+    --seal. Si el documento no está presente en el proyecto, no aplica (proyectos
+    no bootstrapeados o docs retirados). Si está y no está sellado → violación."""
+    errors = []
+    sealed = state.get("sealed_docs", {})
+    for name in REQUIRED_SEALED:
+        path = project_dir / name
+        if not path.exists():
+            continue
+        if name not in sealed:
+            errors.append(f"Documento normativo '{name}' no sellado "
+                          f"(ejecuta: python task_generator.py --seal)")
+            continue
+        if sha256_hex(path.read_bytes()) != sealed[name]:
+            errors.append(f"'{name}' cambió desde el sellado: revisa el cambio "
+                          f"y vuelve a sellarlo (--seal)")
+    return errors
+
+
+def validate_spec_snapshot(state: dict, project_dir: Path):
+    """Si existe SPEC.md y ya fue aprobada (spec_hashes no vacío), su hash actual
+    debe coincidir con el último snapshot aprobado. Antes de la primera aprobación
+    no hay nada que comparar."""
+    spec_path = project_dir / "SPEC.md"
+    if not spec_path.exists():
+        return []
+    hashes = state.get("spec_hashes", [])
+    if not hashes:
+        return []
+    current = sha256_hex(spec_path.read_bytes())
+    latest = hashes[-1].get("sha256")
+    if latest and current != latest:
+        return [f"SPEC.md cambió sin nueva aprobación: el último snapshot aprobado "
+                f"no coincide. Re-aprueba con --approval (o revisa el cambio)."]
+    return []
+
+
+def _load_state_json(project_dir: Path):
+    state_path = project_dir / STATE_FILE
+    if not state_path.exists():
+        return None
+    try:
+        return json.loads(state_path.read_text(encoding="utf-8"))
+    except json.JSONDecodeError:
+        return None
+
+
+def _write_state(project_dir: Path, state: dict):
+    (project_dir / STATE_FILE).write_text(
+        json.dumps(state, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+
+
+def _carry_over_aux_fields(state: dict, previous) -> dict:
+    """Preserva los campos no derivables del MD (sellos, snapshots, aprobadores)
+    al recompilar, para que --sync no los pierda."""
+    if not previous:
+        return state
+    for key in ("sealed_docs", "spec_hashes", "approvers"):
+        if key in previous:
+            state[key] = previous[key]
+    return state
+
+
+def _collect_validation_errors(state: dict, project_dir: Path):
+    return (validate_state(state, project_dir)
+            + validate_sealed_docs(state, project_dir)
+            + validate_spec_snapshot(state, project_dir))
 
 
 def validate_state(state: dict, project_dir: Path):
@@ -387,6 +510,29 @@ def validate_state(state: dict, project_dir: Path):
         if phase.get("status") == "done" and phase_id not in checkpoint_ids:
             errors.append(f"{phase_id} está cerrada sin checkpoint de contexto en PROGRESS.md "
                           f"(Definition of Done; añade '- **{phase_id}:** resumen' en la sección de checkpoints)")
+
+    # Evidencia cruda: una fase de ejecución (F) no puede cerrarse con prosa sola.
+    # Exige un bloque ``` con la salida de validación o 'Evidencia: <archivo>'.
+    checkpoints_by_phase = {c.get("phase"): c for c in state.get("checkpoints", [])}
+    for phase_id, phase in phases.items():
+        if phase.get("status") != "done" or not phase_id.startswith("F"):
+            continue
+        cp = checkpoints_by_phase.get(phase_id)
+        if cp is None:
+            continue
+        evidence = (cp.get("evidence") or "").strip()
+        if evidence:
+            continue
+        evidence_file = cp.get("evidence_file")
+        if evidence_file:
+            ev_path = project_dir / evidence_file
+            if ev_path.exists() and ev_path.stat().st_size > 0:
+                continue
+            errors.append(f"{phase_id}: la evidencia '{evidence_file}' no existe o está vacía")
+        else:
+            errors.append(f"{phase_id} está cerrada sin evidencia cruda de validación: "
+                          f"pega un bloque ``` con la salida de tests/build en su checkpoint "
+                          f"o añade 'Evidencia: <archivo>'")
 
     # Regla de oro nº7: ninguna fase de ejecución se cierra sin su TASK-Fx.md
     for phase_id, phase in phases.items():
@@ -427,25 +573,28 @@ def _print_errors_and_fail(errors, mensaje):
 
 def cmd_sync(project_dir: Path):
     """--sync: compila PROGRESS.md -> progress.json tras validar. Si el estado es
-    inválido, no escribe nada (fail-closed)."""
+    inválido, no escribe nada (fail-closed). Conserva sellos/snapshots previos."""
+    _fix_windows_console_encoding()
     md_text = load_file(project_dir / DEFAULT_FILES["progress"])
     state = compile_state_from_md(md_text, updated=datetime.date.today().isoformat())
-    errors = validate_state(state, project_dir)
+    state = _carry_over_aux_fields(state, _load_state_json(project_dir))
+    errors = _collect_validation_errors(state, project_dir)
     if errors:
         _print_errors_and_fail(
             errors,
             "Estado inválido: corrige PROGRESS.md/DECISIONS.md y vuelve a ejecutar --sync. "
             f"{STATE_FILE} NO se ha escrito.")
-    state_path = project_dir / STATE_FILE
-    state_path.write_text(json.dumps(state, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-    print(f"✅ Estado compilado y validado: {state_path}")
+    _write_state(project_dir, state)
+    print(f"✅ Estado compilado y validado: {project_dir / STATE_FILE}")
     print(f"   {len(state['process_phases'])} fases de proceso · "
           f"{len(state['execution_phases'])} de ejecución · {len(state['checkpoints'])} checkpoints")
 
 
-def cmd_check(project_dir: Path):
+def cmd_check(project_dir: Path, state_optional: bool = False):
     """--check: valida el estado sin modificar nada. Es el comando que ejecuta el CI
-    generado por bootstrap.py (.github/workflows/harness.yml)."""
+    generado por bootstrap.py (.github/workflows/harness.yml). Si falta progress.json,
+    falla salvo con --state-optional (el escape hatch explícito)."""
+    _fix_windows_console_encoding()
     md_text = load_file(project_dir / DEFAULT_FILES["progress"])
     compiled = compile_state_from_md(md_text)
     state_path = project_dir / STATE_FILE
@@ -458,11 +607,13 @@ def cmd_check(project_dir: Path):
             fail(f"PROGRESS.md y {STATE_FILE} están desincronizados (¿edición manual sin compilar?). "
                  "Ejecuta: python task_generator.py --sync")
         state = stored
-    else:
+    elif state_optional:
         state = compiled
-        warn(f"{STATE_FILE} no existe; validando solo sobre PROGRESS.md. "
-             "Ejecuta --sync para generar el artefacto que verifica el CI.")
-    errors = validate_state(state, project_dir)
+        warn(f"{STATE_FILE} no existe; validando solo sobre PROGRESS.md (--state-optional).")
+    else:
+        fail(f"{STATE_FILE} no existe. Ejecuta: python task_generator.py --sync "
+             "(o usa --state-optional para validar solo sobre PROGRESS.md).")
+    errors = _collect_validation_errors(state, project_dir)
     if errors:
         _print_errors_and_fail(errors, f"Estado del harness inválido: {len(errors)} problema(s).")
     print(f"✅ Estado del harness válido: {len(state.get('process_phases', []))} fases de proceso, "
@@ -470,8 +621,32 @@ def cmd_check(project_dir: Path):
           f"{len(state.get('checkpoints', []))} checkpoints, aprobaciones íntegras.")
 
 
+def cmd_seal(project_dir: Path, extra_names):
+    """--seal: sella documentos normativos (SHA-256) en progress.json. Sin argumentos
+    sella el set obligatorio (REQUIRED_SEALED); los nombres extra se añaden."""
+    _fix_windows_console_encoding()
+    md_text = load_file(project_dir / DEFAULT_FILES["progress"])
+    state = compile_state_from_md(md_text, updated=datetime.date.today().isoformat())
+    state = _carry_over_aux_fields(state, _load_state_json(project_dir))
+    targets = list(dict.fromkeys(REQUIRED_SEALED + list(extra_names or [])))
+    sealed = dict(state.get("sealed_docs", {}))
+    for name in targets:
+        path = project_dir / name
+        if not path.exists():
+            fail(f"No se puede sellar '{name}': no existe en el proyecto.")
+        sealed[name] = sha256_hex(path.read_bytes())
+    state["sealed_docs"] = sealed
+    errors = _collect_validation_errors(state, project_dir)
+    if errors:
+        _print_errors_and_fail(errors, "Estado inválido tras sellar; revisa y reintenta.")
+    _write_state(project_dir, state)
+    print(f"✅ Documentos sellados: {', '.join(sealed.keys())}")
+
+
 def cmd_approval(project_dir: Path, action: str, phase: str, ref: str, approved_by: str):
-    """--approval: registra una aprobación humana con sello rastreable en DECISIONS.md."""
+    """--approval: registra una aprobación humana con sello rastreable en DECISIONS.md
+    y, si existe SPEC.md, congela su hash SHA-256 en progress.json['spec_hashes']."""
+    _fix_windows_console_encoding()
     decisions_path = project_dir / "DECISIONS.md"
     if not decisions_path.exists():
         fail("DECISIONS.md no existe en este proyecto; ejecuta bootstrap.py primero.")
@@ -499,6 +674,23 @@ def cmd_approval(project_dir: Path, action: str, phase: str, ref: str, approved_
     decisions_path.write_text("\n".join(lines).rstrip("\n") + "\n", encoding="utf-8")
     print(f"✅ Aprobación registrada en DECISIONS.md: APPROVAL-{new_id:03d} ({today})")
     print("   Cita este ID en el informe de la TASK (Fase L, punto 18); --check verifica que exista.")
+
+    spec_path = project_dir / "SPEC.md"
+    if spec_path.exists():
+        entry = {"sha256": sha256_hex(spec_path.read_bytes()), "ref": ref,
+                 "date": today, "phase": phase or ""}
+        state = _load_state_json(project_dir)
+        if state is None and (project_dir / DEFAULT_FILES["progress"]).exists():
+            state = compile_state_from_md(
+                (project_dir / DEFAULT_FILES["progress"]).read_text(encoding="utf-8"),
+                updated=today)
+        if state is not None:
+            state.setdefault("spec_hashes", []).append(entry)
+            _write_state(project_dir, state)
+            print(f"   🔒 Snapshot de SPEC.md congelado en progress.json ({entry['sha256'][:12]}…)")
+        else:
+            warn("SPEC.md existe pero no se pudo registrar snapshot (falta PROGRESS.md). "
+                 "Ejecuta --sync.")
 
 
 def analyze_phase_requirements(row: dict) -> dict:
@@ -673,7 +865,9 @@ def main():
     parser.add_argument("--lite", "-l", action="store_true", help="Forzar la plantilla Modo Lite.")
     parser.add_argument("--dir", "-d", type=str, default=".", help="Directorio raíz del proyecto.")
     parser.add_argument("--sync", action="store_true", help="Compila y valida PROGRESS.md en progress.json (artefacto que verifica el CI).")
-    parser.add_argument("--check", action="store_true", help="Valida el estado (progreso, TASKs, aprobaciones) sin modificar nada. Es lo que ejecuta el CI.")
+    parser.add_argument("--check", action="store_true", help="Valida el estado (progreso, TASKs, aprobaciones, sellos, snapshot de SPEC) sin modificar nada. Es lo que ejecuta el CI.")
+    parser.add_argument("--state-optional", action="store_true", help="Permite --check sin progress.json (valida solo sobre PROGRESS.md).")
+    parser.add_argument("--seal", nargs="*", metavar="DOC", help="Sella documentos normativos (SHA-256) en progress.json. Sin argumentos, sella el set obligatorio.")
     parser.add_argument("--approval", type=str, metavar="ACCION", help="Registra una aprobación humana con sello APPROVAL-NNN en DECISIONS.md.")
     parser.add_argument("--ref", type=str, default="", help="Referencia de la aprobación (chat, PR, reunión) para --approval.")
     parser.add_argument("--approved-by", type=str, default="Humano", help="Quién otorga la aprobación (para --approval).")
@@ -687,8 +881,11 @@ def main():
     if args.sync:
         cmd_sync(project_dir)
         return
+    if args.seal is not None:
+        cmd_seal(project_dir, args.seal)
+        return
     if args.check:
-        cmd_check(project_dir)
+        cmd_check(project_dir, state_optional=args.state_optional)
         return
 
     progress_content = load_file(project_dir / DEFAULT_FILES["progress"])
@@ -713,15 +910,15 @@ def main():
             fail(f"{STATE_FILE} no es JSON válido ({exc}). Ejecuta: python task_generator.py --sync")
         compiled = compile_state_from_md(progress_content)
         if state_fingerprint(stored) != state_fingerprint(compiled):
-            errors = validate_state(compiled, project_dir)
+            updated_state = _carry_over_aux_fields(compiled, stored)
+            updated_state["updated"] = datetime.date.today().isoformat()
+            errors = _collect_validation_errors(updated_state, project_dir)
             if errors:
                 _print_errors_and_fail(
                     errors,
                     "PROGRESS.md cambió respecto a progress.json y el nuevo estado es inválido. "
                     "Corrige PROGRESS.md y ejecuta --sync.")
-            updated_state = {**compiled, "updated": datetime.date.today().isoformat()}
-            state_path.write_text(json.dumps(updated_state, ensure_ascii=False, indent=2) + "\n",
-                                  encoding="utf-8")
+            _write_state(project_dir, updated_state)
             warn("PROGRESS.md había cambiado respecto a progress.json: estado recompilado y validado.")
 
     phase = args.phase

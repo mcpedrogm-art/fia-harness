@@ -6,4 +6,4 @@ con las plantillas del kit en /docs, los scripts en la raíz y un PRD.md de
 partida. Cero dependencias, Python 3.8+.
 """
 
-__version__ = "2.0.0"
+__version__ = "2.1.0"
