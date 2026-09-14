@@ -26,7 +26,7 @@ ROOT = Path(__file__).resolve().parent.parent
 TEMPLATE_FILES = [
     "INICIO_PROYECTO.md", "SECURITY.md", "AEO_GEO_SEO.md", "UI_UX_EXCLUSIVA.md",
     "SKILLS_MCP.md", "TASK_TEMPLATE.md", "TASK_LITE_TEMPLATE.md", "QUICKSTART_LITE.md",
-    "AGENTS.md",
+    "AGENTS.md", "PRD_TEMPLATE.md",
 ]
 
 
@@ -703,6 +703,75 @@ class ReadmeParityTests(unittest.TestCase):
         es = (ROOT / "README.es.md").read_text(encoding="utf-8")
         h2 = re.compile(r"^##\s+", re.MULTILINE)
         self.assertEqual(len(h2.findall(en)), len(h2.findall(es)))
+
+
+class ReopenTests(unittest.TestCase):
+    def setUp(self):
+        tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(tmp.cleanup)
+        self.dir = Path(tmp.name)
+
+    def _md_f0_done(self):
+        md = VALID_STATE_MD.replace(
+            "| F0 | Bootstrap del repo | Repo funcionando | SPEC aprobado | [ ] Pendiente |",
+            "| F0 | Bootstrap del repo | Repo funcionando | SPEC aprobado | [x] Listo |")
+        return md.replace(
+            "## Checkpoints de Contexto Recientes\n- **M0:** Arranque completado.\n",
+            "## Checkpoints de Contexto Recientes\n- **M0:** Arranque completado.\n"
+            "- **F0:** Repo funcionando.\n"
+            "    ```\n    $ pytest -q\n    OK\n    ```\n")
+
+    def test_reopen_done_a_in_progress(self):
+        _write(self.dir / "PROGRESS.md", self._md_f0_done())
+        _write(self.dir / "DECISIONS.md", "# DECISIONS.md\n\n## Aprobaciones\n")
+        task_generator.cmd_reopen(self.dir, "F0", "detectado un bug")
+        nuevo = (self.dir / "PROGRESS.md").read_text(encoding="utf-8")
+        self.assertIn("| F0 | Bootstrap del repo | Repo funcionando | SPEC aprobado | [~] Listo |",
+                      nuevo)
+        state = json.loads((self.dir / "progress.json").read_text(encoding="utf-8"))
+        f0 = next(p for p in state["execution_phases"] if p["id"] == "F0")
+        self.assertEqual(f0["status"], "in_progress")
+        self.assertIn("## Reaperturas", (self.dir / "DECISIONS.md").read_text(encoding="utf-8"))
+
+    def test_reopen_requiere_razon(self):
+        _write(self.dir / "PROGRESS.md", self._md_f0_done())
+        with self.assertRaises(SystemExit) as ctx:
+            task_generator.cmd_reopen(self.dir, "F0", "")
+        self.assertEqual(ctx.exception.code, 1)
+
+    def test_reopen_fase_no_cerrada_falla(self):
+        _write(self.dir / "PROGRESS.md", VALID_STATE_MD)
+        with self.assertRaises(SystemExit) as ctx:
+            task_generator.cmd_reopen(self.dir, "F0", "motivo")
+        self.assertEqual(ctx.exception.code, 1)
+
+    def test_reopen_bloqueado_por_dependiente_cerrado(self):
+        md = VALID_STATE_MD.replace(
+            "| F0 | Bootstrap del repo | Repo funcionando | SPEC aprobado | [ ] Pendiente |",
+            "| F0 | Bootstrap del repo | Repo funcionando | SPEC aprobado | [x] Listo |")
+        md = md.replace(
+            "| F1 | Modelo de datos + migraciones | BBDD creada | F0 | [ ] Pendiente |",
+            "| F1 | Modelo de datos + migraciones | BBDD creada | F0 | [x] Listo |")
+        _write(self.dir / "PROGRESS.md", md)
+        with self.assertRaises(SystemExit) as ctx:
+            task_generator.cmd_reopen(self.dir, "F0", "motivo")
+        self.assertEqual(ctx.exception.code, 1)
+
+
+class PrdTemplateTests(unittest.TestCase):
+    def _extract(self, content):
+        with tempfile.TemporaryDirectory() as d:
+            p = Path(d) / "PRD.md"
+            p.write_text(content, encoding="utf-8")
+            return bootstrap.extract_prd_metadata(p)
+
+    def test_plantilla_prd_no_deja_campos_sin_resolver(self):
+        content = (ROOT / "PRD_TEMPLATE.md").read_text(encoding="utf-8")
+        self.assertEqual(self._extract(content)["unresolved"], [])
+
+    def test_stub_de_init_es_extraible(self):
+        from fia_harness import cli
+        self.assertEqual(self._extract(cli.PRD_STUB)["unresolved"], [])
 
 
 if __name__ == "__main__":

@@ -5,6 +5,28 @@ con `DECISIONS.md` del propio sistema.
 
 ---
 
+## v2.2.0 — Reapertura auditada y PRD de partida para la ruta de clonado
+
+1. **`--reopen F<N> --reason`** (nuevo). Reabre una fase cerrada (`done` →
+   `in_progress`) editando `PROGRESS.md`, registrando la reapertura en `DECISIONS.md`
+   (sección `## Reaperturas`) y re-compilando `progress.json`. Fail-closed: exige
+   motivo, la fase debe estar `done`, y se bloquea si una fase que depende de ella
+   sigue cerrada. *Tests:* `ReopenTests`.
+
+2. **`PRD_TEMPLATE.md`** (nuevo). Plantilla de PRD para la ruta de clonado del repo,
+   con encabezados exactos que `extract_prd_metadata` reconoce (`## Problema`,
+   `## Usuarios`, `## Funcionalidades`, `## Fuera de alcance`). Se empaqueta e `init`
+   la copia a `docs/`; añadida a `NON_PRD_FILES` para no confundirla con un PRD.
+   *Tests:* `PrdTemplateTests`.
+
+3. **Fix del stub de `fia-harness init`.** El `PRD.md` generado usaba encabezados con
+   sufijos (`Funcionalidades (Must Have)`, `Fuera de alcance (Out of Scope)`) que el
+   regex de `extract_prd_metadata` no reconocía, dejando `features`/`out_of_scope`
+   como "sin confirmar". Ahora usa los encabezados exactos y el test
+   `test_stub_de_init_es_extraible` lo garantiza.
+
+---
+
 ## v2.1.0 — Cierres de interlock (fail-closed, sellos, snapshot y evidencia)
 
 Cuatro cierres para que el enforcement no dependa de la buena fe del agente, más

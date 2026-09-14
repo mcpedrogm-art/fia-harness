@@ -29,6 +29,7 @@ TEMPLATE_NAMES = [
     "TASK_LITE_TEMPLATE.md",
     "QUICKSTART_LITE.md",
     "AGENTS.md",
+    "PRD_TEMPLATE.md",
 ]
 
 SCRIPT_NAMES = ["bootstrap.py", "task_generator.py"]
@@ -51,12 +52,12 @@ PRD_STUB = """# <Nombre del Proyecto>
 
 ✏️ ¿Quiénes son los usuarios finales? ¿Qué perfil, cuántos, qué frecuencia?
 
-## Funcionalidades (Must Have)
+## Funcionalidades
 
 * ✏️ Funcionalidad imprescindible nº1.
 * ✏️ Funcionalidad imprescindible nº2.
 
-## Fuera de alcance (Out of Scope)
+## Fuera de alcance
 
 * ✏️ Lo que explícitamente NO entra en esta versión.
 """

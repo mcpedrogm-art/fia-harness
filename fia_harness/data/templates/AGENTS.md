@@ -54,6 +54,9 @@ Las respuestas alimentan `SECURITY.md`, `AEO_GEO_SEO.md` y las decisiones de
   cercado) en el checkpoint de `PROGRESS.md`, o referencia `Evidencia: <archivo>`.
 - `python task_generator.py --check` debe quedar en verde antes de dar una fase por
   cerrada. Si falta `progress.json`, `--check` falla salvo `--state-optional`.
+- Para reabrir una fase cerrada: `python task_generator.py --reopen F<n> --reason "..."`
+  (deja constancia en `DECISIONS.md`; se bloquea si una fase que depende de ella
+  sigue cerrada).
 
 ## 6. Reglas que no se negocian (resumen)
 

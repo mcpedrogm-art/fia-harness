@@ -702,6 +702,103 @@ def analyze_phase_requirements(row: dict) -> dict:
     }
 
 
+def _flip_phase_status(md_text: str, phase: str, symbol: str):
+    """Cambia la casilla de estado ([x]/[ ]/[~]/[!]) de la fila de `phase` en la
+    tabla de fases de PROGRESS.md por `[symbol]`. Devuelve el texto editado, o None
+    si no localiza la fila. Solo toca la celda de la columna 'Estado'."""
+    lines = md_text.split("\n")
+    i, n = 0, len(lines)
+    while i < n:
+        if not lines[i].strip().startswith("|"):
+            i += 1
+            continue
+        block, start = [], i
+        while i < n and lines[i].strip().startswith("|"):
+            block.append(lines[i])
+            i += 1
+        if len(block) < 2:
+            continue
+        header = [strip_md(c).lower() for c in block[0].strip().strip("|").split("|")]
+        phase_col = next((k for k, h in enumerate(header) if "fase" in h), None)
+        status_col = next((k for k, h in enumerate(header) if "estado" in h), None)
+        if phase_col is None or status_col is None:
+            continue
+        for j in range(1, len(block)):
+            line = block[j]
+            if _is_separator_row(line):
+                continue
+            clean = [strip_md(c) for c in line.strip().strip("|").split("|")]
+            if phase_col >= len(clean) or clean[phase_col].upper() != phase.upper():
+                continue
+            parts = line.split("|")
+            cell_idx = status_col + 1
+            if cell_idx >= len(parts):
+                continue
+            parts[cell_idx] = re.sub(r"\[\s*[xX~! ]\s*\]", f"[{symbol}]",
+                                     parts[cell_idx], count=1)
+            lines[start + j] = "|".join(parts)
+            return "\n".join(lines)
+    return None
+
+
+def _record_reopen(project_dir: Path, phase: str, reason: str):
+    """Registra la reapertura en DECISIONS.md (sección '## Reaperturas') para dejar
+    rastro auditable del cambio done → in_progress."""
+    decisions_path = project_dir / "DECISIONS.md"
+    if not decisions_path.exists():
+        warn("DECISIONS.md no existe; la reapertura no quedará registrada como decisión.")
+        return
+    entry = f"- **{phase}** ({datetime.date.today().isoformat()}) · Reapertura · Razón: {reason}"
+    lines = decisions_path.read_text(encoding="utf-8").splitlines()
+    heading = next((i for i, l in enumerate(lines) if re.match(r"^##\s*Reaperturas\b", l)), None)
+    if heading is None:
+        lines += ["", "## Reaperturas", "", entry]
+    else:
+        section_end = next((i for i in range(heading + 1, len(lines))
+                            if lines[i].startswith("## ")), len(lines))
+        lines.insert(section_end, entry)
+    decisions_path.write_text("\n".join(lines).rstrip("\n") + "\n", encoding="utf-8")
+
+
+def cmd_reopen(project_dir: Path, phase: str, reason: str):
+    """--reopen: reabre una fase cerrada (done → in_progress) dejando constancia en
+    DECISIONS.md. Fail-closed: exige motivo, fase done y sin dependientes cerrados."""
+    _fix_windows_console_encoding()
+    if not reason or not reason.strip():
+        fail("--reopen exige un motivo (--reason).")
+    phase = (phase or "").upper()
+    if not PHASE_ID_RE.match(phase):
+        fail(f"Código de fase inválido para reabrir: {phase!r}")
+    progress_path = project_dir / DEFAULT_FILES["progress"]
+    md_text = load_file(progress_path)
+    state = compile_state_from_md(md_text)
+    phases = {p["id"]: p for key in ("process_phases", "execution_phases")
+              for p in state.get(key, [])}
+    if phase not in phases:
+        fail(f"La fase {phase} no aparece en {DEFAULT_FILES['progress']}.")
+    if phases[phase].get("status") != "done":
+        fail(f"La fase {phase} no está cerrada (estado: {phases[phase].get('status')}). "
+             "Solo se puede reabrir una fase done.")
+    dependents = [pid for pid, p in phases.items()
+                  if phase in p.get("depends_on", []) and p.get("status") == "done"]
+    if dependents:
+        fail(f"No se puede reabrir {phase}: {', '.join(sorted(dependents))} ya está(n) "
+             "cerrada(s) y depende(n) de ella. Reabre antes esas dependencias.")
+    new_md = _flip_phase_status(md_text, phase, "~")
+    if new_md is None:
+        fail(f"No se pudo localizar la fila de {phase} en {DEFAULT_FILES['progress']}.")
+    progress_path.write_text(new_md, encoding="utf-8")
+    _record_reopen(project_dir, phase, reason)
+    updated = _carry_over_aux_fields(
+        compile_state_from_md(new_md, updated=datetime.date.today().isoformat()),
+        _load_state_json(project_dir))
+    errors = _collect_validation_errors(updated, project_dir)
+    if errors:
+        _print_errors_and_fail(errors, "Estado inválido tras reabrir; revisa y ejecuta --sync.")
+    _write_state(project_dir, updated)
+    print(f"✅ Fase {phase} reabierta (done → in_progress). Razón: {reason}")
+
+
 # ---------------------------------------------------------------------------
 # Inyección basada en marcadores (robusta a cambios de redacción en la plantilla)
 # ---------------------------------------------------------------------------
@@ -871,6 +968,8 @@ def main():
     parser.add_argument("--approval", type=str, metavar="ACCION", help="Registra una aprobación humana con sello APPROVAL-NNN en DECISIONS.md.")
     parser.add_argument("--ref", type=str, default="", help="Referencia de la aprobación (chat, PR, reunión) para --approval.")
     parser.add_argument("--approved-by", type=str, default="Humano", help="Quién otorga la aprobación (para --approval).")
+    parser.add_argument("--reopen", metavar="FASE", help="Reabre una fase cerrada (done → in_progress) dejando constancia en DECISIONS.md.")
+    parser.add_argument("--reason", type=str, default="", help="Motivo de la reapertura (para --reopen).")
     args = parser.parse_args()
 
     project_dir = Path(args.dir)
@@ -886,6 +985,9 @@ def main():
         return
     if args.check:
         cmd_check(project_dir, state_optional=args.state_optional)
+        return
+    if args.reopen:
+        cmd_reopen(project_dir, args.reopen, args.reason)
         return
 
     progress_content = load_file(project_dir / DEFAULT_FILES["progress"])

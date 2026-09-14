@@ -21,7 +21,7 @@ import sys
 import shutil
 from pathlib import Path
 
-HARNESS_VERSION = "2.1.0"
+HARNESS_VERSION = "2.2.0"
 
 # Configuración de archivos de control obligatorios del Harness
 REQUIRED_TEMPLATES = {
@@ -73,6 +73,7 @@ NON_PRD_FILES = {
     "NOTES.md", "RAG_VECTOR_EXTENSION.md", "INICIO_PROYECTO.md",
     "SECURITY.md", "AEO_GEO_SEO.md", "UI_UX_EXCLUSIVA.md", "SKILLS_MCP.md",
     "TASK_TEMPLATE.md", "TASK_LITE_TEMPLATE.md", "QUICKSTART_LITE.md",
+    "PRD_TEMPLATE.md",
 }
 
 # Módulo de extensión opcional para proyectos con búsqueda semántica / RAG.

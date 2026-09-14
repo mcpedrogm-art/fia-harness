@@ -28,6 +28,7 @@ TEMPLATE_NAMES = [
     "TASK_LITE_TEMPLATE.md",
     "QUICKSTART_LITE.md",
     "AGENTS.md",
+    "PRD_TEMPLATE.md",
 ]
 
 
