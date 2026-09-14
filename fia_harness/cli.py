@@ -30,6 +30,7 @@ TEMPLATE_NAMES = [
     "QUICKSTART_LITE.md",
     "AGENTS.md",
     "PRD_TEMPLATE.md",
+    "MODELOS.md",
 ]
 
 SCRIPT_NAMES = ["bootstrap.py", "task_generator.py"]

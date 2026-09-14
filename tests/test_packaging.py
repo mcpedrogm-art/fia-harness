@@ -29,6 +29,7 @@ TEMPLATE_NAMES = [
     "QUICKSTART_LITE.md",
     "AGENTS.md",
     "PRD_TEMPLATE.md",
+    "MODELOS.md",
 ]
 
 

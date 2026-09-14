@@ -73,7 +73,7 @@ NON_PRD_FILES = {
     "NOTES.md", "RAG_VECTOR_EXTENSION.md", "INICIO_PROYECTO.md",
     "SECURITY.md", "AEO_GEO_SEO.md", "UI_UX_EXCLUSIVA.md", "SKILLS_MCP.md",
     "TASK_TEMPLATE.md", "TASK_LITE_TEMPLATE.md", "QUICKSTART_LITE.md",
-    "PRD_TEMPLATE.md",
+    "PRD_TEMPLATE.md", "MODELOS.md",
 }
 
 # Módulo de extensión opcional para proyectos con búsqueda semántica / RAG.

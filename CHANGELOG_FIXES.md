@@ -36,6 +36,12 @@ con `DECISIONS.md` del propio sistema.
    (ubuntu/windows/macos × Python 3.10/3.11/3.12) para detectar regresiones de
    codificación y rutas en cada SO.
 
+6. **`--stats` y `MODELOS.md` (C4).** `task_generator.py --stats` resume el estado
+   del proyecto (fases, checkpoints, aprobaciones, sellos, snapshots) desde
+   `progress.json`; sin artefacto, lo calcula desde `PROGRESS.md` con aviso.
+   `MODELOS.md` (nuevo template) documenta el routing de modelos por fase y el
+   snapshot de coste/tokens en el checkpoint. *Tests:* `StatsTests`.
+
 ---
 
 ## v2.1.0 — Cierres de interlock (fail-closed, sellos, snapshot y evidencia)

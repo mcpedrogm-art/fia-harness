@@ -799,6 +799,50 @@ def cmd_reopen(project_dir: Path, phase: str, reason: str):
     print(f"✅ Fase {phase} reabierta (done → in_progress). Razón: {reason}")
 
 
+def _count_approvals(project_dir: Path) -> int:
+    decisions_path = project_dir / "DECISIONS.md"
+    if not decisions_path.exists():
+        return 0
+    return len(APPROVAL_ENTRY_RE.findall(decisions_path.read_text(encoding="utf-8")))
+
+
+def cmd_stats(project_dir: Path):
+    """--stats: resumen legible del estado del proyecto (fases, checkpoints,
+    aprobaciones, sellos, snapshots) leído de progress.json."""
+    _fix_windows_console_encoding()
+    state = _load_state_json(project_dir)
+    if state is None:
+        md_text = load_file(project_dir / DEFAULT_FILES["progress"], required=False)
+        if md_text:
+            state = compile_state_from_md(md_text)
+            warn(f"{STATE_FILE} no existe; resumen calculado desde PROGRESS.md.")
+        else:
+            fail(f"No hay estado que resumir: falta {STATE_FILE} y {DEFAULT_FILES['progress']}.")
+
+    def counts(phases):
+        c = {"done": 0, "in_progress": 0, "blocked": 0, "pending": 0}
+        for p in phases:
+            c[p.get("status", "pending")] += 1
+        return c
+
+    process = state.get("process_phases", [])
+    execution = state.get("execution_phases", [])
+    pc = counts(process)
+    ec = counts(execution)
+    next_phase = next((p["id"] for p in execution
+                       if p.get("status") in ("pending", "in_progress", "blocked")), None)
+
+    print("=== FIA HARNESS — Estado del proyecto ===")
+    print(f"Fases de proceso (M):    {len(process):>3}  (done {pc['done']}, pendiente {pc['pending']})")
+    print(f"Fases de ejecución (F):  {len(execution):>3}  (done {ec['done']}, en curso {ec['in_progress']}, "
+          f"bloqueada {ec['blocked']}, pendiente {ec['pending']})")
+    print(f"Próxima fase pendiente:  {next_phase or '—'}")
+    print(f"Checkpoints de contexto: {len(state.get('checkpoints', []))}")
+    print(f"Aprobaciones registradas:{_count_approvals(project_dir)}")
+    print(f"Snapshots de SPEC.md:    {len(state.get('spec_hashes', []))}")
+    print(f"Documentos sellados:     {len(state.get('sealed_docs', {}))}")
+
+
 # ---------------------------------------------------------------------------
 # Inyección basada en marcadores (robusta a cambios de redacción en la plantilla)
 # ---------------------------------------------------------------------------
@@ -970,6 +1014,7 @@ def main():
     parser.add_argument("--approved-by", type=str, default="Humano", help="Quién otorga la aprobación (para --approval).")
     parser.add_argument("--reopen", metavar="FASE", help="Reabre una fase cerrada (done → in_progress) dejando constancia en DECISIONS.md.")
     parser.add_argument("--reason", type=str, default="", help="Motivo de la reapertura (para --reopen).")
+    parser.add_argument("--stats", action="store_true", help="Resumen del estado del proyecto (fases, checkpoints, aprobaciones, sellos, snapshots).")
     args = parser.parse_args()
 
     project_dir = Path(args.dir)
@@ -988,6 +1033,9 @@ def main():
         return
     if args.reopen:
         cmd_reopen(project_dir, args.reopen, args.reason)
+        return
+    if args.stats:
+        cmd_stats(project_dir)
         return
 
     progress_content = load_file(project_dir / DEFAULT_FILES["progress"])

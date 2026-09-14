@@ -26,7 +26,7 @@ ROOT = Path(__file__).resolve().parent.parent
 TEMPLATE_FILES = [
     "INICIO_PROYECTO.md", "SECURITY.md", "AEO_GEO_SEO.md", "UI_UX_EXCLUSIVA.md",
     "SKILLS_MCP.md", "TASK_TEMPLATE.md", "TASK_LITE_TEMPLATE.md", "QUICKSTART_LITE.md",
-    "AGENTS.md", "PRD_TEMPLATE.md",
+    "AGENTS.md", "PRD_TEMPLATE.md", "MODELOS.md",
 ]
 
 
@@ -772,6 +772,33 @@ class PrdTemplateTests(unittest.TestCase):
     def test_stub_de_init_es_extraible(self):
         from fia_harness import cli
         self.assertEqual(self._extract(cli.PRD_STUB)["unresolved"], [])
+
+
+class StatsTests(unittest.TestCase):
+    def setUp(self):
+        tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(tmp.cleanup)
+        self.dir = Path(tmp.name)
+        _write(self.dir / "PROGRESS.md", VALID_STATE_MD)
+
+    def test_stats_resume_estado(self):
+        task_generator.cmd_sync(self.dir)
+        out = io.StringIO()
+        with contextlib.redirect_stdout(out):
+            task_generator.cmd_stats(self.dir)
+        text = out.getvalue()
+        self.assertIn("Fases de proceso", text)
+        self.assertIn("Fases de ejecución", text)
+        self.assertIn("Próxima fase pendiente", text)
+        self.assertIn("Aprobaciones registradas", text)
+
+    def test_stats_sin_state_cae_a_md(self):
+        out = io.StringIO()
+        err = io.StringIO()
+        with contextlib.redirect_stdout(out), contextlib.redirect_stderr(err):
+            task_generator.cmd_stats(self.dir)
+        self.assertIn("Fases de ejecución", out.getvalue())
+        self.assertIn("calculado desde PROGRESS.md", err.getvalue())
 
 
 if __name__ == "__main__":
