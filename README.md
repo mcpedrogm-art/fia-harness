@@ -317,10 +317,7 @@ python task_generator.py --check
 | `INICIO_PROYECTO.md` | **Source of truth of the protocol** — if anything diverges, this one rules |
 | `AGENTS.md` | Native agent governance: startup, 3×3 interview, approval guardrail, PRD amendment |
 | `INSTRUCCIONES DE APLICACION.txt` | Quick step-by-step start guide (ES) |
-| `guia-automatizacion-tareas.md` | Task generator guide (ES) |
-| `PROTOCOLO DE GESTION....txt` | Executive summary (quick read, ES) |
-| `Guia_arranque_del_proyecto.pdf` | Static snapshot of the guide for comfortable reading (ES) |
-| `CHANGELOG_FIXES.md` | What was fixed, why and how it was verified |
+| `CHANGELOG_FIXES.md` | Version history: what changed, why and how it was verified |
 
 ---
 

@@ -321,10 +321,7 @@ python task_generator.py --check
 | `INICIO_PROYECTO.md` | **Fuente de verdad del protocolo** — si algo diverge, manda este |
 | `AGENTS.md` | Gobernanza nativa del agente: arranque, entrevista 3×3, guardarraíl de aprobación, enmienda de PRD |
 | `INSTRUCCIONES DE APLICACION.txt` | Guía rápida de arranque paso a paso |
-| `guia-automatizacion-tareas.md` | Guía del generador de tareas |
-| `PROTOCOLO DE GESTION....txt` | Síntesis ejecutiva (lectura rápida) |
-| `Guia_arranque_del_proyecto.pdf` | Snapshot estático de la guía para lectura cómoda |
-| `CHANGELOG_FIXES.md` | Qué se corrigió, por qué y cómo se verificó |
+| `CHANGELOG_FIXES.md` | Historial de versiones: qué cambió, por qué y cómo se verificó |
 
 ---
 

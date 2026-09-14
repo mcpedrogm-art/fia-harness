@@ -51,4 +51,4 @@ Comprueba el estado en cualquier momento (es el mismo comando que ejecuta el CI)
    python task_generator.py --check
 Registra una aprobación humana sellada en DECISIONS.md (cítala luego en el informe de la TASK, Fase L punto 18):
    python task_generator.py --approval "accion aprobada" --phase F2 --ref "chat/PR"
-El generador inyecta los checklists reales de tus documentos vivos y rechaza estados incoherentes: cerrar una fase sin su checkpoint, sin su TASK-Fx.md o con dependencias abiertas no compila. Detalles en guia-automatizacion-tareas.md; tests del kit: python -m unittest discover tests -v
+El generador inyecta los checklists reales de tus documentos vivos y rechaza estados incoherentes: cerrar una fase sin su checkpoint, sin su TASK-Fx.md o con dependencias abiertas no compila. Tests del kit: python -m unittest discover tests -v
