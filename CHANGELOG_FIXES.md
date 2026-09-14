@@ -30,6 +30,12 @@ con `DECISIONS.md` del propio sistema.
    de límites ("lo que el CI no puede garantizar"). Paridad H2 entre `README.md` y
    `README.es.md` verificada por `ReadmeParityTests`.
 
+5. **Infraestructura de release y CI.** `.github/workflows/release.yml` publica en
+   PyPI al etiquetar `v*` mediante Trusted Publishing (OIDC, sin secretos) tras
+   correr la suite. `tests.yml` pasa a una **matriz multiplataforma**
+   (ubuntu/windows/macos × Python 3.10/3.11/3.12) para detectar regresiones de
+   codificación y rutas en cada SO.
+
 ---
 
 ## v2.1.0 — Cierres de interlock (fail-closed, sellos, snapshot y evidencia)
