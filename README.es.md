@@ -1,18 +1,41 @@
-# 🧬 FIA HARNESS COMPLETO
+# 🧬 FIA HARNESS
 
-> **El sistema operativo para construir software con agentes de IA.**
-> Especificación antes que código · Seguridad por diseño · Contexto mínimo en cada fase · Cero asunciones en silencio
-
-**📖 English:** [README.md](README.md)
+> **Los agentes de IA no fallan escribiendo código — fallan por desviarse.**
+> FIA Harness convierte "especificación, disciplina y cero resultados inventados"
+> de buenas intenciones en **checks de merge que ningún agente puede saltarse**.
+> Local, cero dependencias, LLM-agnóstico.
 
 [![CI](https://github.com/mcpedrogm-art/fia-harness/actions/workflows/tests.yml/badge.svg)](https://github.com/mcpedrogm-art/fia-harness/actions/workflows/tests.yml)
 [![PyPI](https://badgen.net/pypi/v/fia-harness)](https://pypi.org/project/fia-harness/)
 [![Python 3.8+](https://badgen.net/badge/python/3.8%2B/blue)](#)
 [![License: MIT](https://badgen.net/badge/license/MIT/blue)](LICENSE)
 
-&nbsp;
+`Python 3.8+` · `Sin dependencias externas` · `Mono o multi-agente` · `2 modos de trabajo` · `Reglas verificadas en CI` · `LLM-agnóstico` *(Claude, DeepSeek, GPT, OpenCode — el agente que uses)*
 
-`Python 3.8+` · `Sin dependencias externas` · `Mono o multi-agente` · `2 modos de trabajo` · `Reglas verificadas en CI` · `LLM-agnóstico` *(funciona con DeepSeek, OpenCode, Claude, GPT o el agente que uses)*
+**📖 English:** [README.md](README.md)
+
+---
+
+## ⚡ Qué problema resuelve
+
+Un agente con spec *y* conciencia igual se desvía: cierra una fase que nunca
+terminó, relaja sus propias reglas o escribe un informe lleno de tests que jamás
+corrieron. Los prompts y los flujos de "confía en mí" no pueden evitarlo.
+
+FIA Harness convierte el **estado del proyecto en un dato validado por máquina** y
+se niega a que el agente se auto-certifique en silencio:
+
+| | Prompts sueltos | SaaS cerrado | **FIA Harness** |
+|---|---|---|---|
+| Dónde corre | tu chat | la nube de otro | **tu máquina** |
+| Spec antes que código | lo esperas | opinión del vendor | **se impone** |
+| Las reglas tienen dientes | ❌ | parcialmente | **✅ checks de merge** |
+| Tus secretos salen del repo | ❌ | quizá | **nunca** |
+| Coste | por token | suscripción | **gratis, local** |
+
+El histórico nunca se reenvía completo: cada fase carga solo unos pocos archivos de
+control comprimidos. Contexto pequeño = respuestas más baratas, más rápidas y con
+menos deriva.
 
 ---
 
@@ -32,10 +55,9 @@ sobre raíles. ¿Prefieres clonar? Este repo es una **plantilla de GitHub** — 
 ## 🎬 Mira cómo el interlock atrapa al agente (60 segundos)
 
 Las reglas aquí no son consejo — son **checks de merge** que ningún agente puede
-saltarse. No nos creas: el repo
-**[`fia-harness-demo`](https://github.com/mcpedrogm-art/fia-harness-demo)** es un
-proyecto pequeño y real cuyo CI bloquea a un agente tramposo que intenta cerrar una
-fase sin su archivo de tarea o checkpoint:
+saltarse. El repo [`fia-harness-demo`](https://github.com/mcpedrogm-art/fia-harness-demo)
+es un proyecto pequeño y real cuyo CI bloquea a un agente tramposo que intenta
+cerrar una fase sin su archivo de tarea o checkpoint:
 
 ```bash
 git clone https://github.com/mcpedrogm-art/fia-harness-demo.git && cd fia-harness-demo
@@ -46,27 +68,17 @@ python task_generator.py --check     # ❌ exit 1 — el merge queda bloqueado
 
 ---
 
-## 🗺️ El sistema en un vistazo
+## 🧭 El modelo mental (3 pasos)
 
-```mermaid
-graph TD
-    PRD["📄 PRD.md<br/>documento de negocio"] --> BOOT["⚙️ bootstrap.py<br/>(Fase M0)"]
-    BOOT --> CTX["CONTEXT.md<br/>resumen vivo del negocio"]
-    BOOT --> PROG["PROGRESS.md<br/>fases M0-M3"]
-    CTX --> INT["🧠 Agente de IA<br/>Entrevista técnica (M1)"]
-    INT --> SEC["SECURITY.md<br/>AEO_GEO_SEO.md<br/>decisiones en CONTEXT.md"]
-    SEC --> SPEC["SPEC.md<br/>especificación aprobada<br/>por el humano (M2)"]
-    SPEC --> PLAN["Tabla F0-Fn<br/>en PROGRESS.md (M3)"]
-    PLAN --> GEN["🤖 task_generator.py"]
-    GEN --> TASK["TASK-F1.md<br/>checklists de seguridad,<br/>visibilidad y UX inyectados"]
-    TASK --> RUN["🛠️ Agente ejecuta<br/>auditoría → diseño → código"]
-    RUN --> VAL["✅ Fase K<br/>tests · typecheck · lint · build"]
-    VAL -- falla --> RUN
-    VAL -- pasa --> NEXT["PROGRESS.md actualizado<br/>siguiente fase pendiente"]
-    NEXT --> GEN
+```text
+1. PENSAR  — PRD → entrevista (M1) → SPEC.md aprobado por un humano (M2). Aún sin código.
+2. PLANEAR — la spec se trocea en fases pequeñas verificables F0…Fn (M3).
+3. CONSTRUIR — una fase = una tarea = un ciclo cerrado: auditar → diseñar → codificar → verificar.
 ```
 
-**La idea central:** el PRD se lee una vez. A partir de ahí, cada fase del agente solo carga 4 archivos comprimidos (`CONTEXT.md` + sección de `SPEC.md` + `PROGRESS.md` + `TASK-Fx.md`). Nunca se reenvía el histórico completo. Contexto pequeño = respuestas más baratas, más rápidas y con menos deriva.
+Cada transición deja un **artefacto validado**: `PROGRESS.md` es la superficie de
+edición y `progress.json` la verdad compilada que lee el CI. Editar el Markdown sin
+recompilar pone el CI en rojo.
 
 ---
 
@@ -85,7 +97,7 @@ graph TD
 
 ### 2️⃣ Fases de ejecución (F0–Fn) — *construir fase a fase*
 
-Cada fase del plan = **una tarea** = un ciclo completo y cerrado. Ejemplo de plan típico:
+Cada fase del plan = **una tarea** = un ciclo completo y cerrado. Ejemplo de plan:
 
 | Fase | Objetivo | Entregable |
 |:---:|---|---|
@@ -94,38 +106,34 @@ Cada fase del plan = **una tarea** = un ciclo completo y cerrado. Ejemplo de pla
 | F2 | Backend core | API mínima |
 | F3 | Frontend core | UI navegable |
 | F4 | Auth y permisos | Login/roles |
-| ... | ... | ... |
 
-`task_generator.py` **detecta automáticamente la primera fase pendiente** y genera su tarea. Tú decides cuándo arrancar la siguiente; el agente nunca encadena fases solo.
+`task_generator.py` **detecta automáticamente la primera fase pendiente** y genera
+su tarea. Tú decides cuándo arrancar la siguiente; el agente nunca encadena fases solo.
 
 ### 3️⃣ El ciclo de tarea (A–L) — *disciplina en cada fase*
 
 ```
-A. Auditoría          → inspeccionar antes de tocar
-B. Diseño             → mapa mínimo alineado con SPEC.md
-C. Hipótesis          → declarar decisiones, no asumirlas
-E. Implementación     → cambio mínimo necesario
-F. Edge cases         → idempotencia, carreras, validación
-I. Tests              → escenarios mínimos obligatorios
-J. No hacer / J2      → scope cerrado + checklist de seguridad
-H2. Visibilidad       → SEO/AEO/GEO si hay superficie pública
-H3. UI/UX             → Design DNA aprobado si hay interfaz
-K. Validación         → tests · typecheck · lint · build
-L. Informe final      → qué se hizo, qué no, y resultado verificado
+A. Auditoría → B. Diseño → C. Hipótesis → E. Implementación → F. Edge cases
+→ I. Tests → J2. Seguridad → H2. Visibilidad → H3. UI/UX → K. Validación → L. Informe
 ```
 
-Las fases H2 (Visibilidad) y J2 (Seguridad) **se inyectan automáticamente solo si la fase las necesita**, con el contenido *real y vivo* de tus `AEO_GEO_SEO.md`, `SECURITY.md` y `UI_UX_EXCLUSIVA.md`. Si no aplican, el generador lo deja escrito con su motivo — nunca se omite en silencio.
+Seguridad (J2), visibilidad (H2) y UI/UX (H3) **se inyectan automáticamente solo si
+la fase las necesita**, con el contenido *real y vivo* de tus `SECURITY.md`,
+`AEO_GEO_SEO.md` y `UI_UX_EXCLUSIVA.md`. Si no aplican, el generador lo dice
+explícitamente — nunca se omite en silencio.
 
 ---
 
 ## 🚀 Arranque en 4 pasos
 
-> ⚡ **O en un solo comando (PyPI):** `uvx fia-harness init` (o `pipx run fia-harness init`) monta el proyecto nuevo automáticamente — plantillas en `/docs`, scripts en la raíz y `PRD.md` de partida. Salta al paso 2.
+> ⚡ **O en un solo comando (PyPI):** `uvx fia-harness init` monta el proyecto
+> nuevo automáticamente — plantillas en `/docs`, scripts en la raíz y `PRD.md` de
+> partida. Salta al paso 2.
 
 ```text
 1. Prepara el proyecto nuevo
    ├── bootstrap.py + task_generator.py en la raíz
-   ├── /docs con las 8 plantillas maestras
+   ├── /docs con las plantillas maestras
    ├── (opcional) RAG_VECTOR_EXTENSION.md dentro de /docs si habrá búsqueda semántica
    └── PRD.md en la raíz
 
@@ -149,20 +157,21 @@ Las fases H2 (Visibilidad) y J2 (Seguridad) **se inyectan automáticamente solo 
 
 | Archivo | Qué es |
 |---|---|
-| 🧭 `INICIO_PROYECTO.md` | **Fuente de verdad del protocolo**: rol del agente, fases, entrevista técnica, reglas de oro |
-| ⚙️ `bootstrap.py` | Inicializador (M0): lee el PRD, genera `CONTEXT.md`/`PROGRESS.md`/`progress.json`/`DECISIONS.md`, activa plantillas y RAG si procede, y emite el CI de reglas de oro |
-| 🤖 `task_generator.py` | Genera cada `TASK-Fx.md`, compila/valida el estado (`--sync`, `--check`) y registra aprobaciones (`--approval`) |
-| 📦 `fia_harness/` + `pyproject.toml` | Paquete PyPI: `fia-harness init` (CLI instalador). Las copias de scripts/plantillas del paquete están vigiladas por tests de sincronización |
-| 🗃️ `progress.json` | Estado compilado y validado del proyecto: la máquina de verdad que lee el CI |
+| 🧭 `INICIO_PROYECTO.md` | **Fuente de verdad del protocolo**: rol del agente, fases, entrevista, reglas de oro |
+| ⚙️ `bootstrap.py` | Inicializador (M0): lee el PRD, genera los archivos de control, sella las normas y emite el CI de reglas de oro |
+| 🤖 `task_generator.py` | Genera `TASK-Fx.md`, compila/valida el estado (`--sync`, `--check`), sella docs (`--seal`), registra aprobaciones (`--approval`) y reabre fases (`--reopen`) |
+| 📦 `fia_harness/` + `pyproject.toml` | Paquete PyPI: `fia-harness init` (CLI instalador). Las copias del paquete están vigiladas por tests de sincronización |
+| 🗃️ `progress.json` | Estado compilado y validado: la máquina de verdad que lee el CI |
 | 📋 `TASK_TEMPLATE.md` | Plantilla maestra de tarea (ciclo completo A–L, 20 puntos de informe) |
 | ⚡ `TASK_LITE_TEMPLATE.md` | Plantilla de tarea rápida para el Modo Lite |
+| 📄 `PRD_TEMPLATE.md` | PRD de partida para la ruta de clonado (con los encabezados que `bootstrap.py` parsea) |
 | 🛡️ `SECURITY.md` | Checklist de seguridad **obligatorio en todo proyecto**: auth/2FA, RLS, secretos, firewall, Skills/MCP, prompt injection |
-| 🔎 `AEO_GEO_SEO.md` | Visibilidad en tres motores: SEO (buscadores), AEO (asistentes) y GEO (LLMs) — solo si hay superficie pública |
+| 🔎 `AEO_GEO_SEO.md` | Visibilidad en SEO (buscadores), AEO (asistentes) y GEO (LLMs) — solo si hay superficie pública |
 | 🎨 `UI_UX_EXCLUSIVA.md` | Design DNA, arquetipos, motion system y auditoría anti-clon |
 | 🔌 `SKILLS_MCP.md` | Gobernanza de capacidades: nada se busca/instala/conecta sin **aprobación humana explícita** |
 | ⚡ `QUICKSTART_LITE.md` | Protocolo reducido para prototipos, con promoción obligatoria si aparece riesgo |
-| 🧩 `PROYECTOS RAG Y VECTORIALES/` | Módulo de extensión: stack vectorial (pgvector/Pinecone/Qdrant), chunking, recuperación híbrida + reranking, `llms.txt` |
-| 🧪 `tests/test_harness.py` | Tests automatizados de los parsers y del ciclo completo |
+| 🧩 `PROYECTOS RAG Y VECTORIALES/` | Módulo de extensión: stack vectorial, chunking, recuperación híbrida + reranking, `llms.txt` |
+| 🧪 `tests/` | Tests automatizados de los parsers, la máquina de estado, el empaquetado y el ciclo completo |
 | 📜 `CHANGELOG_FIXES.md` | Historial de correcciones aplicadas y cómo se verificaron |
 
 ---
@@ -174,11 +183,14 @@ Las fases H2 (Visibilidad) y J2 (Seguridad) **se inyectan automáticamente solo 
 | Para | MVPs, productos reales | Prototipos, vertical slices, cambios acotados |
 | Documentación | `CONTEXT` + `SPEC` + `PROGRESS` + `DECISIONS` | Solo `QUICK_CONTEXT.md` |
 | Tareas | `TASK-Fx.md` desde `TASK_TEMPLATE.md` | `TASK-QUICK.md` desde `TASK_LITE_TEMPLATE.md` |
-| Seguridad, aprobación humana, Context7 | ✅ Siempre | ✅ Siempre (no se negocian) |
+| Seguridad, aprobación humana | ✅ Siempre | ✅ Siempre (no se negocian) |
 
-**Promoción automática a Completo** si aparece cualquiera de estos: auth/roles, pagos, PII/salud, migraciones críticas, escritura en servicios externos, deploy/secretos, alcance incierto. La promoción **conserva** el trabajo ya validado.
+**Promoción automática a Completo** si aparece cualquiera de estos: auth/roles,
+pagos, PII/salud, migraciones críticas, escritura en servicios externos,
+deploy/secretos, alcance incierto. La promoción **conserva** el trabajo ya validado.
 
-> Para activar Lite: declara `Modo de trabajo: Lite` en `CONTEXT.md` (lo detecta `task_generator.py` solo) o fuerza con `--lite`.
+> Para activar Lite: declara `Modo de trabajo: Lite` en `CONTEXT.md`
+> (lo detecta `task_generator.py` solo) o fuerza con `--lite`.
 
 ---
 
@@ -195,26 +207,35 @@ El harness base es común; estas capas se activan solo cuando el proyecto las ne
 
 ---
 
-## 🚨 Enforcement: las reglas tienen dientes *(nuevo en v2)*
+## 🚨 Enforcement: las reglas tienen dientes
 
-Un harness de documentos obliga por convención; este kit desde la v2 obliga también por infraestructura. `bootstrap.py` emite un workflow de GitHub Actions (`.github/workflows/harness.yml`) que se ejecuta en cada push y PR:
+Desde la v2, el harness obliga por **infraestructura**, no solo por convención.
+`bootstrap.py` emite un workflow de GitHub Actions que se ejecuta en cada push y PR:
 
 | Regla de oro | Cómo se hace cumplir mecánicamente |
 |---|---|
 | Nunca cerrar fases con dependencias abiertas (nº4) | `progress.json` validado: cerrar F2 con F1 abierta **rompe el build** |
 | Nunca cerrar una fase sin Definition of Done (nº5) | Toda fase `done` exige su checkpoint de contexto en `PROGRESS.md` |
-| Nunca ejecutar una fase sin su `TASK-Fx.md` (nº7) | El validador comprueba que `TASK-F<N>.md` exista para cada fase F cerrada |
+| Nunca cerrar una fase sin evidencia real (nº7) | Toda fase F `done` exige un bloque de salida cruda o `Evidencia: <archivo>` |
+| Nunca ejecutar una fase sin su `TASK-Fx.md` (nº7) | El validador exige `TASK-F<N>.md` para cada fase F cerrada |
+| Nunca reescribir las reglas (nº2) | Los documentos normativos están **sellados** (SHA-256); editarlos pone el CI en rojo hasta `--seal` |
+| Nunca derivar la spec sin aprobación (nº6) | `SPEC.md` queda snapshotteado; cambiarla sin `--approval` pone el CI en rojo |
 | Nunca hacer commit con secretos (nº8) | **gitleaks** escanea todo el historial en cada push |
 | Dependencias sin vulnerabilidades conocidas | `npm audit` / `pip-audit` según el stack detectado |
 | Tests obligatorios antes de dar una fase por cerrada | Job de CI con pytest/unittest o `npm test`, según lo que detecte |
 | Aprobaciones humanas rastreables | Toda `APPROVAL-NNN` citada en una TASK debe existir en `DECISIONS.md` |
 
-El flujo de estado: `PROGRESS.md` sigue siendo la superficie de edición (humano o agente), y `task_generator.py --sync` lo compila y valida en `progress.json`. Si editas el Markdown a mano y no compila, el CI se pone rojo hasta que hagas `--sync`. Y `--sync` es *fail-closed*: si el estado viola una regla, **no escribe nada**.
+El flujo de estado: `PROGRESS.md` es la superficie de edición (humano o agente);
+`task_generator.py --sync` lo compila y valida en `progress.json`. Si editas el
+Markdown a mano y no compilas, el CI se pone rojo hasta que hagas `--sync`. Y
+`--sync` es *fail-closed*: si el estado viola una regla, **no escribe nada**.
 
 ```bash
 python task_generator.py --sync      # compila y valida PROGRESS.md -> progress.json
-python task_generator.py --check     # valida sin modificar nada (lo ejecuta el CI)
+python task_generator.py --check     # valida sin modificar (lo ejecuta el CI)
+python task_generator.py --seal      # sella los documentos normativos (SHA-256)
 python task_generator.py --approval "instalar Skill X v1.2" --phase F2 --ref "chat 5-sep"
+python task_generator.py --reopen F3 --reason "regresión detectada en auth"
 ```
 
 ---
@@ -234,11 +255,35 @@ python task_generator.py --approval "instalar Skill X v1.2" --phase F2 --ref "ch
 
 ---
 
+## ⚠️ Limitaciones — lo que el CI no puede garantizar
+
+El harness eleva el coste de desviarse de *trivial* a *deliberado y rastreable*,
+pero **no** es una frontera a prueba de manipulación. Conoce sus bordes:
+
+- **Confía en la máquina, no en la persona.** El agente y el validador comparten el
+  mismo filesystem y shell. Un actor malicioso con acceso de escritura total podría
+  re-sellar un documento o fabricar evidencia. El harness lo hace *detectable e
+  incómodo*, no imposible.
+- **Las aprobaciones son conversacionales, no criptográficas.** `--approval`
+  congela un snapshot de `SPEC.md`, pero la entrada de aprobación en sí puede
+  seguir siendo escrita por el agente. La firma por autoría git es una opción
+  planificada, aún no el valor por defecto.
+- **La evidencia se declara, no se reproduce.** El CI comprueba que el bloque de
+  salida cruda *existe y no está vacío*; no puede verificar que sea genuino.
+- **Modelo de confianza local.** No hay nube, ni telemetría, ni autoridad remota —
+  es el precio de no enviar tu código a ningún sitio.
+
+Estos límites son la frontera honesta de un kit que corre en *tu* máquina con
+*tus* reglas. Para un dev en solitario + agente construyendo MVPs, es el equilibrio
+correcto.
+
+---
+
 ## 🐕 Dogfooding
 
 Este repositorio se gobierna con el kit que distribuye:
 
-- El badge de arriba es el CI de este propio repo: **56 tests** más un job de
+- El badge de arriba es el CI de este propio repo: **73 tests** más un job de
   **auto-aplicación** que ejecuta `fia-harness init` → `bootstrap.py` → `--check`
   sobre un proyecto temporal nuevo en cada push.
 - El repo [`fia-harness-demo`](https://github.com/mcpedrogm-art/fia-harness-demo)
@@ -252,7 +297,12 @@ Este repositorio se gobierna con el kit que distribuye:
 python -m unittest discover tests -v
 ```
 
-Los tests cubren el parser de `PROGRESS.md` (tablas múltiples, negritas, columnas combinadas), la extracción de secciones con tablas reales, los inyectores por marcadores, la heurística de palabras clave (incluido el falso positivo clásico de *"entre**vista**"*), el recorte de plantilla, la detección de Modo Lite, la **máquina de estado** (dependencias, checkpoints, TASKs, aprobaciones, drift y fail-closed) y un **ciclo completo e2e** (`bootstrap.py` → `task_generator.py`) en carpeta temporal.
+Los tests cubren el parser de `PROGRESS.md`, la extracción de secciones, los
+inyectores por marcadores, la heurística de palabras clave, el recorte de plantilla,
+la detección de Modo Lite, la **máquina de estado** (dependencias, checkpoints,
+evidencia, aprobaciones, sellos, snapshot de spec, drift, fail-closed, reapertura),
+el **empaquetado** (copias anti-drift, `init` e2e, consolas cp1252) y un **ciclo
+completo e2e** en carpeta temporal.
 
 En un proyecto ya arrancado, puedes comprobar su estado en cualquier momento:
 
@@ -266,11 +316,13 @@ python task_generator.py --check
 
 | Documento | Rol |
 |---|---|
-| `README.md` / `README.es.md` | Índice y visión general del sistema (EN / ES) |
+| `README.md` *(este archivo)* | Índice y visión general del sistema (inglés) |
+| `README.es.md` | La misma visión general en español |
 | `INICIO_PROYECTO.md` | **Fuente de verdad del protocolo** — si algo diverge, manda este |
+| `AGENTS.md` | Gobernanza nativa del agente: arranque, entrevista 3×3, guardarraíl de aprobación, enmienda de PRD |
 | `INSTRUCCIONES DE APLICACION.txt` | Guía rápida de arranque paso a paso |
 | `guia-automatizacion-tareas.md` | Guía del generador de tareas |
-| `PROTOCOLO DE GESTION....txt` | Síntesis ejecutiva (lectura rápida, no se actualiza con cada cambio) |
+| `PROTOCOLO DE GESTION....txt` | Síntesis ejecutiva (lectura rápida) |
 | `Guia_arranque_del_proyecto.pdf` | Snapshot estático de la guía para lectura cómoda |
 | `CHANGELOG_FIXES.md` | Qué se corrigió, por qué y cómo se verificó |
 

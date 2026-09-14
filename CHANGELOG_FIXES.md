@@ -25,6 +25,11 @@ con `DECISIONS.md` del propio sistema.
    como "sin confirmar". Ahora usa los encabezados exactos y el test
    `test_stub_de_init_es_extraible` lo garantiza.
 
+4. **Rediseño del README (EN/ES) + sección LIMITACIONES.** Portada con *hook*,
+   modelo mental en 3 pasos, comparativa frente a prompts/SaaS y un bloque honesto
+   de límites ("lo que el CI no puede garantizar"). Paridad H2 entre `README.md` y
+   `README.es.md` verificada por `ReadmeParityTests`.
+
 ---
 
 ## v2.1.0 — Cierres de interlock (fail-closed, sellos, snapshot y evidencia)
