@@ -1,6 +1,6 @@
 # PROGRESS.md — Hoja de Ruta e Historial de Fases (repo FIA Harness)
 
-**Fase activa:** F6
+**Fase activa:** F7
 
 ## Fases del Proceso (Harness — dogfood del propio kit)
 
@@ -21,7 +21,7 @@
 | F3 | State Engine (migración incremental) | schema_version, IDs estables, timestamps, fingerprints, migración con backup | F2 | [x] Listo |
 | F4 | Spike: mecanismo de captura de evidencia | docs/EVIDENCE_CAPTURE_DECISION.md + ejemplo end-to-end | F3 | [x] Listo |
 | F5 | Evidence Engine | Schema EV-NNN, `fia evidence`, cadena claim→command→execution→artifact→hash | F4 | [x] Listo |
-| F6 | Verification Engine | `fia verify` (STATE/DEPS/EVIDENCE/PROVENANCE/SEALS/SPEC) + smoke de tampering | F5 | [ ] Pendiente |
+| F6 | Verification Engine | `fia verify` (STATE/DEPS/EVIDENCE/PROVENANCE/SEALS/SPEC) + smoke de tampering | F5 | [x] Listo |
 | F7 | CI / Merge Gate mínimo | harness.yml con `fia verify`, local vs CI confiable, demo en rojo/verde | F6 | [ ] Pendiente |
 
 ## Checkpoints de Contexto Recientes
@@ -96,3 +96,6 @@
 - **F5 (Evidence Engine):** registros `EV-NNN` con schema del contrato F4 (comando, exit code, timestamps, hashes de stdout/stderr, artifacts, entorno, `source`), almacén `evidence/`, wrapper opcional `fia run -- <cmd>` (transparente: propaga el exit code) y comandos `fia evidence` (lista/muestra/valida) y `fia evidence --ingest` (digests de CI). La regla de cierre de fase acepta `Evidencia: EV-NNN` y valida procedencia + integridad (hash de cada artifact y digest de CI si existe). Tests: 178 → 197.
   Evidencia: EV-001
   La cadena del registro EV-001 (suite completa ejecutada con `fia run`) se valida en este mismo `--check`: campos, artifacts presentes y hashes coincidentes.
+- **F6 (Verification Engine):** `fia verify` compone el reporte STATE / DEPENDENCIES / EVIDENCE / PROVENANCE / SEALS / SPEC SNAPSHOT, no confía en afirmaciones (inspecciona artefactos) y es fail-closed (exit 1 con razones). PROVENANCE distingue `trusted` (digests de CI, ADR-005) de `local` y cuenta la evidencia "solo existencia" (compat v2.2). `validate_state` se refactorizó en secciones (estructura/dependencias) sin cambiar comportamiento. Tests: 197 → 212.
+  Evidencia: EV-002
+  EV-002 es la ejecución real de `fia verify` sobre este repo (registrada con `fia run`); su cadena se valida en el `--check` de este cierre. Smoke de tampering: copia sana → PASS; artifact manipulado → PROVENANCE FAIL; documento sellado alterado → SEALS FAIL.

@@ -187,42 +187,74 @@ def cmd_evidence(project_dir: Path, evidence_id=None, ingest=None) -> int:
     return 0
 
 
-def validate_closed_phase_evidence(state: dict, project_dir) -> list:
-    """Devuelve las violaciones de la regla de evidencia cruda en fases F cerradas."""
-    errors = []
+def evidence_kind(checkpoint) -> str:
+    """Nivel de evidencia de un checkpoint: inline | file | record | none."""
+    if checkpoint is None:
+        return "none"
+    if (checkpoint.get("evidence") or "").strip():
+        return "inline"
+    ref = checkpoint.get("evidence_file")
+    if ref and EVIDENCE_ID_RE.match(str(ref)):
+        return "record"
+    if ref:
+        return "file"
+    return "none"
+
+
+def trust_level(record: dict) -> str:
+    """`trusted` = con digests de CI (ancla externa, ADR-005); `local` = sin ancla."""
+    return "trusted" if (record.get("ci") or {}).get("digests") else "local"
+
+
+def evidence_report(state: dict, project_dir: Path) -> list:
+    """Nivel de evidencia por fase F cerrada, separando existencia de procedencia.
+
+    Cada entrada: {phase, kind, trust, evidence_errors, provenance_errors}.
+    Las fases cerradas sin checkpoint no aparecen (ya fallan en STATE).
+    """
     checkpoints_by_phase = {c.get("phase"): c for c in state.get("checkpoints", [])}
+    report = []
     for key in ("process_phases", "execution_phases"):
         for phase in state.get(key, []):
             phase_id = phase.get("id", "")
             if phase.get("status") != "done" or not phase_id.startswith("F"):
                 continue
-            cp = checkpoints_by_phase.get(phase_id)
-            if cp is None:
+            checkpoint = checkpoints_by_phase.get(phase_id)
+            if checkpoint is None:
                 continue
-            evidence = (cp.get("evidence") or "").strip()
-            if evidence:
-                continue
-            evidence_file = cp.get("evidence_file")
-            if evidence_file and EVIDENCE_ID_RE.match(evidence_file):
-                record = load_record(project_dir, evidence_file)
+            entry = {"phase": phase_id, "kind": evidence_kind(checkpoint), "trust": "—",
+                     "evidence_errors": [], "provenance_errors": []}
+            if entry["kind"] == "none":
+                entry["evidence_errors"].append(
+                    f"{phase_id} está cerrada sin evidencia cruda de validación: "
+                    f"pega un bloque ``` con la salida de tests/build en su checkpoint, "
+                    f"referencia 'Evidencia: EV-NNN' (fia run) o añade "
+                    f"'Evidencia: <archivo>'. Si el proyecto es anterior a v2.1 "
+                    f"(la fase se cerró sin esta regla), reábrela con "
+                    f"--reopen {phase_id} --reason \"...\" y vuelve a cerrarla con su "
+                    f"evidencia real (si tiene dependientes cerradas, empieza por la última).")
+            elif entry["kind"] == "file":
+                ref = checkpoint.get("evidence_file")
+                path = project_dir / ref
+                if not (path.exists() and path.stat().st_size > 0):
+                    entry["evidence_errors"].append(
+                        f"{phase_id}: la evidencia '{ref}' no existe o está vacía")
+            elif entry["kind"] == "record":
+                ref = checkpoint.get("evidence_file")
+                record = load_record(project_dir, ref)
                 if record is None:
-                    errors.append(f"{phase_id}: la evidencia '{evidence_file}' no está "
-                                  f"registrada en {EVIDENCE_DIR}/ (usa: fia run -- <comando>)")
+                    entry["evidence_errors"].append(
+                        f"{phase_id}: la evidencia '{ref}' no está registrada en "
+                        f"{EVIDENCE_DIR}/ (usa: fia run -- <comando>)")
                 else:
-                    errors += [f"{phase_id}: {e}"
-                               for e in validate_record(project_dir, record)]
-                continue
-            if evidence_file:
-                ev_path = project_dir / evidence_file
-                if ev_path.exists() and ev_path.stat().st_size > 0:
-                    continue
-                errors.append(f"{phase_id}: la evidencia '{evidence_file}' no existe o está vacía")
-            else:
-                errors.append(f"{phase_id} está cerrada sin evidencia cruda de validación: "
-                              f"pega un bloque ``` con la salida de tests/build en su checkpoint, "
-                              f"referencia 'Evidencia: EV-NNN' (fia run) o añade "
-                              f"'Evidencia: <archivo>'. Si el proyecto es anterior a v2.1 "
-                              f"(la fase se cerró sin esta regla), reábrela con "
-                              f"--reopen {phase_id} --reason \"...\" y vuelve a cerrarla con su "
-                              f"evidencia real (si tiene dependientes cerradas, empieza por la última).")
-    return errors
+                    entry["trust"] = trust_level(record)
+                    entry["provenance_errors"] = [f"{phase_id}: {e}"
+                                                  for e in validate_record(project_dir, record)]
+            report.append(entry)
+    return report
+
+
+def validate_closed_phase_evidence(state: dict, project_dir) -> list:
+    """Violaciones de la regla de evidencia en fases F cerradas (existencia + cadena)."""
+    return [error for entry in evidence_report(state, project_dir)
+            for error in entry["evidence_errors"] + entry["provenance_errors"]]

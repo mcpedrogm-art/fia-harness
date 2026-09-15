@@ -5,6 +5,28 @@ con `DECISIONS.md` del propio sistema.
 
 ---
 
+## v3.0.0a5 — Verification Engine: `fia verify` (F6 de v3.0-core)
+
+1. **`fia verify`** (`core/verify.py`): reporte STATE / DEPENDENCIES / EVIDENCE /
+   PROVENANCE / SEALS / SPEC SNAPSHOT. No confía en afirmaciones: inspecciona
+   artefactos. Exit 0 (PASS — merge eligible) / 1 (FAIL — merge blocked) con la
+   lista de razones.
+2. **PROVENANCE (ADR-005)**: distingue `trusted` (registros EV con digests de CI
+   verificados) de `local`, y cuenta la evidencia "solo existencia" (inline/archivo,
+   compat v2.2). Un artifact manipulado o un digest de CI que no cuadra → FAIL.
+3. **Secciones de estado**: `validate_state` se refactorizó en
+   `validate_state_structure` (schema, fases, checkpoints, TASK-Fx) y
+   `validate_dependencies` (Regla de Oro nº4/5), sin cambiar el comportamiento de
+   `--check`; el reporte usa las secciones por separado.
+4. **Smoke de gobernanza e2e**: copia sana → PASS; artifact de EV manipulado →
+   PROVENANCE FAIL; documento sellado alterado → SEALS FAIL. `verify` también
+   detecta deriva MD↔JSON, artefacto editado a mano (huella) y SPEC cambiada sin
+   re-aprobación.
+5. **Dogfood**: F6 se cierra citando EV-002 (la propia ejecución de `fia verify`
+   registrada con `fia run`). Tests: 197 → 212.
+
+---
+
 ## v3.0.0a4 — Evidence Engine: registros EV-NNN y cadena de procedencia (F5 de v3.0-core)
 
 1. **Registros de evidencia `EV-NNN`** (`core/evidence.py`) con el schema decidido en

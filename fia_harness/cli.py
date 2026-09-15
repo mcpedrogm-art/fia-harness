@@ -184,6 +184,10 @@ def main(argv=None) -> int:
                                  help="Adjunta los digests de CI desde un manifiesto.")
     evidence_parser.add_argument("-d", "--dir", default=".")
 
+    verify_parser = subparsers.add_parser(
+        "verify", help="Reporte de verificación (STATE/DEPS/EVIDENCE/PROVENANCE/SEALS/SPEC).")
+    verify_parser.add_argument("-d", "--dir", default=".")
+
     args = parser.parse_args(argv)
     target = Path(args.dir)
 
@@ -225,6 +229,9 @@ def main(argv=None) -> int:
     if args.command == "evidence":
         from fia_harness.core.evidence import cmd_evidence
         return cmd_evidence(target, args.evidence_id, args.ingest)
+    if args.command == "verify":
+        from fia_harness.core.verify import cmd_verify
+        return cmd_verify(target)
 
     parser.print_help()
     return 2

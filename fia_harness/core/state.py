@@ -168,9 +168,10 @@ def collect_validation_errors(state: dict, project_dir: Path):
             + validate_spec_snapshot(state, project_dir))
 
 
-def validate_state(state: dict, project_dir: Path):
-    """Devuelve la lista de violaciones de las reglas de oro detectables por máquina.
-    Lista vacía = estado coherente. Nunca modifica nada."""
+def validate_state_structure(state: dict, project_dir: Path):
+    """Coherencia estructural: schema, identificadores y estados de fase, checkpoints
+    de fases cerradas y TASK-Fx (Regla de Oro nº7). Sin dependencias ni evidencia
+    (viven en sus propias secciones del reporte de verificación)."""
     errors = []
     schema = schema_of(state)
     if schema not in (SCHEMA_VERSION, LEGACY_SCHEMA):
@@ -191,23 +192,11 @@ def validate_state(state: dict, project_dir: Path):
                 errors.append(f"{phase_id}: estado {phase.get('status')!r} no válido "
                               f"(valores: {', '.join(STATUS_VALUES)})")
 
-    # Regla de oro nº4/5: no se cierra una fase con dependencias abiertas
-    for phase_id, phase in phases.items():
-        for dep in phase.get("depends_on", []):
-            if dep not in phases:
-                errors.append(f"{phase_id} depende de {dep}, que no existe en el estado")
-            elif phase.get("status") == "done" and phases[dep].get("status") != "done":
-                errors.append(f"{phase_id} está cerrada pero su dependencia {dep} no — "
-                              f"nunca cerrar una fase sin cerrar las previas (Regla de Oro nº4)")
-
     checkpoint_ids = {c.get("phase") for c in state.get("checkpoints", [])}
     for phase_id, phase in phases.items():
         if phase.get("status") == "done" and phase_id not in checkpoint_ids:
             errors.append(f"{phase_id} está cerrada sin checkpoint de contexto en PROGRESS.md "
                           f"(Definition of Done; añade '- **{phase_id}:** resumen' en la sección de checkpoints)")
-
-    # Evidencia cruda: una fase de ejecución (F) no puede cerrarse con prosa sola.
-    errors += evidence.validate_closed_phase_evidence(state, project_dir)
 
     # Regla de oro nº7: ninguna fase de ejecución se cierra sin su TASK-Fx.md
     for phase_id, phase in phases.items():
@@ -215,8 +204,30 @@ def validate_state(state: dict, project_dir: Path):
             if not (project_dir / f"TASK-{phase_id}.md").exists():
                 errors.append(f"{phase_id} está cerrada pero no existe TASK-{phase_id}.md — "
                               f"nunca ejecutar una fase sin su TASK (Regla de Oro nº7)")
-
-    # Aprobaciones con sello: lo que una TASK cita debe existir en DECISIONS.md,
-    # y toda entrada registrada debe estar completa (fecha, acción, aprobador).
-    errors += approvals.validate_approvals(state, project_dir)
     return errors
+
+
+def validate_dependencies(state: dict):
+    """Regla de oro nº4/5: no se cierra una fase con dependencias abiertas."""
+    errors = []
+    phases = {phase.get("id", ""): phase
+              for key in ("process_phases", "execution_phases")
+              for phase in state.get(key, [])
+              if PHASE_ID_RE.match(phase.get("id", ""))}
+    for phase_id, phase in phases.items():
+        for dep in phase.get("depends_on", []):
+            if dep not in phases:
+                errors.append(f"{phase_id} depende de {dep}, que no existe en el estado")
+            elif phase.get("status") == "done" and phases[dep].get("status") != "done":
+                errors.append(f"{phase_id} está cerrada pero su dependencia {dep} no — "
+                              f"nunca cerrar una fase sin cerrar las previas (Regla de Oro nº4)")
+    return errors
+
+
+def validate_state(state: dict, project_dir: Path):
+    """Devuelve la lista de violaciones de las reglas de oro detectables por máquina.
+    Lista vacía = estado coherente. Nunca modifica nada."""
+    return (validate_state_structure(state, project_dir)
+            + validate_dependencies(state)
+            + evidence.validate_closed_phase_evidence(state, project_dir)
+            + approvals.validate_approvals(state, project_dir))

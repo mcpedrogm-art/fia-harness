@@ -107,7 +107,7 @@
         "F5"
       ],
       "depends_on_notes": "",
-      "status": "pending"
+      "status": "done"
     },
     {
       "id": "F7",
@@ -198,8 +198,16 @@
       "summary": "registros `EV-NNN` con schema del contrato F4 (comando, exit code, timestamps, hashes de stdout/stderr, artifacts, entorno, `source`), almacén `evidence/`, wrapper opcional `fia run -- <cmd>` (transparente: propaga el exit code) y comandos `fia evidence` (lista/muestra/valida) y `fia evidence --ingest` (digests de CI). La regla de cierre de fase acepta `Evidencia: EV-NNN` y valida procedencia + integridad (hash de cada artifact y digest de CI si existe). Tests: 178 → 197.",
       "evidence": "",
       "evidence_file": "EV-001",
-      "id": "CP-F5",
-      "recorded_at": "2026-09-15T18:10:02"
+      "recorded_at": "2026-09-15T18:10:02",
+      "id": "CP-F5"
+    },
+    {
+      "phase": "F6",
+      "summary": "`fia verify` compone el reporte STATE / DEPENDENCIES / EVIDENCE / PROVENANCE / SEALS / SPEC SNAPSHOT, no confía en afirmaciones (inspecciona artefactos) y es fail-closed (exit 1 con razones). PROVENANCE distingue `trusted` (digests de CI, ADR-005) de `local` y cuenta la evidencia \"solo existencia\" (compat v2.2). `validate_state` se refactorizó en secciones (estructura/dependencias) sin cambiar comportamiento. Tests: 197 → 212.",
+      "evidence": "",
+      "evidence_file": "EV-002",
+      "id": "CP-F6",
+      "recorded_at": "2026-09-15T18:14:30"
     }
   ],
   "updated": "2026-09-15",
@@ -217,6 +225,6 @@
       "id": "SNAP-001"
     }
   ],
-  "compiled_at": "2026-09-15T18:10:02",
-  "state_sha256": "75150640402de2b1ddf2bd5e4f2157120cbbd3e4aa83fc8e7b0d12043ed1dc73"
+  "compiled_at": "2026-09-15T18:14:30",
+  "state_sha256": "1a9199c9635fd4b501ce32252b4ae9c2baa63bf2088f65487ecf5c2e242dc7c4"
 }
