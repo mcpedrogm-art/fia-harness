@@ -2,8 +2,9 @@
 
 > **Los agentes de IA no fallan escribiendo código — fallan por desviarse.**
 > FIA Harness convierte "especificación, disciplina y cero resultados inventados"
-> de buenas intenciones en **checks de merge que ningún agente puede saltarse**.
-> Local, cero dependencias, LLM-agnóstico.
+> de buenas intenciones en **checks de merge que el agente no puede saltarse en
+> silencio — dentro del trust boundary de tu Git + CI**. Local, cero dependencias,
+> LLM-agnóstico.
 
 [![CI](https://github.com/mcpedrogm-art/fia-harness/actions/workflows/tests.yml/badge.svg)](https://github.com/mcpedrogm-art/fia-harness/actions/workflows/tests.yml)
 [![PyPI](https://badgen.net/pypi/v/fia-harness)](https://pypi.org/project/fia-harness/)
@@ -11,6 +12,11 @@
 [![License: MIT](https://badgen.net/badge/license/MIT/blue)](LICENSE)
 
 `Python 3.8+` · `Sin dependencias externas` · `Mono o multi-agente` · `2 modos de trabajo` · `Reglas verificadas en CI` · `LLM-agnóstico` *(Claude, DeepSeek, GPT, OpenCode — el agente que uses)*
+
+**En una frase:** un protocolo de ingeniería local-first para trabajar con agentes
+sin entregarles el control — *un freno de mano, no un piloto automático de
+calidad.* No escribe código por ti ni juzga lo bueno que es: hace **verificable el
+estado** del proyecto y mantiene al humano decidiendo qué se mergea.
 
 **📖 English:** [README.md](README.md)
 
@@ -274,6 +280,16 @@ fia seal / fia approve / fia reopen  # sellos, aprobaciones humanas, reapertura 
 ---
 
 ## ⚠️ Limitaciones — lo que el CI no puede garantizar
+
+**FIA es un freno de mano, no un piloto automático de calidad.** Hace detectable y
+caro el estado deshonesto; no juzga la calidad. La frontera, explícita:
+
+| ✅ FIA garantiza | ❌ FIA no garantiza | 🙋 El humano debe |
+|---|---|---|
+| Una fase no puede cerrarse deshonestamente: dependencias, Definition of Done, `TASK-Fx.md` y evidencia se comprueban mecánicamente | Que el **código**, la **arquitectura** o la **SPEC** sean *buenos* | Asumir las decisiones de calidad: revisión de la spec, arquitectura, prioridades |
+| La evidencia tiene **integridad** (hashes) y **procedencia** (`local` vs `trusted` con el digest de CI) | Reproducción independiente de cada resultado (opt-in, roadmap v3.2) | Revisar la evidencia que importa — las fases de riesgo exigen una decisión humana registrada (v3.1) |
+| Las ediciones silenciosas de docs normativos, spec o estado son **detectables** (sellos, snapshots, hash de integridad) | Un sandbox: el agente comparte filesystem y shell | Mantener el trust boundary donde toca: **Git + CI**, no la palabra del agente |
+| El merge se **bloquea** cuando el estado no es verificable | Comportamiento en runtime, rendimiento, product-market fit | Escribir qué significa "terminado"; FIA solo comprueba que lo hiciste |
 
 El harness eleva el coste de desviarse de *trivial* a *deliberado y rastreable*,
 pero **no** es una frontera a prueba de manipulación. Conoce sus bordes:

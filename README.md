@@ -2,7 +2,8 @@
 
 > **AI agents don't fail at writing code — they fail at staying on track.**
 > FIA Harness turns "spec, discipline and no fake results" from good intentions
-> into **merge checks no agent can skip**. Local, zero-dependency, LLM-agnostic.
+> into **merge checks the agent cannot silently skip — inside your Git + CI trust
+> boundary**. Local, zero-dependency, LLM-agnostic.
 
 [![CI](https://github.com/mcpedrogm-art/fia-harness/actions/workflows/tests.yml/badge.svg)](https://github.com/mcpedrogm-art/fia-harness/actions/workflows/tests.yml)
 [![PyPI](https://badgen.net/pypi/v/fia-harness)](https://pypi.org/project/fia-harness/)
@@ -10,6 +11,11 @@
 [![License: MIT](https://badgen.net/badge/license/MIT/blue)](LICENSE)
 
 `Python 3.8+` · `Zero external dependencies` · `Single or multi-agent` · `2 working modes` · `Rules verified in CI` · `LLM-agnostic` *(Claude, DeepSeek, GPT, OpenCode — whatever agent you use)*
+
+**In one sentence:** a local-first governance harness for AI-assisted software
+development — *a handbrake, not a quality autopilot.* It does not write code for
+you and it does not judge how good your code is: it makes the project's **state**
+verifiable and keeps the human in control of what gets merged.
 
 **📖 Español:** [README.es.md](README.es.md)
 
@@ -272,6 +278,16 @@ fia seal / fia approve / fia reopen  # seals, human approvals, audited reopen
 ---
 
 ## ⚠️ Limitations — what the CI cannot guarantee
+
+**FIA is a handbrake, not a quality autopilot.** It makes dishonest state
+detectable and expensive; it does not judge quality. The boundary, explicitly:
+
+| ✅ FIA guarantees | ❌ FIA does not guarantee | 🙋 The human must |
+|---|---|---|
+| A phase cannot close dishonestly: dependencies, Definition of Done, `TASK-Fx.md` and evidence are checked mechanically | That the **code**, the **architecture** or the **SPEC** are *good* | Own the quality decisions: spec review, architecture, priorities |
+| Evidence has **integrity** (hashes) and **provenance** (`local` vs `trusted` with the CI artifact digest) | Independent reproduction of every result (opt-in, roadmap v3.2) | Review the evidence that matters — risk phases require a recorded human decision (v3.1) |
+| Silent edits to normative docs, the spec or the state are **detectable** (seals, snapshots, integrity hash) | A sandbox: the agent shares the filesystem and shell | Keep the trust boundary where it belongs: **Git + CI**, not the agent's word |
+| Merge is **blocked** when the state is not verifiable | Runtime behavior, performance, product-market fit | Write down what "done" means; FIA only checks that you did |
 
 The harness raises the cost of drifting from *trivial* to *deliberate and
 traceable*, but it is **not** a tamper-proof boundary. Be aware of its edges:

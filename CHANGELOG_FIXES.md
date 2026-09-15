@@ -5,23 +5,31 @@ con `DECISIONS.md` del propio sistema.
 
 ---
 
-## Unreleased — Reorganización del repositorio (`templates/` + `governance/`)
+## v3.0.2 — Posicionamiento honesto: freno de mano, no piloto automático (Etapa 0)
 
-1. **Root del repo = producto + metadatos.** Las 11 plantillas del kit y el módulo
-   RAG pasan a `templates/` (fuente de verdad; el test anti-drift las compara con
-   `fia_harness/data/templates/`). La gobernanza dogfood del propio kit
-   (`PROGRESS.md`, `SPEC.md`, `DECISIONS.md`, `progress.json`, `TASK-F0…F7.md`,
-   `evidence/`) pasa a `governance/` y se opera con `-d governance`; el job de CI
-   ejecuta `fia verify -d governance`.
-2. **Eliminado `INSTRUCCIONES DE APLICACION.txt`**: manual de la era v2 (flujo de
-   copiar scripts), redundante con el README y con el protocolo. Las referencias
-   apuntan ahora a `templates/INICIO_PROYECTO.md`.
-3. **Los proyectos de usuario no cambian**: `fia init` / `bootstrap.py` siguen
-   dejando las plantillas y las fachadas en la raíz del proyecto. La regla de oro
-   (estado, TASKs, evidencia en la raíz del proyecto) es idéntica.
-4. Nota: los sellos (`--seal`) ya no aplican al repo del kit (sus documentos son
-   plantillas del producto); la protección del kit queda en el snapshot de `SPEC.md`,
-   la huella de integridad del estado y las cadenas de evidencia.
+1. **Hero suavizado** (README EN/ES): de *"merge checks no agent can skip"* a
+   *"merge checks the agent cannot silently skip — inside your Git + CI trust
+   boundary"*. Precisión > marketing: el enforcement vive dentro del trust boundary
+   de Git + CI, no es un sandbox.
+2. **Claim explícito**: *"a local-first governance harness for AI-assisted software
+   development"* / *"un protocolo de ingeniería para trabajar con agentes sin
+   entregarles el control"* — con la frase que fija la frontera: **un freno de mano,
+   no un piloto automático de calidad**.
+3. **Tabla de frontera** en *Limitations* (EN/ES): qué garantiza FIA · qué NO
+   garantiza · qué debe hacer el humano. Incluye la evidencia (integridad y
+   procedencia sí; reproducción independiente, opt-in v3.2) y el sandbox (no).
+4. **Demo con segunda trampa**: el README de `fia-harness-demo` añade el caso de
+   **evidencia manipulada** (`echo ... >> evidence/EV-001.stderr.txt` →
+   `PROVENANCE` FAIL con la razón exacta, salida real).
+5. **Materiales de lanzamiento alineados** (Show HN, DevHunt, posts ES) con el
+   mensaje honesto y las tres demostraciones: trampa → detección → por qué se bloqueó.
+6. **Reorganización del repositorio** (incluida en esta release): las 11 plantillas
+   + RAG a `templates/` (fuente de verdad; el test anti-drift las compara con el
+   paquete) y la gobernanza dogfood a `governance/` (se opera con `-d governance`;
+   el CI ejecuta `fia verify -d governance`). Eliminado `INSTRUCCIONES DE
+   APLICACION.txt` (manual v2). Los proyectos de usuario no cambian.
+7. Roadmap comprometido: `docs/ROADMAP_V3_1.md` (Etapa 0 → v3.0.2; Etapa 1 →
+   v3.1.0; Etapa 2 → v3.2, solo con fricción real).
 
 ---
 
