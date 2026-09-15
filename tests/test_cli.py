@@ -2,6 +2,7 @@
 
 import contextlib
 import io
+import sys
 import tempfile
 import unittest
 from pathlib import Path
@@ -77,6 +78,19 @@ class SubcommandTests(unittest.TestCase):
         with contextlib.redirect_stdout(out):
             self.assertEqual(cli.main(["task", "-p", "F0", "-d", str(self.dir)]), 0)
         self.assertTrue((self.dir / "TASK-F0.md").exists())
+
+    def test_run_registra_evidencia_y_evidence_la_lista(self):
+        out = io.StringIO()
+        with contextlib.redirect_stdout(out):
+            code = cli.main(["run", "-d", str(self.dir), "--",
+                             sys.executable, "-c", "print('hola')"])
+        self.assertEqual(code, 0)
+        self.assertIn("EV-001", out.getvalue())
+        self.assertTrue((self.dir / "evidence" / "EV-001.json").exists())
+        out = io.StringIO()
+        with contextlib.redirect_stdout(out):
+            self.assertEqual(cli.main(["evidence", "-d", str(self.dir)]), 0)
+        self.assertIn("EV-001", out.getvalue())
 
 
 if __name__ == "__main__":

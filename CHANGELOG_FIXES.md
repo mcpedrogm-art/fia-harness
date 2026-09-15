@@ -5,6 +5,27 @@ con `DECISIONS.md` del propio sistema.
 
 ---
 
+## v3.0.0a4 — Evidence Engine: registros EV-NNN y cadena de procedencia (F5 de v3.0-core)
+
+1. **Registros de evidencia `EV-NNN`** (`core/evidence.py`) con el schema decidido en
+   F4: comando, cwd, exit code, timestamps UTC, duración, hashes de stdout/stderr,
+   artifacts y entorno; `source: local-run | ci-artifact`. Almacén `evidence/`
+   (`EV-NNN.json` + `EV-NNN.<stream>.txt`).
+2. **Wrapper opcional `fia run -- <comando>`** (`core/runner.py`, ADR-005):
+   transparente (propaga el exit code), captura SIEMPRE ambos streams (hallazgo del
+   spike: `unittest` escribe en stderr) y registra la evidencia.
+3. **`fia evidence`**: lista registros, muestra uno validando su cadena
+   (campos → artifacts presentes → hashes → digest de CI si existe) y
+   `fia evidence --ingest <manifiesto>` adjunta los digests publicados por la
+   plataforma CI.
+4. **Regla de cierre de fase ampliada**: `Evidencia: EV-NNN` valida procedencia e
+   integridad (ya no solo existencia); el bloque ``` y `Evidencia: <archivo>` siguen
+   funcionando. `fia status` muestra la evidencia registrada.
+5. **Dogfood**: la suite del propio repo se registró como EV-001 con `fia run` y el
+   `--check` del repo valida su cadena. Tests: 178 → 197.
+
+---
+
 ## v3.0.0a3 — State Engine incremental: schema 3.0, huellas y migración (F3 de v3.0-core)
 
 1. **Schema `3.0`** (`schema_version`) con migración incremental (ADR-002): se

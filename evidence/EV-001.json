@@ -1,0 +1,33 @@
+{
+  "id": "EV-001",
+  "type": "test",
+  "source": "local-run",
+  "command": [
+    "python",
+    "-m",
+    "unittest",
+    "discover",
+    "tests"
+  ],
+  "cwd": "C:\\Users\\Usuario\\Documents\\MIS SKILLS Y MCP\\INICIO DE PROYECTO\\FIA HARNESS COMPLETO",
+  "exit_code": 0,
+  "started_at": "2026-09-15T16:09:50.005444+00:00",
+  "finished_at": "2026-09-15T16:09:52.221198+00:00",
+  "duration_s": 2.218,
+  "stdout_sha256": "6452914022df85537f18094edd2b8f53f5c051aa23a3a5c7e7c275317086d9ad",
+  "stderr_sha256": "214d9d1c74672518d6227a1b5ecb3bb450c7452a1ab5919879457d6f53d61d15",
+  "artifacts": [
+    {
+      "name": "EV-001.stdout.txt",
+      "sha256": "6452914022df85537f18094edd2b8f53f5c051aa23a3a5c7e7c275317086d9ad"
+    },
+    {
+      "name": "EV-001.stderr.txt",
+      "sha256": "214d9d1c74672518d6227a1b5ecb3bb450c7452a1ab5919879457d6f53d61d15"
+    }
+  ],
+  "environment": {
+    "python": "3.11.15",
+    "os": "Windows-10-10.0.26200-SP0"
+  }
+}

@@ -1,6 +1,6 @@
 # PROGRESS.md — Hoja de Ruta e Historial de Fases (repo FIA Harness)
 
-**Fase activa:** F5
+**Fase activa:** F6
 
 ## Fases del Proceso (Harness — dogfood del propio kit)
 
@@ -20,7 +20,7 @@
 | F2 | Parser Engine con niveles de confianza | `extract_field(...) -> ExtractionResult`, config de sinónimos, corpus de PRDs, métrica % | F1 | [x] Listo |
 | F3 | State Engine (migración incremental) | schema_version, IDs estables, timestamps, fingerprints, migración con backup | F2 | [x] Listo |
 | F4 | Spike: mecanismo de captura de evidencia | docs/EVIDENCE_CAPTURE_DECISION.md + ejemplo end-to-end | F3 | [x] Listo |
-| F5 | Evidence Engine | Schema EV-NNN, `fia evidence`, cadena claim→command→execution→artifact→hash | F4 | [ ] Pendiente |
+| F5 | Evidence Engine | Schema EV-NNN, `fia evidence`, cadena claim→command→execution→artifact→hash | F4 | [x] Listo |
 | F6 | Verification Engine | `fia verify` (STATE/DEPS/EVIDENCE/PROVENANCE/SEALS/SPEC) + smoke de tampering | F5 | [ ] Pendiente |
 | F7 | CI / Merge Gate mínimo | harness.yml con `fia verify`, local vs CI confiable, demo en rojo/verde | F6 | [ ] Pendiente |
 
@@ -93,3 +93,6 @@
   python task_generator.py --check
   ✅ Estado del harness válido: 4 fases de proceso, 8 de ejecución, 9 checkpoints, aprobaciones íntegras.
   ```
+- **F5 (Evidence Engine):** registros `EV-NNN` con schema del contrato F4 (comando, exit code, timestamps, hashes de stdout/stderr, artifacts, entorno, `source`), almacén `evidence/`, wrapper opcional `fia run -- <cmd>` (transparente: propaga el exit code) y comandos `fia evidence` (lista/muestra/valida) y `fia evidence --ingest` (digests de CI). La regla de cierre de fase acepta `Evidencia: EV-NNN` y valida procedencia + integridad (hash de cada artifact y digest de CI si existe). Tests: 178 → 197.
+  Evidencia: EV-001
+  La cadena del registro EV-001 (suite completa ejecutada con `fia run`) se valida en este mismo `--check`: campos, artifacts presentes y hashes coincidentes.

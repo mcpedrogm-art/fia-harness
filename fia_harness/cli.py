@@ -172,6 +172,18 @@ def main(argv=None) -> int:
     task_parser.add_argument("-l", "--lite", action="store_true", help="Forzar la plantilla Lite.")
     task_parser.add_argument("-d", "--dir", default=".")
 
+    run_parser = subparsers.add_parser("run", help="Ejecuta un comando y registra su evidencia (EV-NNN).")
+    run_parser.add_argument("-d", "--dir", default=".")
+    run_parser.add_argument("--type", default="test", help="Tipo de evidencia (por defecto: test).")
+    run_parser.add_argument("cmd", nargs=argparse.REMAINDER, help="Comando: fia run -- <cmd...>")
+
+    evidence_parser = subparsers.add_parser("evidence", help="Lista, muestra o ancla evidencia (EV-NNN).")
+    evidence_parser.add_argument("evidence_id", nargs="?", default=None,
+                                 help="ID a mostrar con su cadena validada (p. ej. EV-001).")
+    evidence_parser.add_argument("--ingest", default=None, metavar="MANIFEST",
+                                 help="Adjunta los digests de CI desde un manifiesto.")
+    evidence_parser.add_argument("-d", "--dir", default=".")
+
     args = parser.parse_args(argv)
     target = Path(args.dir)
 
@@ -204,6 +216,15 @@ def main(argv=None) -> int:
             legacy_argv.append("--lite")
         main_task_generator(legacy_argv)
         return 0
+    if args.command == "run":
+        from fia_harness.core.runner import cmd_run
+        tokens = list(args.cmd or [])
+        if tokens and tokens[0] == "--":
+            tokens = tokens[1:]
+        return cmd_run(target, tokens, args.type)
+    if args.command == "evidence":
+        from fia_harness.core.evidence import cmd_evidence
+        return cmd_evidence(target, args.evidence_id, args.ingest)
 
     parser.print_help()
     return 2

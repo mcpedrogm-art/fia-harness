@@ -6,6 +6,7 @@ Se separa de `core.commands` para mantener ese módulo dentro del límite de tam
 
 from pathlib import Path
 
+from fia_harness.core import evidence as ev
 from fia_harness.core import state as st
 from fia_harness.core.approvals import APPROVAL_ENTRY_RE
 from fia_harness.core.console import fail, fix_windows_console_encoding, warn
@@ -55,3 +56,4 @@ def cmd_stats(project_dir: Path):
     print(f"Aprobaciones registradas:{_count_approvals(project_dir)}")
     print(f"Snapshots de SPEC.md:    {len(state.get('spec_hashes', []))}")
     print(f"Documentos sellados:     {len(state.get('sealed_docs', {}))}")
+    print(f"Evidencia registrada:    {len(ev.list_records(project_dir))}")
