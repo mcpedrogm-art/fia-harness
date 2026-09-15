@@ -72,7 +72,7 @@ class SubcommandTests(unittest.TestCase):
     def test_task_genera_archivo(self):
         root = Path(__file__).resolve().parent.parent
         for name in ("TASK_TEMPLATE.md", "SECURITY.md", "AEO_GEO_SEO.md", "UI_UX_EXCLUSIVA.md"):
-            (self.dir / name).write_text((root / name).read_text(encoding="utf-8"),
+            (self.dir / name).write_text((root / "templates" / name).read_text(encoding="utf-8"),
                                          encoding="utf-8")
         out = io.StringIO()
         with contextlib.redirect_stdout(out):

@@ -106,8 +106,8 @@ class ExtractSectionTests(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.ui_ux = (ROOT / "UI_UX_EXCLUSIVA.md").read_text(encoding="utf-8")
-        cls.security = (ROOT / "SECURITY.md").read_text(encoding="utf-8")
+        cls.ui_ux = (ROOT / "templates" / "UI_UX_EXCLUSIVA.md").read_text(encoding="utf-8")
+        cls.security = (ROOT / "templates" / "SECURITY.md").read_text(encoding="utf-8")
 
     def test_captura_tabla_del_gate_de_entrada_completa(self):
         gate = task_generator.extract_section(self.ui_ux, "Gate de entrada")
@@ -172,14 +172,14 @@ class KeywordHeuristicTests(unittest.TestCase):
 
 class StripTemplateHeaderTests(unittest.TestCase):
     def test_plantilla_completa_empieza_en_el_encabezado_de_tarea(self):
-        plantilla = (ROOT / "TASK_TEMPLATE.md").read_text(encoding="utf-8")
+        plantilla = (ROOT / "templates" / "TASK_TEMPLATE.md").read_text(encoding="utf-8")
         recortada = task_generator.strip_template_meta_header(plantilla, "TASK_TEMPLATE.md")
         self.assertTrue(recortada.startswith("# TASK-<N>"))
         self.assertNotIn("Cómo usar esta plantilla", recortada)
         self.assertIn("FASE J2", recortada)  # el cuerpo llega íntegro
 
     def test_plantilla_lite_empieza_en_task_quick(self):
-        plantilla = (ROOT / "TASK_LITE_TEMPLATE.md").read_text(encoding="utf-8")
+        plantilla = (ROOT / "templates" / "TASK_LITE_TEMPLATE.md").read_text(encoding="utf-8")
         recortada = task_generator.strip_template_meta_header(plantilla, "TASK_LITE_TEMPLATE.md")
         self.assertTrue(recortada.startswith("# TASK-QUICK"))
 
@@ -448,8 +448,8 @@ class EndToEndTests(unittest.TestCase):
         docs = self.dir / "docs"
         docs.mkdir()
         for nombre in TEMPLATE_FILES:
-            shutil.copy2(ROOT / nombre, docs / nombre)
-        shutil.copy2(ROOT / "PROYECTOS RAG Y VECTORIALES" / bootstrap.RAG_MODULE_NAME,
+            shutil.copy2(ROOT / "templates" / nombre, docs / nombre)
+        shutil.copy2(ROOT / "templates" / bootstrap.RAG_MODULE_NAME,
                      docs / bootstrap.RAG_MODULE_NAME)
         (self.dir / "PRD.md").write_text(self.PRD, encoding="utf-8")
 
@@ -766,7 +766,7 @@ class PrdTemplateTests(unittest.TestCase):
             return bootstrap.extract_prd_metadata(p)
 
     def test_plantilla_prd_no_deja_campos_sin_resolver(self):
-        content = (ROOT / "PRD_TEMPLATE.md").read_text(encoding="utf-8")
+        content = (ROOT / "templates" / "PRD_TEMPLATE.md").read_text(encoding="utf-8")
         self.assertEqual(self._extract(content)["unresolved"], [])
 
     def test_stub_de_init_es_extraible(self):

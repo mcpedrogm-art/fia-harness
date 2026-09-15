@@ -11,7 +11,7 @@
     de sincronía. Alternativa diferida a v3.1+: bundle standalone generado
     (zipapp/inliner), solo si hay fricción real reportada. Razón: instalación y
     desarrollo simples, sin romper local-first/stdlib-only/sin-telemetría.
-    Detalle: `docs/V3_BASELINE.md`.
+    Detalle: `../docs/V3_BASELINE.md`.
 *   **ADR-002 (2026-09-15):** F3 State Engine con migración incremental: se conservan
     los campos de `harness-state/1` (`process_phases`, `execution_phases`,
     `checkpoints`, `sealed_docs`, `spec_hashes`, `approvers`) y se añaden
@@ -35,7 +35,7 @@
     <cmd>` opcional en local (procedencia local) + artifacts de CI como fuente de
     verdad (`trusted`) validados contra el digest de la plataforma. `verify` (F6)
     distinguirá `local` de `trusted`; sin ancla de CI no hay PASS de procedencia.
-    Detalle y evidencia del spike: `docs/EVIDENCE_CAPTURE_DECISION.md`.
+    Detalle y evidencia del spike: `../docs/EVIDENCE_CAPTURE_DECISION.md`.
 
 ## Reaperturas
 

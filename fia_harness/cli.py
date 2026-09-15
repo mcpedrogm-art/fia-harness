@@ -1,12 +1,12 @@
 """FIA Harness CLI — instalador y comandos del kit.
 
-`fia init` monta un proyecto nuevo con la misma estructura que describe
-`INSTRUCCIONES DE APLICACION.txt`: plantillas del kit en /docs, fachadas de los
+`fia init` monta un proyecto nuevo con la estructura que describe el protocolo
+(`templates/INICIO_PROYECTO.md`): plantillas del kit en /docs, fachadas de los
 scripts en la raíz (que importan el paquete instalado, ADR-001) y un `PRD.md` de
 partida. El resto de subcomandos (`check`, `sync`, `task`, `status`, `approve`,
-`seal`, `reopen`) delegan en el núcleo: `fia` y `fia-harness` son el mismo comando.
-Igual que el resto del kit: solo librería estándar, idempotente (nunca sobrescribe
-lo que ya existe) y sin telemetría.
+`seal`, `reopen`, `run`, `evidence`, `verify`) delegan en el núcleo: `fia` y
+`fia-harness` son el mismo comando. Igual que el resto del kit: solo librería
+estándar, idempotente (nunca sobrescribe lo que ya existe) y sin telemetría.
 """
 
 import argparse

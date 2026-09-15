@@ -154,30 +154,24 @@ explícitamente — nunca se omite en silencio.
    fia verify                → merge gate: estado + evidencia + procedencia
 ```
 
-> 📖 Guía detallada paso a paso: **[INSTRUCCIONES DE APLICACION.txt](INSTRUCCIONES%20DE%20APLICACION.txt)** · Protocolo completo: **[INICIO_PROYECTO.md](INICIO_PROYECTO.md)**
+> 📖 Protocolo completo: **[templates/INICIO_PROYECTO.md](templates/INICIO_PROYECTO.md)** · Visión general en inglés: **[README.md](README.md)**
 
 ---
 
 ## 📁 Mapa de archivos
 
+> En un **proyecto de usuario** las plantillas viven en la raíz (las copian
+> `fia init` / `bootstrap.py`). En este repo viven en `templates/`, y el proyecto
+> gobernado del propio repo vive en `governance/`.
+
 | Archivo | Qué es |
 |---|---|
-| 🧭 `INICIO_PROYECTO.md` | **Fuente de verdad del protocolo**: rol del agente, fases, entrevista, reglas de oro |
-| ⚙️ `bootstrap.py` | Fachada fina en la raíz del proyecto: importa el paquete instalado y ejecuta el inicializador M0 (PRD, archivos de control, sellos, CI de reglas de oro) |
-| 🤖 `task_generator.py` | Fachada fina en la raíz del proyecto: genera `TASK-Fx.md`, compila/valida el estado (`--sync`, `--check`), sella docs (`--seal`), registra aprobaciones (`--approval`) y reabre fases (`--reopen`) |
-| 📦 `fia_harness/` + `pyproject.toml` | Paquete PyPI y **única fuente de verdad** (ADR-001): `fia init`, `fia check`, `fia sync`, `fia task`, `fia status`, `fia approve`, `fia seal`, `fia reopen`, `fia run`, `fia evidence`, `fia verify`. Los scripts de la raíz son fachadas generadas desde este paquete |
-| 🗃️ `progress.json` | Estado compilado y validado (schema `3.0`): la máquina de verdad que lee el CI |
-| 🔒 `evidence/` | Registros de evidencia `EV-NNN` + artifacts crudos hasheados (`fia run`); `fia verify` revalida toda la cadena |
-| 📋 `TASK_TEMPLATE.md` | Plantilla maestra de tarea (ciclo completo A–L, 20 puntos de informe) |
-| ⚡ `TASK_LITE_TEMPLATE.md` | Plantilla de tarea rápida para el Modo Lite |
-| 📄 `PRD_TEMPLATE.md` | PRD de partida para la ruta de clonado (con los encabezados que `bootstrap.py` parsea) |
-| 🛡️ `SECURITY.md` | Checklist de seguridad **obligatorio en todo proyecto**: auth/2FA, RLS, secretos, firewall, Skills/MCP, prompt injection |
-| 🔎 `AEO_GEO_SEO.md` | Visibilidad en SEO (buscadores), AEO (asistentes) y GEO (LLMs) — solo si hay superficie pública |
-| 🎨 `UI_UX_EXCLUSIVA.md` | Design DNA, arquetipos, motion system y auditoría anti-clon |
-| 🔌 `SKILLS_MCP.md` | Gobernanza de capacidades: nada se busca/instala/conecta sin **aprobación humana explícita** |
-| ⚡ `QUICKSTART_LITE.md` | Protocolo reducido para prototipos, con promoción obligatoria si aparece riesgo |
-| 🧩 `PROYECTOS RAG Y VECTORIALES/` | Módulo de extensión: stack vectorial, chunking, recuperación híbrida + reranking, `llms.txt` |
-| 🧪 `tests/` | Tests automatizados de los parsers, la máquina de estado, el empaquetado y el ciclo completo |
+| ⚙️ `bootstrap.py` · 🤖 `task_generator.py` | Fachadas finas en la raíz del proyecto: la implementación vive en el paquete instalado (ADR-001) |
+| 📦 `fia_harness/` + `pyproject.toml` | Paquete PyPI y **única fuente de verdad**: `fia init/check/sync/task/status/approve/seal/reopen/run/evidence/verify` |
+| 🗂️ `templates/` | Plantillas maestras del kit: protocolo (`INICIO_PROYECTO.md`), `SECURITY.md`, `AEO_GEO_SEO.md`, `UI_UX_EXCLUSIVA.md`, `SKILLS_MCP.md`, `TASK_TEMPLATE.md`, `TASK_LITE_TEMPLATE.md`, `QUICKSTART_LITE.md`, `AGENTS.md`, `PRD_TEMPLATE.md`, `MODELOS.md` y el módulo RAG |
+| 🏛️ `governance/` | Proyecto dogfood del propio repo (se opera con `-d governance`): `PROGRESS.md`, `SPEC.md`, `DECISIONS.md`, `progress.json`, `TASK-F0…F7.md`, `evidence/` |
+| 📖 `docs/` | Baseline v3 (`V3_BASELINE.md`) y la decisión de captura de evidencia (ADR-005) |
+| 🧪 `tests/` | Tests automatizados de los parsers, la máquina de estado, evidencia, verificación, empaquetado y el ciclo completo |
 | 📜 `CHANGELOG_FIXES.md` | Historial de correcciones aplicadas y cómo se verificaron |
 
 ---
@@ -352,7 +346,6 @@ fia check     # validación legacy solo del estado
 | `README.es.md` | La misma visión general en español |
 | `INICIO_PROYECTO.md` | **Fuente de verdad del protocolo** — si algo diverge, manda este |
 | `AGENTS.md` | Gobernanza nativa del agente: arranque, entrevista 3×3, guardarraíl de aprobación, enmienda de PRD |
-| `INSTRUCCIONES DE APLICACION.txt` | Guía rápida de arranque paso a paso |
 | `CHANGELOG_FIXES.md` | Historial de versiones: qué cambió, por qué y cómo se verificó |
 
 ---

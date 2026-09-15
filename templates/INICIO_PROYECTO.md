@@ -323,7 +323,7 @@ Crear y mantener siempre estos archivos en la raíz del repo:
 - **`TASK-F<N>.md`** — Una instancia por fase, generada a partir de `TASK_TEMPLATE.md` (ver Fase 3.1). Es la unidad real de trabajo del agente.
 - **`SECURITY.md`** — **Obligatorio siempre.** Especificación y checklist de seguridad: auth/2FA, RLS/autorización, gestión de secretos, hardening de servidor/firewall según el stack.
 - **`AEO_GEO_SEO.md`** — (solo si hay superficie pública) Especificación y checklist de SEO/AEO/GEO a aplicar en las fases de contenido y despliegue.
-- **`RAG_VECTOR_EXTENSION.md`** — (solo si hay búsqueda semántica, embeddings o RAG) Stack vectorial, pipeline de chunking/recuperación híbrida/reranking, metadatos obligatorios y salvaguardas de seguridad de la capa vectorial. `bootstrap.py` lo activa automáticamente si el PRD menciona RAG; también está disponible en el kit maestro, carpeta `PROYECTOS RAG Y VECTORIALES`.
+- **`RAG_VECTOR_EXTENSION.md`** — (solo si hay búsqueda semántica, embeddings o RAG) Stack vectorial, pipeline de chunking/recuperación híbrida/reranking, metadatos obligatorios y salvaguardas de seguridad de la capa vectorial. `bootstrap.py` lo activa automáticamente si el PRD menciona RAG; también está disponible en el kit maestro, carpeta `templates/`.
 
 ---
 

@@ -151,30 +151,24 @@ so explicitly — never omitted in silence.
    fia verify                → merge gate: state + evidence + provenance
 ```
 
-> 📖 Step-by-step guide: **[INSTRUCCIONES DE APLICACION.txt](INSTRUCCIONES%20DE%20APLICACION.txt)** (ES) · Full protocol: **[INICIO_PROYECTO.md](INICIO_PROYECTO.md)** (ES)
+> 📖 Full protocol: **[templates/INICIO_PROYECTO.md](templates/INICIO_PROYECTO.md)** (ES) · Spanish overview: **[README.es.md](README.es.md)**
 
 ---
 
 ## 📁 File map
 
+> In a **user project** the templates live at the root (copied by `fia init` /
+> `bootstrap.py`). In this repo they live under `templates/`, and the repo's own
+> governed project lives under `governance/`.
+
 | File | What it is |
 |---|---|
-| 🧭 `INICIO_PROYECTO.md` | **Source of truth of the protocol**: agent role, phases, interview, golden rules |
-| ⚙️ `bootstrap.py` | Thin facade at the project root: imports the installed package and runs the M0 bootstrapper (PRD, control files, seals, golden-rules CI) |
-| 🤖 `task_generator.py` | Thin facade at the project root: generates `TASK-Fx.md`, compiles/validates state (`--sync`, `--check`), seals docs (`--seal`), records approvals (`--approval`) and reopens phases (`--reopen`) |
-| 📦 `fia_harness/` + `pyproject.toml` | PyPI package and **single source of truth** (ADR-001): `fia init`, `fia check`, `fia sync`, `fia task`, `fia status`, `fia approve`, `fia seal`, `fia reopen`, `fia run`, `fia evidence`, `fia verify`. Root scripts are facades generated from this package |
-| 🗃️ `progress.json` | Compiled, validated project state (schema `3.0`): the machine truth the CI reads |
-| 🔒 `evidence/` | Evidence records `EV-NNN` + raw hashed artifacts (`fia run`); `fia verify` revalidates the whole chain |
-| 📋 `TASK_TEMPLATE.md` | Master task template (full A–L cycle, 20-point report) |
-| ⚡ `TASK_LITE_TEMPLATE.md` | Quick task template for Lite mode |
-| 📄 `PRD_TEMPLATE.md` | Starter PRD for the clone path (matches what `bootstrap.py` parses) |
-| 🛡️ `SECURITY.md` | Security checklist **mandatory in every project**: auth/2FA, RLS, secrets, firewall, Skills/MCP, prompt injection |
-| 🔎 `AEO_GEO_SEO.md` | Visibility across SEO (search), AEO (assistants) and GEO (LLMs) — only if there's a public surface |
-| 🎨 `UI_UX_EXCLUSIVA.md` | Design DNA, archetypes, motion system and anti-clone audit |
-| 🔌 `SKILLS_MCP.md` | Capability governance: nothing is searched/installed/connected without **explicit human approval** |
-| ⚡ `QUICKSTART_LITE.md` | Reduced protocol for prototypes, with mandatory promotion when risk appears |
-| 🧩 `PROYECTOS RAG Y VECTORIALES/` | Extension module: vector stack, chunking, hybrid retrieval + reranking, `llms.txt` |
-| 🧪 `tests/` | Automated tests of the parsers, the state machine, the packaging and the full cycle |
+| ⚙️ `bootstrap.py` · 🤖 `task_generator.py` | Thin facades at the project root: the implementation lives in the installed package (ADR-001) |
+| 📦 `fia_harness/` + `pyproject.toml` | PyPI package and **single source of truth**: `fia init/check/sync/task/status/approve/seal/reopen/run/evidence/verify` |
+| 🗂️ `templates/` | Master templates of the kit: protocol (`INICIO_PROYECTO.md`), `SECURITY.md`, `AEO_GEO_SEO.md`, `UI_UX_EXCLUSIVA.md`, `SKILLS_MCP.md`, `TASK_TEMPLATE.md`, `TASK_LITE_TEMPLATE.md`, `QUICKSTART_LITE.md`, `AGENTS.md`, `PRD_TEMPLATE.md`, `MODELOS.md` and the RAG module |
+| 🏛️ `governance/` | This repo's own dogfood project (operated with `-d governance`): `PROGRESS.md`, `SPEC.md`, `DECISIONS.md`, `progress.json`, `TASK-F0…F7.md`, `evidence/` |
+| 📖 `docs/` | v3 baseline (`V3_BASELINE.md`) and the evidence-capture decision (ADR-005) |
+| 🧪 `tests/` | Automated tests of the parsers, the state machine, evidence, verification, packaging and the full cycle |
 | 📜 `CHANGELOG_FIXES.md` | History of fixes applied and how they were verified |
 
 ---
@@ -346,7 +340,6 @@ fia check     # legacy state-only validation
 | `README.es.md` | The same overview in Spanish |
 | `INICIO_PROYECTO.md` | **Source of truth of the protocol** — if anything diverges, this one rules |
 | `AGENTS.md` | Native agent governance: startup, 3×3 interview, approval guardrail, PRD amendment |
-| `INSTRUCCIONES DE APLICACION.txt` | Quick step-by-step start guide (ES) |
 | `CHANGELOG_FIXES.md` | Version history: what changed, why and how it was verified |
 
 ---

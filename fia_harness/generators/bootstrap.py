@@ -147,7 +147,7 @@ def maybe_activate_rag_module(root_dir: Path, prd_path: Path):
         print("       Resume sus decisiones en SPEC.md (Fase 2, punto 12 de INICIO_PROYECTO.md).")
     else:
         print(f"   [⚠️] {RAG_MODULE_NAME} no está en /docs. Cópialo desde el kit maestro "
-              f"(carpeta 'PROYECTOS RAG Y VECTORIALES') antes de la Fase 2.", file=sys.stderr)
+              f"(carpeta `templates/` del repo de FIA Harness) antes de la Fase 2.", file=sys.stderr)
 
 
 def main():

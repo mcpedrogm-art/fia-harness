@@ -63,13 +63,13 @@ class ScriptFacadesTest(unittest.TestCase):
     def test_templates_match_repo_root(self):
         for name in TEMPLATE_NAMES:
             packaged = (PKG / "data" / "templates" / name).read_text(encoding="utf-8")
-            original = (ROOT / name).read_text(encoding="utf-8")
+            original = (ROOT / "templates" / name).read_text(encoding="utf-8")
             self.assertEqual(packaged, original,
                              f"{name}: la copia del paquete difiere de la raíz; sincronízalas")
 
     def test_rag_module_matches_repo_root(self):
         packaged = (PKG / "data" / "rag" / "RAG_VECTOR_EXTENSION.md").read_text(encoding="utf-8")
-        original = (ROOT / "PROYECTOS RAG Y VECTORIALES" / "RAG_VECTOR_EXTENSION.md").read_text(encoding="utf-8")
+        original = (ROOT / "templates" / "RAG_VECTOR_EXTENSION.md").read_text(encoding="utf-8")
         self.assertEqual(packaged, original,
                          "RAG_VECTOR_EXTENSION.md: la copia del paquete difiere de la raíz")
 

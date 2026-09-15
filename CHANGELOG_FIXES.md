@@ -5,6 +5,26 @@ con `DECISIONS.md` del propio sistema.
 
 ---
 
+## Unreleased — Reorganización del repositorio (`templates/` + `governance/`)
+
+1. **Root del repo = producto + metadatos.** Las 11 plantillas del kit y el módulo
+   RAG pasan a `templates/` (fuente de verdad; el test anti-drift las compara con
+   `fia_harness/data/templates/`). La gobernanza dogfood del propio kit
+   (`PROGRESS.md`, `SPEC.md`, `DECISIONS.md`, `progress.json`, `TASK-F0…F7.md`,
+   `evidence/`) pasa a `governance/` y se opera con `-d governance`; el job de CI
+   ejecuta `fia verify -d governance`.
+2. **Eliminado `INSTRUCCIONES DE APLICACION.txt`**: manual de la era v2 (flujo de
+   copiar scripts), redundante con el README y con el protocolo. Las referencias
+   apuntan ahora a `templates/INICIO_PROYECTO.md`.
+3. **Los proyectos de usuario no cambian**: `fia init` / `bootstrap.py` siguen
+   dejando las plantillas y las fachadas en la raíz del proyecto. La regla de oro
+   (estado, TASKs, evidencia en la raíz del proyecto) es idéntica.
+4. Nota: los sellos (`--seal`) ya no aplican al repo del kit (sus documentos son
+   plantillas del producto); la protección del kit queda en el snapshot de `SPEC.md`,
+   la huella de integridad del estado y las cadenas de evidencia.
+
+---
+
 ## v3.0.1 — Los artifacts de evidencia viajan como binarios (fix de portabilidad)
 
 **Bug cazado por el propio CI (dogfood de F7):** git normalizaba los finales de
