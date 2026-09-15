@@ -87,7 +87,7 @@
         "F3"
       ],
       "depends_on_notes": "",
-      "status": "pending"
+      "status": "done"
     },
     {
       "id": "F5",
@@ -184,6 +184,14 @@
       "evidence_file": "CHANGELOG_FIXES.md (v3.0.0a3) · tests/test_core_fingerprints.py · tests/test_core_state.py",
       "recorded_at": "2026-09-15T17:59:36",
       "id": "CP-F3"
+    },
+    {
+      "phase": "F4",
+      "summary": "prototipadas las dos opciones (wrapper y artifacts) sobre un fixture mínimo; decisión híbrida (ADR-005) documentada en `docs/EVIDENCE_CAPTURE_DECISION.md`. Hallazgos clave: los runners escriben en streams distintos (unittest → stderr); sin ancla de CI la fabricación local no es detectable; la distinción local/trusted es la frontera de la garantía. Sin cambios de producto (spike).",
+      "evidence": "Spike F4 (fixture mínimo, Python 3.11.15, stdlib-only):\n(a) wrapper verde:  exit_code=0 · stdout_sha256=e3b0c442… (vacío) · stderr_sha256=a4ca7fdb…\nhallazgo: unittest escribe el informe en stderr → capturar ambos streams\n(a) wrapper rojo:   exit_code=1 · FAILED (failures=1)\n(b) verificación verde: PASS (10/10 checks) — artifact↔manifest, claim↔artifact, resultado↔exit\n(b) verificación roja:  PASS (FAILED es coherente con exit 1)\n(b) tras manipular el artifact (FAILED→OK): FAIL (3 detecciones: hash, binding, coherencia)\n\npython task_generator.py --check\n✅ Estado del harness válido: 4 fases de proceso, 8 de ejecución, 9 checkpoints, aprobaciones íntegras.",
+      "evidence_file": "docs/EVIDENCE_CAPTURE_DECISION.md · DECISIONS.md (ADR-005)",
+      "id": "CP-F4",
+      "recorded_at": "2026-09-15T18:05:00"
     }
   ],
   "updated": "2026-09-15",
@@ -201,6 +209,6 @@
       "id": "SNAP-001"
     }
   ],
-  "compiled_at": "2026-09-15T18:03:07",
-  "state_sha256": "e96d6803a31b05e084df37714d4003ffd76014069975f689fcbe61cd73e6901c"
+  "compiled_at": "2026-09-15T18:05:00",
+  "state_sha256": "976a716070a27a0b3e0f50a96615d6ec2405080b62fa151aa7521569c5f64129"
 }

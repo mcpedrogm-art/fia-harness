@@ -1,6 +1,6 @@
 # PROGRESS.md — Hoja de Ruta e Historial de Fases (repo FIA Harness)
 
-**Fase activa:** F4
+**Fase activa:** F5
 
 ## Fases del Proceso (Harness — dogfood del propio kit)
 
@@ -19,7 +19,7 @@
 | F1 | Extracción del Core + superficie `fia` | Módulos core/parser/generators, fachadas generadas, entry point `fia` | F0 | [x] Listo |
 | F2 | Parser Engine con niveles de confianza | `extract_field(...) -> ExtractionResult`, config de sinónimos, corpus de PRDs, métrica % | F1 | [x] Listo |
 | F3 | State Engine (migración incremental) | schema_version, IDs estables, timestamps, fingerprints, migración con backup | F2 | [x] Listo |
-| F4 | Spike: mecanismo de captura de evidencia | docs/EVIDENCE_CAPTURE_DECISION.md + ejemplo end-to-end | F3 | [ ] Pendiente |
+| F4 | Spike: mecanismo de captura de evidencia | docs/EVIDENCE_CAPTURE_DECISION.md + ejemplo end-to-end | F3 | [x] Listo |
 | F5 | Evidence Engine | Schema EV-NNN, `fia evidence`, cadena claim→command→execution→artifact→hash | F4 | [ ] Pendiente |
 | F6 | Verification Engine | `fia verify` (STATE/DEPS/EVIDENCE/PROVENANCE/SEALS/SPEC) + smoke de tampering | F5 | [ ] Pendiente |
 | F7 | CI / Merge Gate mínimo | harness.yml con `fia verify`, local vs CI confiable, demo en rojo/verde | F6 | [ ] Pendiente |
@@ -78,4 +78,18 @@
 
   python task_generator.py --check
   ✅ Estado del harness válido: 4 fases de proceso, 8 de ejecución, 8 checkpoints, aprobaciones íntegras.
+  ```
+- **F4 (Spike captura de evidencia):** prototipadas las dos opciones (wrapper y artifacts) sobre un fixture mínimo; decisión híbrida (ADR-005) documentada en `docs/EVIDENCE_CAPTURE_DECISION.md`. Hallazgos clave: los runners escriben en streams distintos (unittest → stderr); sin ancla de CI la fabricación local no es detectable; la distinción local/trusted es la frontera de la garantía. Sin cambios de producto (spike).
+  Evidencia: docs/EVIDENCE_CAPTURE_DECISION.md · DECISIONS.md (ADR-005)
+  ```text
+  Spike F4 (fixture mínimo, Python 3.11.15, stdlib-only):
+    (a) wrapper verde:  exit_code=0 · stdout_sha256=e3b0c442… (vacío) · stderr_sha256=a4ca7fdb…
+        hallazgo: unittest escribe el informe en stderr → capturar ambos streams
+    (a) wrapper rojo:   exit_code=1 · FAILED (failures=1)
+    (b) verificación verde: PASS (10/10 checks) — artifact↔manifest, claim↔artifact, resultado↔exit
+    (b) verificación roja:  PASS (FAILED es coherente con exit 1)
+    (b) tras manipular el artifact (FAILED→OK): FAIL (3 detecciones: hash, binding, coherencia)
+
+  python task_generator.py --check
+  ✅ Estado del harness válido: 4 fases de proceso, 8 de ejecución, 9 checkpoints, aprobaciones íntegras.
   ```
