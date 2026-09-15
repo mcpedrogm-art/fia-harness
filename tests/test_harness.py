@@ -454,7 +454,7 @@ class EndToEndTests(unittest.TestCase):
         (self.dir / "PRD.md").write_text(self.PRD, encoding="utf-8")
 
     def _run(self, *args):
-        env = {**os.environ, "PYTHONIOENCODING": "utf-8"}
+        env = {**os.environ, "PYTHONIOENCODING": "utf-8", "PYTHONPATH": str(ROOT)}
         return subprocess.run(
             [sys.executable, str(ROOT / args[0]), *args[1:]],
             cwd=self.dir, capture_output=True, text=True, encoding="utf-8", env=env,

@@ -5,6 +5,31 @@ con `DECISIONS.md` del propio sistema.
 
 ---
 
+## v3.0.0a1 — Núcleo extraído al paquete, CLI `fia` y fachadas (F1 de v3.0-core)
+
+> **Cambio de contrato (major):** los scripts `bootstrap.py` y `task_generator.py` de
+> los proyectos pasan a ser **fachadas finas** que importan el paquete instalado
+> (`pip install fia-harness`). Decisión: ADR-001 en `DECISIONS.md`; baseline en
+> `docs/V3_BASELINE.md`.
+
+1. **Extracción del núcleo a módulos** (`fia_harness/core`, `parser`, `generators`):
+   consola, reglas/heurísticas, estado, evidencia, aprobaciones, comandos, parser de
+   Markdown y de PRD, generadores de tarea y de proyecto. Ningún módulo supera 250
+   líneas; comportamiento equivalente a v2.2 (suite completa en verde).
+2. **Fachadas de compatibilidad** (`fia_harness/facades.py`): `init` escribe scripts
+   de ~20 líneas que re-exportan la API histórica; si falta el paquete, fallan con un
+   mensaje accionable. Se elimina la duplicación `fia_harness/data/scripts/` y sus
+   tests de sincronía; nuevo test anti-drift (fachadas del repo == plantilla del
+   paquete).
+3. **CLI unificada `fia`** (con `fia-harness` como alias): `init`, `sync`, `check`,
+   `task`, `status`, `approve`, `seal`, `reopen`. La CLI legacy con flags se mantiene
+   intacta vía `fia_harness/legacy.py`.
+4. **CI:** el workflow generado instala `fia-harness` antes de `--check`; el job
+   dogfood del repo usa `PYTHONPATH`; nuevo job `estado-harness` que valida el estado
+   del propio repo. Tests: 75 → 144 (`python -m unittest discover tests -v`).
+
+---
+
 ## v2.2.0 — Reapertura auditada y PRD de partida para la ruta de clonado
 
 1. **`--reopen F<N> --reason`** (nuevo). Reabre una fase cerrada (`done` →

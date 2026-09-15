@@ -24,6 +24,9 @@ jobs:
   dogfood:
     name: Autoaplicación (el kit se gobierna a sí mismo)
     runs-on: ubuntu-latest
+    env:
+      # Las fachadas del proyecto temporal importan el paquete (ADR-001).
+      PYTHONPATH: ${{ github.workspace }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5

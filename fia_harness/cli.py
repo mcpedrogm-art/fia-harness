@@ -1,9 +1,12 @@
-"""fia-harness CLI — instalador del kit (PyPI).
+"""FIA Harness CLI — instalador y comandos del kit.
 
-`fia-harness init` monta un proyecto nuevo con la misma estructura que describe
-`INSTRUCCIONES DE APLICACION.txt`: plantillas del kit en /docs, los dos scripts
-en la raíz y un `PRD.md` de partida. Igual que el resto del kit: solo librería
-estándar, idempotente (nunca sobrescribe lo que ya existe) y sin telemetría.
+`fia init` monta un proyecto nuevo con la misma estructura que describe
+`INSTRUCCIONES DE APLICACION.txt`: plantillas del kit en /docs, fachadas de los
+scripts en la raíz (que importan el paquete instalado, ADR-001) y un `PRD.md` de
+partida. El resto de subcomandos (`check`, `sync`, `task`, `status`, `approve`,
+`seal`, `reopen`) delegan en el núcleo: `fia` y `fia-harness` son el mismo comando.
+Igual que el resto del kit: solo librería estándar, idempotente (nunca sobrescribe
+lo que ya existe) y sin telemetría.
 """
 
 import argparse
@@ -12,11 +15,13 @@ import sys
 from pathlib import Path
 
 from fia_harness import __version__
+from fia_harness.core import commands
+from fia_harness.core.console import fix_windows_console_encoding
+from fia_harness.facades import facade_files
 
 PACKAGE_DIR = Path(__file__).resolve().parent
 DATA_DIR = PACKAGE_DIR / "data"
 TEMPLATES_DIR = DATA_DIR / "templates"
-SCRIPTS_DIR = DATA_DIR / "scripts"
 RAG_DIR = DATA_DIR / "rag"
 
 TEMPLATE_NAMES = [
@@ -32,8 +37,6 @@ TEMPLATE_NAMES = [
     "PRD_TEMPLATE.md",
     "MODELOS.md",
 ]
-
-SCRIPT_NAMES = ["bootstrap.py", "task_generator.py"]
 
 RAG_NAME = "RAG_VECTOR_EXTENSION.md"
 
@@ -96,9 +99,15 @@ def run_init(target_dir: Path) -> int:
     copy_if_absent(RAG_DIR / RAG_NAME, target_dir / "docs" / RAG_NAME,
                    f"docs/{RAG_NAME} (módulo RAG/vectorial opcional)")
 
-    print("\n-> Copiando los dos scripts del kit a la raíz ...")
-    for name in SCRIPT_NAMES:
-        copy_if_absent(SCRIPTS_DIR / name, target_dir / name, name)
+    print("\n-> Escribiendo las fachadas de los scripts en la raíz ...")
+    for name, content in facade_files().items():
+        facade_path = target_dir / name
+        if facade_path.exists():
+            print(f"   [.] Ya existe (no sobrescrito): {name}")
+            continue
+        with open(facade_path, "w", encoding="utf-8", newline="\n") as f:
+            f.write(content)
+        print(f"   [+] {name} (fachada; requiere `pip install fia-harness`)")
 
     print("\n-> Preparando PRD.md de partida ...")
     prd_path = target_dir / "PRD.md"
@@ -116,38 +125,85 @@ def run_init(target_dir: Path) -> int:
     return 0
 
 
-def _fix_windows_console_encoding():
-    """Evita UnicodeEncodeError (🚀/✅) en consolas Windows con codificación cp1252."""
-    for stream in (sys.stdout, sys.stderr):
-        if stream is None:
-            continue
-        try:
-            stream.reconfigure(encoding="utf-8", errors="replace")
-        except (AttributeError, ValueError, OSError):
-            pass
-
-
 def main(argv=None) -> int:
-    _fix_windows_console_encoding()
+    fix_windows_console_encoding()
     parser = argparse.ArgumentParser(
-        prog="fia-harness",
+        prog="fia",
         description="FIA Harness: kit local de especificación y enforcement para agentes de IA.",
     )
     subparsers = parser.add_subparsers(dest="command", required=True)
 
     init_parser = subparsers.add_parser(
         "init",
-        help="Monta un proyecto nuevo: plantillas en /docs, scripts en la raíz y PRD.md.",
+        help="Monta un proyecto nuevo: plantillas en /docs, fachadas en la raíz y PRD.md.",
     )
-    init_parser.add_argument(
-        "-d", "--dir", default=".",
-        help="Directorio de destino del proyecto (por defecto: el actual).",
-    )
+    init_parser.add_argument("-d", "--dir", default=".",
+                             help="Directorio de destino del proyecto (por defecto: el actual).")
+
+    sync_parser = subparsers.add_parser("sync", help="Compila y valida PROGRESS.md → progress.json.")
+    sync_parser.add_argument("-d", "--dir", default=".")
+
+    check_parser = subparsers.add_parser("check", help="Valida el estado sin modificar nada (lo que ejecuta el CI).")
+    check_parser.add_argument("-d", "--dir", default=".")
+    check_parser.add_argument("--state-optional", action="store_true",
+                              help="Permite validar sin progress.json (escape explícito).")
+
+    status_parser = subparsers.add_parser("status", help="Resumen del estado del proyecto.")
+    status_parser.add_argument("-d", "--dir", default=".")
+
+    approve_parser = subparsers.add_parser("approve", help="Registra una aprobación humana (APPROVAL-NNN).")
+    approve_parser.add_argument("accion", help="Acción aprobada.")
+    approve_parser.add_argument("--phase", default=None, help="Fase asociada (p. ej. M2 o F3).")
+    approve_parser.add_argument("--ref", default="", help="Referencia (chat, PR, reunión).")
+    approve_parser.add_argument("--approved-by", default="Humano", help="Quién aprueba.")
+    approve_parser.add_argument("-d", "--dir", default=".")
+
+    seal_parser = subparsers.add_parser("seal", help="Sella documentos normativos (SHA-256).")
+    seal_parser.add_argument("docs", nargs="*", help="Documentos extra a sellar (sin args: set obligatorio).")
+    seal_parser.add_argument("-d", "--dir", default=".")
+
+    reopen_parser = subparsers.add_parser("reopen", help="Reabre una fase cerrada (done → in_progress).")
+    reopen_parser.add_argument("fase", help="Código de fase (p. ej. F3).")
+    reopen_parser.add_argument("--reason", required=True, help="Motivo de la reapertura.")
+    reopen_parser.add_argument("-d", "--dir", default=".")
+
+    task_parser = subparsers.add_parser("task", help="Genera el TASK-Fx.md de la fase activa.")
+    task_parser.add_argument("-p", "--phase", default=None, help="Fase explícita (p. ej. F1).")
+    task_parser.add_argument("-l", "--lite", action="store_true", help="Forzar la plantilla Lite.")
+    task_parser.add_argument("-d", "--dir", default=".")
 
     args = parser.parse_args(argv)
+    target = Path(args.dir)
 
     if args.command == "init":
-        return run_init(Path(args.dir))
+        return run_init(target)
+    if args.command == "sync":
+        commands.cmd_sync(target)
+        return 0
+    if args.command == "check":
+        commands.cmd_check(target, state_optional=args.state_optional)
+        return 0
+    if args.command == "status":
+        commands.cmd_stats(target)
+        return 0
+    if args.command == "approve":
+        commands.cmd_approval(target, args.accion, args.phase, args.ref, args.approved_by)
+        return 0
+    if args.command == "seal":
+        commands.cmd_seal(target, args.docs)
+        return 0
+    if args.command == "reopen":
+        commands.cmd_reopen(target, args.fase, args.reason)
+        return 0
+    if args.command == "task":
+        from fia_harness.legacy import main_task_generator
+        legacy_argv = ["--dir", str(target)]
+        if args.phase:
+            legacy_argv += ["--phase", args.phase]
+        if args.lite:
+            legacy_argv.append("--lite")
+        main_task_generator(legacy_argv)
+        return 0
 
     parser.print_help()
     return 2

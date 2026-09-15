@@ -1,6 +1,6 @@
 # PROGRESS.md — Hoja de Ruta e Historial de Fases (repo FIA Harness)
 
-**Fase activa:** F1
+**Fase activa:** F2
 
 ## Fases del Proceso (Harness — dogfood del propio kit)
 
@@ -16,7 +16,7 @@
 | Fase | Objetivo | Entregable | Depende de | Estado |
 | --- | --- | --- | --- | --- |
 | F0 | Baseline v2.2 y dogfood del repo | docs/V3_BASELINE.md, suite 75/75 registrada, rama v3.0-core, CI con --check | — | [x] Listo |
-| F1 | Extracción del Core + superficie `fia` | Módulos core/parser/generators, fachadas generadas, entry point `fia` | F0 | [ ] Pendiente |
+| F1 | Extracción del Core + superficie `fia` | Módulos core/parser/generators, fachadas generadas, entry point `fia` | F0 | [x] Listo |
 | F2 | Parser Engine con niveles de confianza | `extract_field(...) -> ExtractionResult`, config de sinónimos, corpus de PRDs, métrica % | F1 | [ ] Pendiente |
 | F3 | State Engine (migración incremental) | schema_version, IDs estables, timestamps, fingerprints, migración con backup | F2 | [ ] Pendiente |
 | F4 | Spike: mecanismo de captura de evidencia | docs/EVIDENCE_CAPTURE_DECISION.md + ejemplo end-to-end | F3 | [ ] Pendiente |
@@ -39,4 +39,14 @@
 
   python task_generator.py --check
   ✅ Estado del harness válido: 4 fases de proceso, 8 de ejecución, 5 checkpoints, aprobaciones íntegras.
+  ```
+- **F1 (Core + CLI `fia`):** Núcleo extraído a `fia_harness/core|parser|generators` (17 módulos, ninguno >250 líneas), fachadas finas generadas (ADR-001, sin duplicación) y CLI `fia` con 8 subcomandos. Suite 75 → 144 tests, todos en verde; comportamiento equivalente a v2.2 (tests originales intactos).
+  Evidencia: CHANGELOG_FIXES.md (v3.0.0a1) · docs/V3_BASELINE.md (referencia de equivalencia)
+  ```text
+  python -m unittest discover tests -v   (Python 3.11.15, Windows)
+  Ran 144 tests in 2.127s
+  OK
+
+  python task_generator.py --check
+  ✅ Estado del harness válido: 4 fases de proceso, 8 de ejecución, 6 checkpoints, aprobaciones íntegras.
   ```

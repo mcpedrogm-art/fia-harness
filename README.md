@@ -129,6 +129,7 @@ so explicitly — never omitted in silence.
 
 ```text
 1. Prepare the new project
+   ├── pip install fia-harness  (root scripts are thin facades: they import the package)
    ├── bootstrap.py + task_generator.py at the root
    ├── /docs with the master templates
    ├── (optional) RAG_VECTOR_EXTENSION.md inside /docs if there will be semantic search
@@ -155,9 +156,9 @@ so explicitly — never omitted in silence.
 | File | What it is |
 |---|---|
 | 🧭 `INICIO_PROYECTO.md` | **Source of truth of the protocol**: agent role, phases, interview, golden rules |
-| ⚙️ `bootstrap.py` | Bootstrapper (M0): reads the PRD, generates the control files, seals the norms, emits the golden-rules CI |
-| 🤖 `task_generator.py` | Generates `TASK-Fx.md`, compiles/validates state (`--sync`, `--check`), seals docs (`--seal`), records approvals (`--approval`) and reopens phases (`--reopen`) |
-| 📦 `fia_harness/` + `pyproject.toml` | PyPI package: `fia-harness init` (installer CLI). Package copies are watched by sync tests |
+| ⚙️ `bootstrap.py` | Thin facade at the project root: imports the installed package and runs the M0 bootstrapper (PRD, control files, seals, golden-rules CI) |
+| 🤖 `task_generator.py` | Thin facade at the project root: generates `TASK-Fx.md`, compiles/validates state (`--sync`, `--check`), seals docs (`--seal`), records approvals (`--approval`) and reopens phases (`--reopen`) |
+| 📦 `fia_harness/` + `pyproject.toml` | PyPI package and **single source of truth** (ADR-001): `fia init`, `fia check`, `fia sync`, `fia task`, `fia status`, `fia approve`, `fia seal`, `fia reopen`. Root scripts are facades generated from this package |
 | 🗃️ `progress.json` | Compiled, validated project state: the machine truth the CI reads |
 | 📋 `TASK_TEMPLATE.md` | Master task template (full A–L cycle, 20-point report) |
 | ⚡ `TASK_LITE_TEMPLATE.md` | Quick task template for Lite mode |
@@ -279,7 +280,7 @@ These limits are the honest boundary of a kit that runs on *your* machine with
 
 This repository is governed by the kit it ships:
 
-- The badge above is this repo's own CI: **73 tests** plus a **self-application
+- The badge above is this repo's own CI: **144 tests** plus a **self-application
   job** that runs `fia-harness init` → `bootstrap.py` → `--check` on a fresh
   temp project in every push.
 - The [`fia-harness-demo`](https://github.com/mcpedrogm-art/fia-harness-demo)

@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "fia-harness"
-version = "2.2.0"
+version = "3.0.0a1"
 description = "FIA Harness: spec-driven development kit for AI agents with machine-validated state and CI enforcement. Stdlib-only, no cloud, no telemetry."
 readme = "README.md"
 requires-python = ">=3.8"
@@ -33,6 +33,7 @@ Repository = "https://github.com/mcpedrogm-art/fia-harness"
 Demo = "https://github.com/mcpedrogm-art/fia-harness-demo"
 
 [project.scripts]
+fia = "fia_harness.cli:main"
 fia-harness = "fia_harness.cli:main"
 
 [tool.setuptools.packages.find]
@@ -40,7 +41,6 @@ include = ["fia_harness*"]
 
 [tool.setuptools.package-data]
 fia_harness = [
-  "data/scripts/*.py",
   "data/templates/*.md",
   "data/rag/*.md",
 ]

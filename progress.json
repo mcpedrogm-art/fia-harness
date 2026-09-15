@@ -57,7 +57,7 @@
         "F0"
       ],
       "depends_on_notes": "",
-      "status": "pending"
+      "status": "done"
     },
     {
       "id": "F2",
@@ -150,6 +150,12 @@
       "summary": "Suite v2.2 en verde (75/75), baseline documentado y dogfood activo en el repo (SPEC.md, PROGRESS.md, DECISIONS.md, progress.json, TASK-F0.md, job de CI `--check`).",
       "evidence": "python -m unittest discover tests -v   (Python 3.11.15, Windows)\nRan 75 tests in 2.210s\nOK\n\npython task_generator.py --check\n✅ Estado del harness válido: 4 fases de proceso, 8 de ejecución, 5 checkpoints, aprobaciones íntegras.",
       "evidence_file": "docs/V3_BASELINE.md"
+    },
+    {
+      "phase": "F1",
+      "summary": "Núcleo extraído a `fia_harness/core|parser|generators` (17 módulos, ninguno >250 líneas), fachadas finas generadas (ADR-001, sin duplicación) y CLI `fia` con 8 subcomandos. Suite 75 → 144 tests, todos en verde; comportamiento equivalente a v2.2 (tests originales intactos).",
+      "evidence": "python -m unittest discover tests -v   (Python 3.11.15, Windows)\nRan 144 tests in 2.127s\nOK\n\npython task_generator.py --check\n✅ Estado del harness válido: 4 fases de proceso, 8 de ejecución, 6 checkpoints, aprobaciones íntegras.",
+      "evidence_file": "CHANGELOG_FIXES.md (v3.0.0a1) · docs/V3_BASELINE.md (referencia de equivalencia)"
     }
   ],
   "updated": "2026-09-15",

@@ -12,6 +12,9 @@ Si no existe ninguno, el bootstrap usa como pista el único .md de la raíz que 
 Asegúrate de que la carpeta /docs de tu nuevo proyecto contiene las plantillas maestras del kit:
 INICIO_PROYECTO.md, SECURITY.md, AEO_GEO_SEO.md, UI_UX_EXCLUSIVA.md, SKILLS_MCP.md, TASK_TEMPLATE.md, TASK_LITE_TEMPLATE.md y QUICKSTART_LITE.md
 Copia TAMBIEN los dos scripts a la raíz del proyecto: bootstrap.py y task_generator.py (el segundo es necesario para compilar el estado y para el CI que se genera en el paso 3).
+IMPORTANTE (v3): desde el kit v3 esos dos scripts son fachadas finas que importan el paquete, así que el proyecto necesita el paquete instalado:
+   pip install fia-harness      (o uvx fia-harness init, que monta el proyecto entero)
+El CI generado en el paso 3 instala el paquete automáticamente antes de validar el estado.
 Si tu proyecto será de búsqueda semántica / RAG (embeddings, documentos, memoria a largo plazo), copia también RAG_VECTOR_EXTENSION.md dentro de /docs: el bootstrap lo activará solo si el PRD lo menciona, y si falta te avisará expresamente.
 
 3. Ejecución de bootstrap.py (Fase M0)

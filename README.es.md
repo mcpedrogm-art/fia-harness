@@ -132,6 +132,7 @@ explícitamente — nunca se omite en silencio.
 
 ```text
 1. Prepara el proyecto nuevo
+   ├── pip install fia-harness  (los scripts de la raíz son fachadas finas: importan el paquete)
    ├── bootstrap.py + task_generator.py en la raíz
    ├── /docs con las plantillas maestras
    ├── (opcional) RAG_VECTOR_EXTENSION.md dentro de /docs si habrá búsqueda semántica
@@ -158,9 +159,9 @@ explícitamente — nunca se omite en silencio.
 | Archivo | Qué es |
 |---|---|
 | 🧭 `INICIO_PROYECTO.md` | **Fuente de verdad del protocolo**: rol del agente, fases, entrevista, reglas de oro |
-| ⚙️ `bootstrap.py` | Inicializador (M0): lee el PRD, genera los archivos de control, sella las normas y emite el CI de reglas de oro |
-| 🤖 `task_generator.py` | Genera `TASK-Fx.md`, compila/valida el estado (`--sync`, `--check`), sella docs (`--seal`), registra aprobaciones (`--approval`) y reabre fases (`--reopen`) |
-| 📦 `fia_harness/` + `pyproject.toml` | Paquete PyPI: `fia-harness init` (CLI instalador). Las copias del paquete están vigiladas por tests de sincronización |
+| ⚙️ `bootstrap.py` | Fachada fina en la raíz del proyecto: importa el paquete instalado y ejecuta el inicializador M0 (PRD, archivos de control, sellos, CI de reglas de oro) |
+| 🤖 `task_generator.py` | Fachada fina en la raíz del proyecto: genera `TASK-Fx.md`, compila/valida el estado (`--sync`, `--check`), sella docs (`--seal`), registra aprobaciones (`--approval`) y reabre fases (`--reopen`) |
+| 📦 `fia_harness/` + `pyproject.toml` | Paquete PyPI y **única fuente de verdad** (ADR-001): `fia init`, `fia check`, `fia sync`, `fia task`, `fia status`, `fia approve`, `fia seal`, `fia reopen`. Los scripts de la raíz son fachadas generadas desde este paquete |
 | 🗃️ `progress.json` | Estado compilado y validado: la máquina de verdad que lee el CI |
 | 📋 `TASK_TEMPLATE.md` | Plantilla maestra de tarea (ciclo completo A–L, 20 puntos de informe) |
 | ⚡ `TASK_LITE_TEMPLATE.md` | Plantilla de tarea rápida para el Modo Lite |
@@ -283,7 +284,7 @@ correcto.
 
 Este repositorio se gobierna con el kit que distribuye:
 
-- El badge de arriba es el CI de este propio repo: **73 tests** más un job de
+- El badge de arriba es el CI de este propio repo: **144 tests** más un job de
   **auto-aplicación** que ejecuta `fia-harness init` → `bootstrap.py` → `--check`
   sobre un proyecto temporal nuevo en cada push.
 - El repo [`fia-harness-demo`](https://github.com/mcpedrogm-art/fia-harness-demo)

@@ -33,15 +33,28 @@ TEMPLATE_NAMES = [
 ]
 
 
-class PackageDataSyncTest(unittest.TestCase):
-    """Las copias del paquete nunca divergen de los archivos reales del kit."""
+class ScriptFacadesTest(unittest.TestCase):
+    """ADR-001: el paquete es la única fuente de verdad; los scripts de la raíz son
+    fachadas finas que lo importan (ya no hay copias que sincronizar)."""
 
-    def test_scripts_match_repo_root(self):
+    def test_no_hay_copias_de_scripts_en_el_paquete(self):
+        self.assertFalse((PKG / "data" / "scripts").exists(),
+                         "fia_harness/data/scripts ya no debe existir (ADR-001)")
+
+    def test_scripts_de_la_raiz_son_fachadas(self):
         for name in ("bootstrap.py", "task_generator.py"):
-            packaged = (PKG / "data" / "scripts" / name).read_text(encoding="utf-8")
-            original = (ROOT / name).read_text(encoding="utf-8")
-            self.assertEqual(packaged, original,
-                             f"{name}: la copia del paquete difiere de la raíz; sincronízalas")
+            content = (ROOT / name).read_text(encoding="utf-8")
+            self.assertIn("from fia_harness", content, f"{name} no importa el paquete")
+            self.assertLess(len(content.splitlines()), 40,
+                            f"{name} dejó de ser una fachada fina")
+
+    def test_fachadas_del_repo_coinciden_con_la_plantilla_del_paquete(self):
+        from fia_harness.facades import facade_files
+        for name, template in facade_files().items():
+            content = (ROOT / name).read_text(encoding="utf-8")
+            self.assertEqual(content.replace("\r\n", "\n").rstrip("\n"),
+                             template.rstrip("\n"),
+                             f"{name}: la fachada del repo difiere de la plantilla del paquete")
 
     def test_templates_match_repo_root(self):
         for name in TEMPLATE_NAMES:
@@ -63,6 +76,9 @@ class InitEndToEndTest(unittest.TestCase):
     def _run(self, cmd, cwd):
         env = dict(os.environ)
         env["PYTHONIOENCODING"] = "utf-8"
+        # Las fachadas de la raíz importan el paquete (ADR-001): el proyecto temporal
+        # no está instalado, así que le damos el repo por PYTHONPATH.
+        env["PYTHONPATH"] = str(ROOT)
         return subprocess.run(cmd, cwd=cwd, capture_output=True, text=True,
                               encoding="utf-8", env=env)
 
@@ -112,6 +128,7 @@ class InitEndToEndTest(unittest.TestCase):
             self.assertEqual(cli.main(["init", "-d", str(target)]), 0)
             env = dict(os.environ)
             env["PYTHONIOENCODING"] = "cp1252"  # consola Windows típica
+            env["PYTHONPATH"] = str(ROOT)
             boot = subprocess.run([sys.executable, "bootstrap.py"], cwd=target,
                                   capture_output=True, text=True, encoding="utf-8", env=env)
             self.assertEqual(boot.returncode, 0, boot.stdout + boot.stderr)
