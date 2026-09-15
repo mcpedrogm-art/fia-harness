@@ -1,0 +1,13 @@
+FIA Verification Report
+
+STATE          PASS
+DEPENDENCIES   PASS
+EVIDENCE       PASS
+PROVENANCE     PASS — 3 con procedencia (0 trusted) · 5 solo existencia
+RISK           PASS
+SEALS          PASS
+SPEC SNAPSHOT  PASS
+QUALITY        OK
+
+RESULT
+  PASS — merge eligible

@@ -249,8 +249,15 @@
       "date": "2026-09-15",
       "phase": "M2",
       "id": "SNAP-001"
+    },
+    {
+      "sha256": "1384682d2fab220115ee16ef9955dad934b1b0ed8fb6ce2bf6be1c0dcbe9bb61",
+      "ref": "sesion 2026-09-15 (usuario autoriza cada fase)",
+      "date": "2026-09-15",
+      "phase": "F3",
+      "id": "SNAP-002"
     }
   ],
-  "compiled_at": "2026-09-15T18:24:53",
-  "state_sha256": "211e9d41a244bfb80f58b76fb09757c0d2956771fd82855de1b0a5a50e25254d"
+  "compiled_at": "2026-09-15T19:40:15",
+  "state_sha256": "af0ebd0b84289741c759caba47cdfa2ce2130704ccc7506faa1c43601483ab08"
 }

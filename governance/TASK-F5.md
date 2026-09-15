@@ -1,5 +1,7 @@
 # TASK-F5 — EVIDENCE ENGINE
 
+> **Decisión humana (riesgo: esquema de evidencia):** APPROVAL-002 — autorización del plan v3.0-core (fases F0–F7).
+
 ## Tipo de tarea
 - [ ] Construcción de funcionalidad nueva (fase del plan de ejecución)
 - [ ] Diagnóstico / corrección de bug

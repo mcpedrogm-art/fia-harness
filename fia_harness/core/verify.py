@@ -1,29 +1,31 @@
-"""Verification Engine (`fia verify`, F6).
+"""Verification Engine (`fia verify`, F6; gates de riesgo/calidad en v3.1).
 
 `verify` no confía en afirmaciones del agente: inspecciona artefactos y compone el
-reporte STATE / DEPENDENCIES / EVIDENCE / PROVENANCE / SEALS / SPEC SNAPSHOT.
+reporte STATE / DEPENDENCIES / EVIDENCE / PROVENANCE / RISK / SEALS / SPEC SNAPSHOT.
 No modifica nada y es fail-closed (exit 1 si algo no cierra).
 
-PROVENANCE (ADR-005): un registro EV con digests de CI verificados se reporta como
-`trusted`; sin ancla externa queda `local`. La evidencia inline/archivo cuenta como
-existencia (compat v2.2), no como procedencia verificada.
+- PROVENANCE (ADR-005): `trusted` (digests de CI verificados) vs `local`.
+- RISK (v3.1): fases con señales de riesgo exigen decisión humana registrada.
+- QUALITY (v3.1): avisos que **nunca** bloquean (informe TASK incompleto, riesgo futuro).
 """
 
 from pathlib import Path
 
 from fia_harness.core import approvals
 from fia_harness.core import evidence as ev
+from fia_harness.core import quality
 from fia_harness.core import state as st
 from fia_harness.core.console import fix_windows_console_encoding
 from fia_harness.parser.markdown import load_file
 
-SECTION_ORDER = ("STATE", "DEPENDENCIES", "EVIDENCE", "PROVENANCE", "SEALS", "SPEC SNAPSHOT")
+SECTION_ORDER = ("STATE", "DEPENDENCIES", "EVIDENCE", "PROVENANCE", "RISK",
+                 "SEALS", "SPEC SNAPSHOT")
 
 
-def _finalize(sections: dict) -> dict:
+def _finalize(sections: dict, advisories=()) -> dict:
     reasons = [f"[{name}] {error}"
                for name in SECTION_ORDER for error in sections[name]["errors"]]
-    return {"sections": sections, "reasons": reasons}
+    return {"sections": sections, "reasons": reasons, "advisories": list(advisories)}
 
 
 def build_report(project_dir: Path) -> dict:
@@ -66,13 +68,16 @@ def build_report(project_dir: Path) -> dict:
         f"{len(with_provenance)} con procedencia ({len(trusted)} trusted) · "
         f"{len(existence_only)} solo existencia")
 
+    sections["RISK"]["errors"] += quality.validate_risk_decisions(stored, project_dir)
     sections["SEALS"]["errors"] += st.validate_sealed_docs(stored, project_dir)
     sections["SPEC SNAPSHOT"]["errors"] += st.validate_spec_snapshot(stored, project_dir)
-    return _finalize(sections)
+    return _finalize(sections, quality.quality_advisories(stored, project_dir))
 
 
 def cmd_verify(project_dir: Path) -> int:
-    """`fia verify`: imprime el reporte y devuelve 0 (PASS) o 1 (FAIL)."""
+    """`fia verify`: imprime el reporte y devuelve 0 (PASS) o 1 (FAIL).
+
+    La sección QUALITY es informativa: sus avisos nunca cambian el exit code."""
     fix_windows_console_encoding()
     report = build_report(project_dir)
     print("FIA Verification Report")
@@ -82,12 +87,19 @@ def cmd_verify(project_dir: Path) -> int:
         status = "PASS" if not section["errors"] else "FAIL"
         note = f" — {section['note']}" if section["note"] else ""
         print(f"{name:<14} {status}{note}")
+    advisories = report["advisories"]
+    print(f"{'QUALITY':<14} " + (f"WARN — {len(advisories)} aviso(s) (no bloquean)"
+                                 if advisories else "OK"))
     print()
     if not report["reasons"]:
         print("RESULT\n  PASS — merge eligible")
-        return 0
-    print("RESULT\n  FAIL — merge blocked")
-    print("\nReasons:")
-    for reason in report["reasons"]:
-        print(f"  {reason}")
-    return 1
+    else:
+        print("RESULT\n  FAIL — merge blocked")
+        print("\nReasons:")
+        for reason in report["reasons"]:
+            print(f"  {reason}")
+    if advisories:
+        print("\nAdvisories (no bloquean):")
+        for advisory in advisories:
+            print(f"  {advisory}")
+    return 1 if report["reasons"] else 0

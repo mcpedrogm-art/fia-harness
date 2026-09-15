@@ -12,7 +12,7 @@ import re
 import shutil
 from pathlib import Path
 
-from fia_harness.core import approvals, evidence
+from fia_harness.core import approvals, evidence, quality
 from fia_harness.core.fingerprints import (sha256_hex, state_fingerprint,
                                            state_sha256, validate_state_integrity)
 from fia_harness.core.seals import (REQUIRED_SEALED, compute_doc_hashes,  # noqa: F401
@@ -165,7 +165,8 @@ def carry_over_aux_fields(state: dict, previous) -> dict:
 def collect_validation_errors(state: dict, project_dir: Path):
     return (validate_state(state, project_dir)
             + validate_sealed_docs(state, project_dir)
-            + validate_spec_snapshot(state, project_dir))
+            + validate_spec_snapshot(state, project_dir)
+            + quality.validate_risk_decisions(state, project_dir))
 
 
 def validate_state_structure(state: dict, project_dir: Path):

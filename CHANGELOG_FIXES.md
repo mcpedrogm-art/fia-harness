@@ -5,6 +5,32 @@ con `DECISIONS.md` del propio sistema.
 
 ---
 
+## v3.1.0 — Gates de calidad: riesgo → decisión humana y avisos (Etapa 1)
+
+1. **Gate de riesgo → decisión humana** (`core/quality.py`, fail-closed): una fase
+   con señales de riesgo (auth, BBDD/migraciones/schema, secretos, pagos, PII,
+   infra, servicios externos) no puede cerrarse sin una **decisión humana
+   registrada** (`APPROVAL-NNN` citada en su TASK o checkpoint: aprobación o
+   exención motivada). Es `heurística → recomendación → decisión`: no bloquea por la
+   palabra clave, bloquea por la ausencia de decisión. En **Modo Lite**, una fase de
+   riesgo exige **promoción a Modo Completo** — lo que `QUICKSTART_LITE.md` ya
+   prometía, ahora mecánico.
+2. **Sección `RISK` en `fia verify`** y gate equivalente en `--check` (misma fuente).
+3. **Sección `QUALITY` (avisos, nunca bloquean)**: informe TASK incompleto
+   (secciones 2/8/10/11/12 vacías) y fases pendientes con señales de riesgo.
+   **Grandfathering**: cierres anteriores al 2026-09-16 = legacy (ADR-007).
+4. **`detect_lite_mode` movido a `core/policy.py`** (señales y modo en un solo
+   sitio; `generators.task` lo re-exporta, API intacta).
+5. **ADR-006** (enforcement dentro del trust boundary Git+CI; se rechaza el mediador
+   en runtime) y **ADR-007** (gates de calidad y grandfathering). Dogfood:
+   `APPROVAL-002` (autorización humana de F0–F7) citada en `TASK-F3.md` por su
+   señal de riesgo (migración/schema).
+6. *Desviación documentada*: el aviso de completitud de SPEC se mueve a v3.2
+   (necesita una lista de secciones configurable por tipo de proyecto).
+7. Tests: 213 → 227.
+
+---
+
 ## v3.0.2 — Posicionamiento honesto: freno de mano, no piloto automático (Etapa 0)
 
 1. **Hero suavizado** (README EN/ES): de *"merge checks no agent can skip"* a

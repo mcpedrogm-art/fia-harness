@@ -61,10 +61,12 @@ producto.
   - fases sin criterio de aceptación/entregable;
   - `TASK-Fx.md` con informe incompleto (secciones 2 diseño, 8 tests, 10 lint,
     11 build, 12 seguridad);
-  - evidencia sin `lint`/`build` en fases de código;
-  - `SPEC.md` sin alguna de las 12 secciones del protocolo.
+  - fases pendientes con señales de riesgo (planifica su decisión humana).
 - **Grandfathering:** fases ya cerradas = legacy (ADR-004); el aviso aplica a
   cierres nuevos.
+- *Desviación documentada:* el aviso de **completitud de SPEC** se mueve a 2.1
+  (necesita una lista de secciones **configurable por tipo de proyecto**: un kit,
+  una CLI o una librería no tienen "modelo de datos" ni "contratos de API").
 
 ### 1.3 Registro
 - **ADR-006** — Enforcement dentro del trust boundary Git+CI; "freno de mano, no
@@ -82,7 +84,7 @@ dogfood · CI verde · evidencia (EV) citada en el checkpoint de la fase.
 
 | # | Mejora | Diseño clave | Activación |
 |---|---|---|---|
-| 2.1 | Completitud de SPEC (M2) | 12 secciones no vacías; WARN primero, `--strict` opcional | fricción F8 |
+| 2.1 | Completitud de SPEC (M2) | lista de secciones **configurable por tipo de proyecto**; WARN primero, `--strict` opcional | fricción F8 |
 | 2.2 | Informe TASK completo al cerrar | secciones 2/8/10/11/12 (acepta `N/A (motivo)`); FAIL en `--sync` | fricción F8 |
 | 2.3 | ADR obligatorio en fases arquitectónicas | la aprobación de riesgo cita `ADR-NNN` | tras 1.1 |
 | 2.4 | Scope enforcement post-hoc | la TASK declara alcance; `verify` compara con el diff (`adapters/git.py`) | fricción F8 |

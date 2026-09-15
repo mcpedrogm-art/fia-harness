@@ -8,7 +8,8 @@ La inyección basada en marcadores es robusta a cambios de redacción en la plan
 import re
 
 from fia_harness.core.console import warn
-from fia_harness.core.policy import INJECT_MARKERS, NOT_APPLICABLE_TEXT
+from fia_harness.core.policy import (INJECT_MARKERS, NOT_APPLICABLE_TEXT,  # noqa: F401
+                                     detect_lite_mode)
 from fia_harness.core.state import DEFAULT_FILES
 from fia_harness.parser.markdown import extract_section, load_file
 
@@ -150,15 +151,3 @@ def build_task_file(project_dir, row: dict, reqs: dict, use_lite: bool) -> str:
                  f"{DEFAULT_FILES['template']}. Esa sección quedó SIN modificar — revísala a mano.")
 
     return output
-
-
-def detect_lite_mode(context_content: str, project_dir, forced: bool) -> bool:
-    if forced:
-        return True
-    if (project_dir / "QUICK_CONTEXT.md").exists():
-        return True
-    # Exige que "Lite" sea el valor declarado justo tras "Modo de trabajo:" (permitiendo
-    # negrita/código de Markdown entre medias) — NO basta con que "Lite" se mencione más
-    # adelante en la misma línea como una de las opciones posibles (p. ej. "Completo / Lite").
-    return bool(re.search(r"modo\s+de\s+trabajo\**\s*:\**\s*lite\b",
-                           context_content, re.IGNORECASE))
