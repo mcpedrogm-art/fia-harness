@@ -5,6 +5,31 @@ con `DECISIONS.md` del propio sistema.
 
 ---
 
+## v3.0.0 — Núcleo verificable: estado 3.0, evidencia con procedencia y merge gate
+
+Primera release estable de **v3.0-core** (fases F0–F7 del plan v3.0-core). Resumen:
+
+- **Core extraído al paquete** (ADR-001): `task_generator.py`/`bootstrap.py` en los
+  proyectos son fachadas finas; la CLI es `fia` (`init`, `sync`, `check`, `task`,
+  `status`, `approve`, `seal`, `reopen`, `run`, `evidence`, `verify`).
+- **Parser Engine con confianza** (F2): `extract_field` con niveles alta/media/ninguna,
+  config versionada de sinónimos y corpus de regresión (81% de campos resueltos).
+- **State Engine 3.0** (F3, ADR-002): IDs estables, timestamps, huellas de deriva e
+  integridad, migración con backup y doble lectura `harness-state/1` ↔ 3.0.
+- **Evidence Engine** (F5, ADR-005): registros `EV-NNN` con artifacts hasheados,
+  `fia run` opcional en local y anclaje de digests de CI (`fia evidence --ingest`).
+- **Verification Engine** (F6): `fia verify` (STATE/DEPENDENCIES/EVIDENCE/PROVENANCE/
+  SEALS/SPEC SNAPSHOT), fail-closed, con distinción `trusted` vs `local`.
+- **CI / Merge Gate** (F7): el workflow generado y el CI del propio repo ejecutan
+  `fia verify`; el demo público queda migrado a v3.
+- 212 tests, stdlib-only, sin cloud ni telemetría.
+
+> **Cambio de contrato (major):** los scripts de la raíz requieren el paquete
+> instalado (`pip install fia-harness`); ya no se copian scripts autocontenidos.
+> Detalle por fase en las entradas v3.0.0a1–a6.
+
+---
+
 ## v3.0.0a6 — CI / Merge Gate: `fia verify` como gate (F7 de v3.0-core)
 
 1. **Workflow generado** (`bootstrap.py` → `.github/workflows/harness.yml`): el job
