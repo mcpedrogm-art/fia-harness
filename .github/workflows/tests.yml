@@ -41,12 +41,12 @@ jobs:
           python task_generator.py --check
 
   estado-harness:
-    name: Estado del repo válido (dogfood --check)
+    name: Estado del repo válido (dogfood fia verify)
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
-      - name: Validar estado del propio repo (reglas de oro)
-        run: python task_generator.py --check
+      - name: Validar estado, evidencia y procedencia del propio repo
+        run: python -m fia_harness.cli verify

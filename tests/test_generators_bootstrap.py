@@ -25,7 +25,7 @@ class ScaffoldTests(unittest.TestCase):
             scaffold.generate_github_workflow(d)
             wf = (d / ".github" / "workflows" / "harness.yml").read_text(encoding="utf-8")
             self.assertIn("pip install fia-harness", wf)
-            self.assertIn("task_generator.py --check", wf)
+            self.assertIn("fia verify", wf)
 
     def test_generate_github_workflow_no_sobrescribe(self):
         with tempfile.TemporaryDirectory() as d:

@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "fia-harness"
-version = "3.0.0a5"
+version = "3.0.0a6"
 description = "FIA Harness: spec-driven development kit for AI agents with machine-validated state and CI enforcement. Stdlib-only, no cloud, no telemetry."
 readme = "README.md"
 requires-python = ">=3.8"

@@ -159,9 +159,8 @@ esta tabla; no toca la tabla de fases M0-M3 de arriba.
 
 GITHUB_WORKFLOW = """\
 # Generado por bootstrap.py (kit FIA Harness v3). bootstrap.py nunca lo sobrescribe:
-# personalízalo libremente para tu stack. Los scripts de la raíz (task_generator.py)
-# son fachadas finas que importan el paquete instalado: por eso este workflow lo
-# instala antes de validar el estado.
+# personalízalo libremente para tu stack. Los scripts de la raíz son fachadas finas
+# que importan el paquete instalado; el gate de merge es `fia verify`.
 
 name: Harness — reglas de oro
 
@@ -172,7 +171,7 @@ on:
 
 jobs:
   estado:
-    name: Estado del harness válido (reglas 4, 5 y 7)
+    name: Gobernanza — estado, evidencia y procedencia (fia verify)
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -181,8 +180,14 @@ jobs:
           python-version: "3.11"
       - name: Instalar FIA Harness (los scripts son fachadas; requieren el paquete)
         run: python -m pip install fia-harness
-      - name: Validar estado, cierre de fases y aprobaciones
-        run: python task_generator.py --check
+      - name: Verificación (merge gate)
+        run: fia verify
+      # Procedencia "trusted" (ADR-005): ejecuta tu suite con `fia run`, sube los
+      # artifacts de evidence/ y adjunta el digest que publica la plataforma:
+      #   - run: fia run -- <tu comando de tests>
+      #   - uses: actions/upload-artifact@v4
+      #     with: { name: fia-evidence, path: evidence/ }
+      #   - run: fia evidence --ingest ci_artifact_manifest.json
 
   secretos:
     name: Sin secretos en el repositorio (regla 8)

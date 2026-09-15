@@ -1,6 +1,6 @@
 # PROGRESS.md — Hoja de Ruta e Historial de Fases (repo FIA Harness)
 
-**Fase activa:** F7
+**Fase activa:** F8 (puerta de validación externa)
 
 ## Fases del Proceso (Harness — dogfood del propio kit)
 
@@ -22,7 +22,7 @@
 | F4 | Spike: mecanismo de captura de evidencia | docs/EVIDENCE_CAPTURE_DECISION.md + ejemplo end-to-end | F3 | [x] Listo |
 | F5 | Evidence Engine | Schema EV-NNN, `fia evidence`, cadena claim→command→execution→artifact→hash | F4 | [x] Listo |
 | F6 | Verification Engine | `fia verify` (STATE/DEPS/EVIDENCE/PROVENANCE/SEALS/SPEC) + smoke de tampering | F5 | [x] Listo |
-| F7 | CI / Merge Gate mínimo | harness.yml con `fia verify`, local vs CI confiable, demo en rojo/verde | F6 | [ ] Pendiente |
+| F7 | CI / Merge Gate mínimo | harness.yml con `fia verify`, local vs CI confiable, demo en rojo/verde | F6 | [x] Listo |
 
 ## Checkpoints de Contexto Recientes
 
@@ -99,3 +99,6 @@
 - **F6 (Verification Engine):** `fia verify` compone el reporte STATE / DEPENDENCIES / EVIDENCE / PROVENANCE / SEALS / SPEC SNAPSHOT, no confía en afirmaciones (inspecciona artefactos) y es fail-closed (exit 1 con razones). PROVENANCE distingue `trusted` (digests de CI, ADR-005) de `local` y cuenta la evidencia "solo existencia" (compat v2.2). `validate_state` se refactorizó en secciones (estructura/dependencias) sin cambiar comportamiento. Tests: 197 → 212.
   Evidencia: EV-002
   EV-002 es la ejecución real de `fia verify` sobre este repo (registrada con `fia run`); su cadena se valida en el `--check` de este cierre. Smoke de tampering: copia sana → PASS; artifact manipulado → PROVENANCE FAIL; documento sellado alterado → SEALS FAIL.
+- **F7 (CI / Merge Gate):** el workflow generado pasa a ser `fia verify` (instala el paquete; patrón `trusted` documentado con artifacts + digest, ADR-005) y el job `estado-harness` del propio repo también. Demo `fia-harness-demo` migrado a v3 en local: F0/F1 con evidencia real re-ejecutada (EV-001 greet, EV-002 suite), estado 3.0 con backup, `fia verify` PASS (2 con procedencia, 0 solo existencia) y la trampa F2 bloquea el merge (FAIL por deriva; `sync` fail-closed con los errores de checkpoint/TASK). Cambios del demo sin commitear (pendientes de la release v3.0.0 y de autorización de push).
+  Evidencia: EV-003
+  EV-003 es la ejecución real de `fia verify` sobre este repo (registrada con `fia run`); su cadena se valida en el `--check` de este cierre.

@@ -117,7 +117,7 @@
         "F6"
       ],
       "depends_on_notes": "",
-      "status": "pending"
+      "status": "done"
     }
   ],
   "checkpoints": [
@@ -206,8 +206,16 @@
       "summary": "`fia verify` compone el reporte STATE / DEPENDENCIES / EVIDENCE / PROVENANCE / SEALS / SPEC SNAPSHOT, no confía en afirmaciones (inspecciona artefactos) y es fail-closed (exit 1 con razones). PROVENANCE distingue `trusted` (digests de CI, ADR-005) de `local` y cuenta la evidencia \"solo existencia\" (compat v2.2). `validate_state` se refactorizó en secciones (estructura/dependencias) sin cambiar comportamiento. Tests: 197 → 212.",
       "evidence": "",
       "evidence_file": "EV-002",
-      "id": "CP-F6",
-      "recorded_at": "2026-09-15T18:14:30"
+      "recorded_at": "2026-09-15T18:14:30",
+      "id": "CP-F6"
+    },
+    {
+      "phase": "F7",
+      "summary": "el workflow generado pasa a ser `fia verify` (instala el paquete; patrón `trusted` documentado con artifacts + digest, ADR-005) y el job `estado-harness` del propio repo también. Demo `fia-harness-demo` migrado a v3 en local: F0/F1 con evidencia real re-ejecutada (EV-001 greet, EV-002 suite), estado 3.0 con backup, `fia verify` PASS (2 con procedencia, 0 solo existencia) y la trampa F2 bloquea el merge (FAIL por deriva; `sync` fail-closed con los errores de checkpoint/TASK). Cambios del demo sin commitear (pendientes de la release v3.0.0 y de autorización de push).",
+      "evidence": "",
+      "evidence_file": "EV-003",
+      "id": "CP-F7",
+      "recorded_at": "2026-09-15T18:18:26"
     }
   ],
   "updated": "2026-09-15",
@@ -225,6 +233,6 @@
       "id": "SNAP-001"
     }
   ],
-  "compiled_at": "2026-09-15T18:14:30",
-  "state_sha256": "1a9199c9635fd4b501ce32252b4ae9c2baa63bf2088f65487ecf5c2e242dc7c4"
+  "compiled_at": "2026-09-15T18:18:26",
+  "state_sha256": "4a09f780b3eaf5464b6e99fc667d63d87e33864a9ab510bc4b4f13afa20544b2"
 }

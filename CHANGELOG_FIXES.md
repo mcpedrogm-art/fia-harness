@@ -5,6 +5,29 @@ con `DECISIONS.md` del propio sistema.
 
 ---
 
+## v3.0.0a6 — CI / Merge Gate: `fia verify` como gate (F7 de v3.0-core)
+
+1. **Workflow generado** (`bootstrap.py` → `.github/workflows/harness.yml`): el job
+   de gobernanza instala `fia-harness` y ejecuta **`fia verify`** como merge gate
+   (antes: `task_generator.py --check`). El patrón de procedencia `trusted`
+   (ADR-005) queda documentado en el propio workflow: `fia run` + artifacts +
+   `fia evidence --ingest` con el digest de la plataforma.
+2. **CI del propio repo**: el job `estado-harness` ejecuta
+   `python -m fia_harness.cli verify` (dogfood del gate v3).
+3. **Demo migrado a v3** (`fia-harness-demo`, ADR-004): F0/F1 respaldadas por
+   evidencia real re-ejecutada (`EV-001` greet, `EV-002` suite), estado 3.0 con
+   backup, `fia verify` PASS (2 con procedencia, 0 solo existencia) y la trampa F2
+   bloquea el merge (FAIL). Cambios pendientes de commit/push hasta la release.
+4. **Hallazgo de recuperación (ADR-004)**: con varias fases consecutivas sin
+   evidencia, `--reopen` no basta (la validación bloquea la primera reapertura):
+   la vía práctica es añadir la evidencia real (como hizo el demo) o reabrir todas
+   las afectadas a mano en PROGRESS.md y `--sync`. Candidato a mejorar en v3.1 si
+   hay fricción reportada. *(ADR-004 se había perdido por una edición accidental en
+   F4 y se restauró aquí, con la nota del hallazgo.)*
+5. Tests: 212 (sin cambios); `fia verify` sobre el repo: PASS.
+
+---
+
 ## v3.0.0a5 — Verification Engine: `fia verify` (F6 de v3.0-core)
 
 1. **`fia verify`** (`core/verify.py`): reporte STATE / DEPENDENCIES / EVIDENCE /
