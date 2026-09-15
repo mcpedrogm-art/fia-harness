@@ -1,6 +1,6 @@
 # PROGRESS.md — Hoja de Ruta e Historial de Fases (repo FIA Harness)
 
-**Fase activa:** F2
+**Fase activa:** F3
 
 ## Fases del Proceso (Harness — dogfood del propio kit)
 
@@ -17,7 +17,7 @@
 | --- | --- | --- | --- | --- |
 | F0 | Baseline v2.2 y dogfood del repo | docs/V3_BASELINE.md, suite 75/75 registrada, rama v3.0-core, CI con --check | — | [x] Listo |
 | F1 | Extracción del Core + superficie `fia` | Módulos core/parser/generators, fachadas generadas, entry point `fia` | F0 | [x] Listo |
-| F2 | Parser Engine con niveles de confianza | `extract_field(...) -> ExtractionResult`, config de sinónimos, corpus de PRDs, métrica % | F1 | [ ] Pendiente |
+| F2 | Parser Engine con niveles de confianza | `extract_field(...) -> ExtractionResult`, config de sinónimos, corpus de PRDs, métrica % | F1 | [x] Listo |
 | F3 | State Engine (migración incremental) | schema_version, IDs estables, timestamps, fingerprints, migración con backup | F2 | [ ] Pendiente |
 | F4 | Spike: mecanismo de captura de evidencia | docs/EVIDENCE_CAPTURE_DECISION.md + ejemplo end-to-end | F3 | [ ] Pendiente |
 | F5 | Evidence Engine | Schema EV-NNN, `fia evidence`, cadena claim→command→execution→artifact→hash | F4 | [ ] Pendiente |
@@ -49,4 +49,18 @@
 
   python task_generator.py --check
   ✅ Estado del harness válido: 4 fases de proceso, 8 de ejecución, 6 checkpoints, aprobaciones íntegras.
+  ```
+- **F2 (Parser Engine con confianza):** `extract_field` con estrategias en cascada (heading exacto → parcial → densidad → ninguna), config versionada de sinónimos (añadir sinónimo no toca código), normalización de acentos/mayúsculas, confianza reflejada en CONTEXT.md y consola, corpus de 20 PRDs con test de regresión. Tests: 144 → 161.
+  Evidencia: CHANGELOG_FIXES.md (v3.0.0a2) · tests/fixtures/prds/ · tests/test_prd_corpus.py
+  ```text
+  python -m unittest discover tests -v   (Python 3.11.15, Windows)
+  Ran 161 tests in 2.482s
+  OK
+
+  Métrica del corpus (20 PRDs, 100 campos):
+    resueltos (alta+media): 81/100 = 81.0%
+    confianza alta:         70/100 = 70.0%
+
+  python task_generator.py --check
+  ✅ Estado del harness válido: 4 fases de proceso, 8 de ejecución, 7 checkpoints, aprobaciones íntegras.
   ```

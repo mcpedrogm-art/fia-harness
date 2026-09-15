@@ -67,7 +67,7 @@
         "F1"
       ],
       "depends_on_notes": "",
-      "status": "pending"
+      "status": "done"
     },
     {
       "id": "F3",
@@ -156,6 +156,12 @@
       "summary": "Núcleo extraído a `fia_harness/core|parser|generators` (17 módulos, ninguno >250 líneas), fachadas finas generadas (ADR-001, sin duplicación) y CLI `fia` con 8 subcomandos. Suite 75 → 144 tests, todos en verde; comportamiento equivalente a v2.2 (tests originales intactos).",
       "evidence": "python -m unittest discover tests -v   (Python 3.11.15, Windows)\nRan 144 tests in 2.127s\nOK\n\npython task_generator.py --check\n✅ Estado del harness válido: 4 fases de proceso, 8 de ejecución, 6 checkpoints, aprobaciones íntegras.",
       "evidence_file": "CHANGELOG_FIXES.md (v3.0.0a1) · docs/V3_BASELINE.md (referencia de equivalencia)"
+    },
+    {
+      "phase": "F2",
+      "summary": "`extract_field` con estrategias en cascada (heading exacto → parcial → densidad → ninguna), config versionada de sinónimos (añadir sinónimo no toca código), normalización de acentos/mayúsculas, confianza reflejada en CONTEXT.md y consola, corpus de 20 PRDs con test de regresión. Tests: 144 → 161.",
+      "evidence": "python -m unittest discover tests -v   (Python 3.11.15, Windows)\nRan 161 tests in 2.482s\nOK\n\nMétrica del corpus (20 PRDs, 100 campos):\nresueltos (alta+media): 81/100 = 81.0%\nconfianza alta:         70/100 = 70.0%\n\npython task_generator.py --check\n✅ Estado del harness válido: 4 fases de proceso, 8 de ejecución, 7 checkpoints, aprobaciones íntegras.",
+      "evidence_file": "CHANGELOG_FIXES.md (v3.0.0a2) · tests/fixtures/prds/ · tests/test_prd_corpus.py"
     }
   ],
   "updated": "2026-09-15",

@@ -182,18 +182,26 @@ def main():
     # 3.1 Regla de oro nº2 (INICIO_PROYECTO.md): "nunca asumir en silencio".
     #     Si algún campo se rellenó con un valor por defecto/heurístico, se avisa
     #     explícitamente aquí en vez de dejarlo pasar como si fuera dato real.
+    campo_nombre = {
+        "title": "título del proyecto",
+        "problem": "problema de negocio",
+        "users": "usuario objetivo",
+        "features": "funcionalidades must-have",
+        "out_of_scope": "fuera de alcance",
+    }
     if metadata.get("unresolved"):
-        campo_nombre = {
-            "title": "título del proyecto",
-            "problem": "problema de negocio",
-            "users": "usuario objetivo",
-            "features": "funcionalidades must-have",
-            "out_of_scope": "fuera de alcance",
-        }
         print("\n[⚠️] No se pudo extraer del PRD la sección correspondiente a:")
         for campo in metadata["unresolved"]:
             print(f"     - {campo_nombre.get(campo, campo)} → CONTEXT.md quedó con un valor por defecto.")
         print("    Revisa y completa estos campos a mano en CONTEXT.md antes de aprobar la Fase 1.")
+
+    # 3.1.b Confianza media (F2): se detectó por heurística, no por encabezado exacto.
+    media = [campo for campo, conf in (metadata.get("confidence") or {}).items()
+             if (conf or {}).get("level") == "media"]
+    if media:
+        print("\n[⚠️] Campos detectados con confianza media (heurística; revisar antes de aprobar la Fase 1):")
+        for campo in media:
+            print(f"     - {campo_nombre.get(campo, campo)} → {metadata['confidence'][campo].get('method', '')}")
 
     # 3.2 Módulo de extensión RAG, solo si el PRD lo pide
     maybe_activate_rag_module(root_dir, prd_path)

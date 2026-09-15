@@ -56,6 +56,10 @@ class ScriptFacadesTest(unittest.TestCase):
                              template.rstrip("\n"),
                              f"{name}: la fachada del repo difiere de la plantilla del paquete")
 
+    def test_parser_config_se_empaqueta(self):
+        self.assertTrue((PKG / "data" / "parser" / "synonyms.json").exists(),
+                        "falta la config del parser PRD en el paquete (F2)")
+
     def test_templates_match_repo_root(self):
         for name in TEMPLATE_NAMES:
             packaged = (PKG / "data" / "templates" / name).read_text(encoding="utf-8")

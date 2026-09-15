@@ -41,9 +41,15 @@ def generate_context_file(root_dir, prd_path, metadata: dict):
 
     prd_reference = f"basado en `{prd_path.name}`" if prd_path else "creado desde plantilla vacía"
     unresolved = set(metadata.get("unresolved", []))
+    confidence = metadata.get("confidence", {})
 
     def flag(campo: str, texto: str) -> str:
-        if campo in unresolved:
+        level = (confidence.get(campo) or {}).get("level")
+        method = (confidence.get(campo) or {}).get("method", "heurística")
+        if level == "media":
+            return (f"{texto}\n\n> ⚠️ **Confianza media** ({method}): sección detectada por "
+                    f"heurística; revisar y confirmar antes de aprobar la Fase 1.")
+        if level == "ninguna" or (level is None and campo in unresolved):
             return f"{texto}\n\n> ⚠️ **Sin confirmar:** no se detectó esta sección en el PRD; revisar y completar a mano antes de aprobar la Fase 1."
         return texto
 

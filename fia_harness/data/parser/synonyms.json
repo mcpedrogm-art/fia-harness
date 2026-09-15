@@ -1,0 +1,16 @@
+{
+  "version": 1,
+  "description": "Sinónimos de encabezado por campo y palabras clave del fallback por densidad. Añadir un sinónimo aquí no requiere tocar código (F2 del plan v3.0-core).",
+  "fields": {
+    "problem": ["Problema", "Problem", "¿Por qué?", "Por qué", "Introducción", "Contexto"],
+    "users": ["Usuarios", "Público", "Audiencia", "Target", "Users", "A quién va dirigido"],
+    "features": ["Funcionalidades", "Requisitos", "Features", "Scope", "Alcance", "Must Have"],
+    "out_of_scope": ["Fuera de alcance", "Excluido", "Out of scope", "No incluido"]
+  },
+  "fallback_keywords": {
+    "problem": ["problema", "problem", "dolor", "pain", "necesidad", "why", "contexto", "introduccion", "motivacion"],
+    "users": ["usuario", "usuarios", "user", "users", "publico", "audiencia", "target", "cliente", "clientes", "customer", "segmento"],
+    "features": ["funcionalidad", "funcionalidades", "feature", "features", "requisito", "requisitos", "alcance", "scope", "incluye", "must"],
+    "out_of_scope": ["fuera", "excluido", "excluye", "descartado", "no incluido", "no entra", "out of scope"]
+  }
+}

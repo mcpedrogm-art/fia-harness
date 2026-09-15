@@ -5,6 +5,29 @@ con `DECISIONS.md` del propio sistema.
 
 ---
 
+## v3.0.0a2 — Parser Engine con niveles de confianza (F2 de v3.0-core)
+
+1. **`extract_field(content, field) -> ExtractionResult(value, confidence, method)`**
+   (`fia_harness/parser/prd.py`): cada campo se resuelve con estrategias en cascada
+   — encabezado exacto (`alta`) → encabezado parcial (`media`) → densidad de palabras
+   clave (`media`) → sin resolver (`ninguna`). `extract_prd_metadata` mantiene su
+   interfaz histórica y añade `confidence` por campo; `unresolved` pasa a ser
+   exactamente la lista de campos con confianza `ninguna`.
+2. **Config versionada** `fia_harness/data/parser/synonyms.json`: sinónimos por campo
+   y palabras clave del fallback. Añadir un sinónimo no toca código (verificado por
+   test con config inyectada).
+3. **Normalización de encabezados**: sin marcado Markdown, minúsculas y sin acentos
+   (`## INTRODUCCION` resuelve el sinónimo "Introducción").
+4. **CONTEXT.md y bootstrap reflejan la confianza**: los campos `media` se anotan con
+   su método (`heading_partial:…`, `density:N`) y se listan en consola; los `ninguna`
+   conservan el aviso "Sin confirmar". Nunca se marca un campo como resuelto sin nivel.
+5. **Corpus de regresión** `tests/fixtures/prds/` (20 PRDs: ES/EN, headings no
+   estándar, sin headings, negritas, H3, mayúsculas, tablas, prosa) con test de tasa
+   mínima. **Métrica medida: 81% de campos resueltos automáticamente (70% con
+   confianza alta)** sobre 100 campos. Tests: 144 → 161.
+
+---
+
 ## v3.0.0a1 — Núcleo extraído al paquete, CLI `fia` y fachadas (F1 de v3.0-core)
 
 > **Cambio de contrato (major):** los scripts `bootstrap.py` y `task_generator.py` de
