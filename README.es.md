@@ -45,10 +45,10 @@ menos deriva.
 uvx fia-harness init        # o: pipx run fia-harness init
 ```
 
-Monta un proyecto nuevo al instante: las plantillas del kit en `/docs`, los dos
-scripts en la raíz y un `PRD.md` de partida. Luego `python bootstrap.py` y estás
-sobre raíles. ¿Prefieres clonar? Este repo es una **plantilla de GitHub** — pulsa
-*Use this template*.
+Monta un proyecto nuevo al instante: las plantillas del kit en `/docs`, fachadas
+finas en la raíz (`bootstrap.py`, `task_generator.py`) y un `PRD.md` de partida.
+Luego `python bootstrap.py` y estás sobre raíles. ¿Prefieres clonar? Este repo es
+una **plantilla de GitHub** — pulsa *Use this template*.
 
 ---
 
@@ -57,13 +57,15 @@ sobre raíles. ¿Prefieres clonar? Este repo es una **plantilla de GitHub** — 
 Las reglas aquí no son consejo — son **checks de merge** que ningún agente puede
 saltarse. El repo [`fia-harness-demo`](https://github.com/mcpedrogm-art/fia-harness-demo)
 es un proyecto pequeño y real cuyo CI bloquea a un agente tramposo que intenta
-cerrar una fase sin su archivo de tarea o checkpoint:
+cerrar una fase sin su archivo de tarea, sin su checkpoint o sin evidencia
+verificable:
 
 ```bash
 git clone https://github.com/mcpedrogm-art/fia-harness-demo.git && cd fia-harness-demo
-python task_generator.py --check     # ✅ verde
-copy PROGRESS.F2_tampered.md PROGRESS.md
-python task_generator.py --check     # ❌ exit 1 — el merge queda bloqueado
+pip install fia-harness
+fia verify                               # ✅ PASS — merge elegible
+cp PROGRESS.F2_tampered.md PROGRESS.md   # Windows: copy ...
+fia verify                               # ❌ exit 1 — el merge queda bloqueado
 ```
 
 ---
@@ -107,7 +109,7 @@ Cada fase del plan = **una tarea** = un ciclo completo y cerrado. Ejemplo de pla
 | F3 | Frontend core | UI navegable |
 | F4 | Auth y permisos | Login/roles |
 
-`task_generator.py` **detecta automáticamente la primera fase pendiente** y genera
+`fia task` **detecta automáticamente la primera fase pendiente** y genera
 su tarea. Tú decides cuándo arrancar la siguiente; el agente nunca encadena fases solo.
 
 ### 3️⃣ El ciclo de tarea (A–L) — *disciplina en cada fase*
@@ -146,8 +148,10 @@ explícitamente — nunca se omite en silencio.
    El agente lee CONTEXT.md y NO programa nada todavía.
 
 4. Aprueba SPEC.md, pega la tabla F0-Fn en PROGRESS.md y compila:
-   python task_generator.py --sync   → valida el estado en progress.json
-   python task_generator.py          → genera la tarea de la fase pendiente
+   fia sync                  → valida el estado en progress.json (schema 3.0)
+   fia task                  → genera la tarea de la fase pendiente
+   fia run -- <tus tests>    → registra evidencia (EV-NNN, artifacts hasheados)
+   fia verify                → merge gate: estado + evidencia + procedencia
 ```
 
 > 📖 Guía detallada paso a paso: **[INSTRUCCIONES DE APLICACION.txt](INSTRUCCIONES%20DE%20APLICACION.txt)** · Protocolo completo: **[INICIO_PROYECTO.md](INICIO_PROYECTO.md)**
@@ -161,8 +165,9 @@ explícitamente — nunca se omite en silencio.
 | 🧭 `INICIO_PROYECTO.md` | **Fuente de verdad del protocolo**: rol del agente, fases, entrevista, reglas de oro |
 | ⚙️ `bootstrap.py` | Fachada fina en la raíz del proyecto: importa el paquete instalado y ejecuta el inicializador M0 (PRD, archivos de control, sellos, CI de reglas de oro) |
 | 🤖 `task_generator.py` | Fachada fina en la raíz del proyecto: genera `TASK-Fx.md`, compila/valida el estado (`--sync`, `--check`), sella docs (`--seal`), registra aprobaciones (`--approval`) y reabre fases (`--reopen`) |
-| 📦 `fia_harness/` + `pyproject.toml` | Paquete PyPI y **única fuente de verdad** (ADR-001): `fia init`, `fia check`, `fia sync`, `fia task`, `fia status`, `fia approve`, `fia seal`, `fia reopen`. Los scripts de la raíz son fachadas generadas desde este paquete |
-| 🗃️ `progress.json` | Estado compilado y validado: la máquina de verdad que lee el CI |
+| 📦 `fia_harness/` + `pyproject.toml` | Paquete PyPI y **única fuente de verdad** (ADR-001): `fia init`, `fia check`, `fia sync`, `fia task`, `fia status`, `fia approve`, `fia seal`, `fia reopen`, `fia run`, `fia evidence`, `fia verify`. Los scripts de la raíz son fachadas generadas desde este paquete |
+| 🗃️ `progress.json` | Estado compilado y validado (schema `3.0`): la máquina de verdad que lee el CI |
+| 🔒 `evidence/` | Registros de evidencia `EV-NNN` + artifacts crudos hasheados (`fia run`); `fia verify` revalida toda la cadena |
 | 📋 `TASK_TEMPLATE.md` | Plantilla maestra de tarea (ciclo completo A–L, 20 puntos de informe) |
 | ⚡ `TASK_LITE_TEMPLATE.md` | Plantilla de tarea rápida para el Modo Lite |
 | 📄 `PRD_TEMPLATE.md` | PRD de partida para la ruta de clonado (con los encabezados que `bootstrap.py` parsea) |
@@ -210,14 +215,16 @@ El harness base es común; estas capas se activan solo cuando el proyecto las ne
 
 ## 🚨 Enforcement: las reglas tienen dientes
 
-Desde la v2, el harness obliga por **infraestructura**, no solo por convención.
-`bootstrap.py` emite un workflow de GitHub Actions que se ejecuta en cada push y PR:
+Desde la v3, el harness obliga por **infraestructura**, no solo por convención.
+`bootstrap.py` emite un workflow de GitHub Actions que ejecuta `fia verify` en cada
+push y PR:
 
 | Regla de oro | Cómo se hace cumplir mecánicamente |
 |---|---|
 | Nunca cerrar fases con dependencias abiertas (nº4) | `progress.json` validado: cerrar F2 con F1 abierta **rompe el build** |
 | Nunca cerrar una fase sin Definition of Done (nº5) | Toda fase `done` exige su checkpoint de contexto en `PROGRESS.md` |
-| Nunca cerrar una fase sin evidencia real (nº7) | Toda fase F `done` exige un bloque de salida cruda o `Evidencia: <archivo>` |
+| Nunca cerrar una fase sin evidencia real (nº7) | Toda fase F `done` exige un bloque de salida cruda, `Evidencia: <archivo>` o `Evidencia: EV-NNN` (cadena validada) |
+| Nunca inventar resultados (nº7) | La evidencia de `fia run` está **hasheada**: editar un artifact de `evidence/EV-*.txt` pone `PROVENANCE` en rojo; los digests de CI la marcan `trusted` |
 | Nunca ejecutar una fase sin su `TASK-Fx.md` (nº7) | El validador exige `TASK-F<N>.md` para cada fase F cerrada |
 | Nunca reescribir las reglas (nº2) | Los documentos normativos están **sellados** (SHA-256); editarlos pone el CI en rojo hasta `--seal` |
 | Nunca derivar la spec sin aprobación (nº6) | `SPEC.md` queda snapshotteado; cambiarla sin `--approval` pone el CI en rojo |
@@ -227,17 +234,33 @@ Desde la v2, el harness obliga por **infraestructura**, no solo por convención.
 | Aprobaciones humanas rastreables | Toda `APPROVAL-NNN` citada en una TASK debe existir en `DECISIONS.md` |
 
 El flujo de estado: `PROGRESS.md` es la superficie de edición (humano o agente);
-`task_generator.py --sync` lo compila y valida en `progress.json`. Si editas el
-Markdown a mano y no compilas, el CI se pone rojo hasta que hagas `--sync`. Y
-`--sync` es *fail-closed*: si el estado viola una regla, **no escribe nada**.
+`fia sync` lo compila y valida en `progress.json`. Si editas el Markdown a mano y
+no compilas, el CI se pone rojo hasta que hagas `fia sync`. Y `fia sync` es
+*fail-closed*: si el estado viola una regla, **no escribe nada**.
 
 ```bash
-python task_generator.py --sync      # compila y valida PROGRESS.md -> progress.json
-python task_generator.py --check     # valida sin modificar (lo ejecuta el CI)
-python task_generator.py --seal      # sella los documentos normativos (SHA-256)
-python task_generator.py --approval "instalar Skill X v1.2" --phase F2 --ref "chat 5-sep"
-python task_generator.py --reopen F3 --reason "regresión detectada en auth"
+fia sync        # compila y valida PROGRESS.md -> progress.json
+fia verify      # merge gate: estado + dependencias + evidencia + procedencia + sellos + spec
+fia run -- pytest -q                 # ejecuta y registra evidencia (EV-NNN, artifacts hasheados)
+fia evidence --ingest manifest.json  # ancla los digests de CI (procedencia trusted)
+fia seal / fia approve / fia reopen  # sellos, aprobaciones humanas, reapertura auditada
 ```
+
+> Los flags de v2.2 (`python task_generator.py --sync/--check/--seal/--approval/--reopen`)
+> siguen funcionando a través de la fachada — los proyectos y CI antiguos no se tocan.
+
+---
+
+## 🆕 Qué añade la v3
+
+| | v2.2 | **v3.0** |
+|---|---|---|
+| Estado | `harness-state/1` | **schema 3.0**: IDs estables, timestamps, huella de deriva + hash de integridad, migración con backup `.bak` |
+| Evidencia | bloque pegado o archivo (existencia) | **registros `EV-NNN`**: comando, exit code, timestamps, entorno y **artifacts hasheados** |
+| Verificación | `--check` | **`fia verify`**: STATE · DEPENDENCIES · EVIDENCE · **PROVENANCE** · SEALS · SPEC SNAPSHOT |
+| Procedencia | — | `local` vs **`trusted`** (digest del artifact de la plataforma CI, ADR-005) |
+| Parser de PRD | regex binario | **niveles de confianza** (alta/media/ninguna) + sinónimos versionados + corpus de regresión |
+| Distribución | scripts copiables | **paquete + fachadas finas** (`pip install fia-harness`) |
 
 ---
 
@@ -252,7 +275,7 @@ python task_generator.py --reopen F3 --reason "regresión detectada en auth"
 7. 🧪 **Nunca inventar resultados** — los tests que no se ejecutaron no existen.
 8. 🛑 **Nunca hacer commit/push/deploy sin autorización explícita.**
 
-> 🚨 Desde la v2, las reglas 4, 5, 7 y 8 además se **verifican automáticamente en CI** en cada proyecto que arranca con `bootstrap.py` (sección anterior).
+> 🚨 Desde la v3, las reglas 4, 5, 7 y 8 además se **verifican automáticamente en CI** en cada proyecto que arranca con `bootstrap.py` (sección anterior).
 
 ---
 
@@ -269,8 +292,11 @@ pero **no** es una frontera a prueba de manipulación. Conoce sus bordes:
   congela un snapshot de `SPEC.md`, pero la entrada de aprobación en sí puede
   seguir siendo escrita por el agente. La firma por autoría git es una opción
   planificada, aún no el valor por defecto.
-- **La evidencia se declara, no se reproduce.** El CI comprueba que el bloque de
-  salida cruda *existe y no está vacío*; no puede verificar que sea genuino.
+- **La procedencia de la evidencia es real, no mágica.** Los registros de `fia run`
+  están atados a artifacts hasheados, así que *editar* evidencia es detectable; los
+  bloques pegados a mano siguen siendo "solo existencia". En local la máquina es
+  tuya, así que un registro fabricado puede pasar — la procedencia `trusted`
+  requiere el digest de artifact de la plataforma CI (ADR-005).
 - **Modelo de confianza local.** No hay nube, ni telemetría, ni autoridad remota —
   es el precio de no enviar tu código a ningún sitio.
 
@@ -284,9 +310,11 @@ correcto.
 
 Este repositorio se gobierna con el kit que distribuye:
 
-- El badge de arriba es el CI de este propio repo: **144 tests** más un job de
-  **auto-aplicación** que ejecuta `fia-harness init` → `bootstrap.py` → `--check`
-  sobre un proyecto temporal nuevo en cada push.
+- El badge de arriba es el CI de este propio repo: **213 tests**, un job de
+  **auto-aplicación** (`fia-harness init` → `bootstrap.py` → `--check` sobre un
+  proyecto temporal nuevo) y un job de **gobernanza** que ejecuta `fia verify`
+  sobre este mismo repo — sus registros de evidencia (`EV-001…EV-003`) se
+  revalidan en cada push.
 - El repo [`fia-harness-demo`](https://github.com/mcpedrogm-art/fia-harness-demo)
   se genera con el kit y su CI de reglas de oro atrapa al agente tramposo en vivo.
 
@@ -298,17 +326,20 @@ Este repositorio se gobierna con el kit que distribuye:
 python -m unittest discover tests -v
 ```
 
-Los tests cubren el parser de `PROGRESS.md`, la extracción de secciones, los
-inyectores por marcadores, la heurística de palabras clave, el recorte de plantilla,
-la detección de Modo Lite, la **máquina de estado** (dependencias, checkpoints,
-evidencia, aprobaciones, sellos, snapshot de spec, drift, fail-closed, reapertura),
-el **empaquetado** (copias anti-drift, `init` e2e, consolas cp1252) y un **ciclo
-completo e2e** en carpeta temporal.
+Los tests cubren el parser de `PROGRESS.md`, el **parser de PRD con niveles de
+confianza** (81% resuelto sobre un corpus de 20 PRDs), los inyectores por
+marcadores, la heurística de palabras clave, la **máquina de estado 3.0**
+(huellas, integridad, migración con backup, dependencias, checkpoints, evidencia,
+aprobaciones, sellos, snapshot de spec, fail-closed, reapertura), el **motor de
+evidencia** (artifacts hasheados, detección de manipulación, digests de CI), el
+**motor de verificación** (reporte PASS/FAIL) y el **empaquetado** (fachadas,
+`init` e2e, consolas cp1252) más un **ciclo completo e2e** en carpeta temporal.
 
 En un proyecto ya arrancado, puedes comprobar su estado en cualquier momento:
 
 ```bash
-python task_generator.py --check
+fia verify    # reporte completo — el gate del CI
+fia check     # validación legacy solo del estado
 ```
 
 ---
