@@ -5,6 +5,23 @@ con `DECISIONS.md` del propio sistema.
 
 ---
 
+## v3.0.1 — Los artifacts de evidencia viajan como binarios (fix de portabilidad)
+
+**Bug cazado por el propio CI (dogfood de F7):** git normalizaba los finales de
+línea de `evidence/EV-*.stdout.txt`/`.stderr.txt` (CRLF→LF) al commitear, así que
+en el checkout de Linux los hashes no coincidían y `fia verify` bloqueaba el merge
+(`PROVENANCE FAIL — artifact no coincide con su hash`).
+
+1. El almacén de evidencia crea `evidence/.gitattributes` con `* -text`: los
+   artifacts son bytes exactos y su integridad ES el hash.
+2. `.gitattributes` raíz con `* text=auto eol=lf` + `evidence/** -text`: protege
+   además los sellos SHA-256 de los documentos normativos en clones Windows
+   (`core.autocrlf=true`), que hasta ahora podían fallar por CRLF.
+3. El mensaje de hash no coincidente ahora menciona la normalización por git.
+4. Tests: 212 → 213.
+
+---
+
 ## v3.0.0 — Núcleo verificable: estado 3.0, evidencia con procedencia y merge gate
 
 Primera release estable de **v3.0-core** (fases F0–F7 del plan v3.0-core). Resumen:

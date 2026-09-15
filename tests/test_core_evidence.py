@@ -55,6 +55,13 @@ class StoreTests(unittest.TestCase):
         self.assertEqual(record["exit_code"], 0)
         self.assertEqual(len(ev.list_records(self.dir)), 1)
 
+    def test_el_almacen_protege_los_artifacts_como_binarios(self):
+        # Hallazgo F7: sin esto, git normaliza CRLF→LF y la cadena rompe en CI.
+        _make_record(self.dir, "EV-001")
+        attributes = self.dir / "evidence" / ".gitattributes"
+        self.assertTrue(attributes.exists())
+        self.assertEqual(attributes.read_text(encoding="utf-8"), "* -text\n")
+
     def test_load_inexistente(self):
         self.assertIsNone(ev.load_record(self.dir, "EV-999"))
 

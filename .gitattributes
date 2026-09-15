@@ -1,0 +1,8 @@
+# Normalización de finales de línea: LF en el repo y en el working tree.
+# Los sellos SHA-256 (INICIO_PROYECTO.md, SECURITY.md, TASK_TEMPLATE.md) y el
+# snapshot de SPEC.md se calculan sobre los BYTES: sin esto, un clon en Windows
+# (core.autocrlf=true) cambiaría CRLF y el CI fallaría por sellos alterados.
+* text=auto eol=lf
+
+# Los artifacts de evidencia son bytes exactos: su integridad ES el hash.
+evidence/** -text

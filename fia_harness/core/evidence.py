@@ -27,10 +27,21 @@ SOURCES = ("local-run", "ci-artifact")
 REQUIRED_FIELDS = ("id", "type", "source", "command", "cwd", "exit_code",
                    "started_at", "finished_at", "duration_s",
                    "stdout_sha256", "stderr_sha256", "artifacts", "environment")
+# Los artifacts de evidencia son bytes exactos: su integridad ES el hash. Git no
+# debe normalizar sus finales de línea (hallazgo F7: CRLF→LF rompía la cadena en CI).
+GITATTRIBUTES = "* -text\n"
 
 
 def evidence_dir(project_dir: Path) -> Path:
     return project_dir / EVIDENCE_DIR
+
+
+def _ensure_store(directory: Path):
+    """Crea el almacén y su `.gitattributes` (artifacts tratados como binarios)."""
+    directory.mkdir(parents=True, exist_ok=True)
+    attributes = directory / ".gitattributes"
+    if not attributes.exists():
+        attributes.write_text(GITATTRIBUTES, encoding="utf-8", newline="\n")
 
 
 def next_evidence_id(project_dir: Path) -> str:
@@ -65,14 +76,14 @@ def list_records(project_dir: Path):
 
 def save_record(project_dir: Path, record: dict):
     directory = evidence_dir(project_dir)
-    directory.mkdir(parents=True, exist_ok=True)
+    _ensure_store(directory)
     (directory / f"{record['id']}.json").write_text(
         json.dumps(record, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
 
 
 def write_streams(project_dir: Path, evidence_id: str, stdout: bytes, stderr: bytes):
     directory = evidence_dir(project_dir)
-    directory.mkdir(parents=True, exist_ok=True)
+    _ensure_store(directory)
     (directory / f"{evidence_id}.stdout.txt").write_bytes(stdout)
     (directory / f"{evidence_id}.stderr.txt").write_bytes(stderr)
 
@@ -121,7 +132,8 @@ def validate_record(project_dir: Path, record: dict) -> list:
         current = sha256_hex(path.read_bytes())
         if current != artifact.get("sha256"):
             errors.append(f"{evidence_id}: artifact '{name}' no coincide con su hash "
-                          f"(manipulado o corrupto)")
+                          f"(manipulado, corrupto o normalizado por git; los artifacts "
+                          f"deben viajar como binarios: {EVIDENCE_DIR}/.gitattributes)")
         ci_digest = digests.get(name)
         if ci_digest and current != ci_digest:
             errors.append(f"{evidence_id}: artifact '{name}' no coincide con el digest "
