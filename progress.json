@@ -1,0 +1,169 @@
+{
+  "schema": "harness-state/1",
+  "process_phases": [
+    {
+      "id": "M0",
+      "title": "",
+      "objective": "Bootstrap del harness en el propio repo / SPEC.md, PROGRESS.md, DECISIONS.md y progress.json activos en la raíz",
+      "depends_on": [],
+      "depends_on_notes": "—",
+      "status": "done"
+    },
+    {
+      "id": "M1",
+      "title": "",
+      "objective": "Descubrimiento técnico: análisis de los planes D1/D2/D3 y decisiones de alcance / Decisiones de distribución, dogfood, F3 y benchmark registradas en DECISIONS.md",
+      "depends_on": [
+        "M0"
+      ],
+      "depends_on_notes": "",
+      "status": "done"
+    },
+    {
+      "id": "M2",
+      "title": "",
+      "objective": "Especificación v3.0-core aprobada por el humano / SPEC.md congelado con APPROVAL-001",
+      "depends_on": [
+        "M1"
+      ],
+      "depends_on_notes": "",
+      "status": "done"
+    },
+    {
+      "id": "M3",
+      "title": "",
+      "objective": "Plan de fases de ejecución derivado de SPEC.md / Tabla F0–F7 en PROGRESS.md",
+      "depends_on": [
+        "M2"
+      ],
+      "depends_on_notes": "",
+      "status": "done"
+    }
+  ],
+  "execution_phases": [
+    {
+      "id": "F0",
+      "title": "",
+      "objective": "Baseline v2.2 y dogfood del repo / docs/V3BASELINE.md, suite 75/75 registrada, rama v3.0-core, CI con --check",
+      "depends_on": [],
+      "depends_on_notes": "—",
+      "status": "done"
+    },
+    {
+      "id": "F1",
+      "title": "",
+      "objective": "Extracción del Core + superficie fia / Módulos core/parser/generators, fachadas generadas, entry point fia",
+      "depends_on": [
+        "F0"
+      ],
+      "depends_on_notes": "",
+      "status": "pending"
+    },
+    {
+      "id": "F2",
+      "title": "",
+      "objective": "Parser Engine con niveles de confianza / extractfield(...) -> ExtractionResult, config de sinónimos, corpus de PRDs, métrica %",
+      "depends_on": [
+        "F1"
+      ],
+      "depends_on_notes": "",
+      "status": "pending"
+    },
+    {
+      "id": "F3",
+      "title": "",
+      "objective": "State Engine (migración incremental) / schemaversion, IDs estables, timestamps, fingerprints, migración con backup",
+      "depends_on": [
+        "F2"
+      ],
+      "depends_on_notes": "",
+      "status": "pending"
+    },
+    {
+      "id": "F4",
+      "title": "",
+      "objective": "Spike: mecanismo de captura de evidencia / docs/EVIDENCECAPTUREDECISION.md + ejemplo end-to-end",
+      "depends_on": [
+        "F3"
+      ],
+      "depends_on_notes": "",
+      "status": "pending"
+    },
+    {
+      "id": "F5",
+      "title": "",
+      "objective": "Evidence Engine / Schema EV-NNN, fia evidence, cadena claim→command→execution→artifact→hash",
+      "depends_on": [
+        "F4"
+      ],
+      "depends_on_notes": "",
+      "status": "pending"
+    },
+    {
+      "id": "F6",
+      "title": "",
+      "objective": "Verification Engine / fia verify (STATE/DEPS/EVIDENCE/PROVENANCE/SEALS/SPEC) + smoke de tampering",
+      "depends_on": [
+        "F5"
+      ],
+      "depends_on_notes": "",
+      "status": "pending"
+    },
+    {
+      "id": "F7",
+      "title": "",
+      "objective": "CI / Merge Gate mínimo / harness.yml con fia verify, local vs CI confiable, demo en rojo/verde",
+      "depends_on": [
+        "F6"
+      ],
+      "depends_on_notes": "",
+      "status": "pending"
+    }
+  ],
+  "checkpoints": [
+    {
+      "phase": "M0",
+      "summary": "Estructura de gobierno activa en el repo (SPEC.md, PROGRESS.md, DECISIONS.md, progress.json) creada en F0.",
+      "evidence": "",
+      "evidence_file": null
+    },
+    {
+      "phase": "M1",
+      "summary": "Análisis comparativo D1/D2/D3 completado; ADR-001/002/003 registradas.",
+      "evidence": "",
+      "evidence_file": null
+    },
+    {
+      "phase": "M2",
+      "summary": "SPEC.md v3.0-core aprobado por el humano (APPROVAL-001).",
+      "evidence": "",
+      "evidence_file": null
+    },
+    {
+      "phase": "M3",
+      "summary": "Tabla F0–F7 definida y derivada de SPEC.md.",
+      "evidence": "",
+      "evidence_file": null
+    },
+    {
+      "phase": "F0",
+      "summary": "Suite v2.2 en verde (75/75), baseline documentado y dogfood activo en el repo (SPEC.md, PROGRESS.md, DECISIONS.md, progress.json, TASK-F0.md, job de CI `--check`).",
+      "evidence": "python -m unittest discover tests -v   (Python 3.11.15, Windows)\nRan 75 tests in 2.210s\nOK\n\npython task_generator.py --check\n✅ Estado del harness válido: 4 fases de proceso, 8 de ejecución, 5 checkpoints, aprobaciones íntegras.",
+      "evidence_file": "docs/V3_BASELINE.md"
+    }
+  ],
+  "updated": "2026-09-15",
+  "sealed_docs": {
+    "INICIO_PROYECTO.md": "49207ffcfdf3d796f3fdc2b69fa4424a7db383a9fbdaf11501b23b1f95a51581",
+    "SECURITY.md": "e0dbd7fa011c95c0dccf40402698f68be7df5f6067ca24cdc05b0bf9ad8f62db",
+    "TASK_TEMPLATE.md": "98c3ae71d945f6cbc4db6edbf5694a56e57223f9d79242d63054c7dbed4d0b9b"
+  },
+  "spec_hashes": [
+    {
+      "sha256": "1384682d2fab220115ee16ef9955dad934b1b0ed8fb6ce2bf6be1c0dcbe9bb61",
+      "ref": "sesion 2026-09-15 (usuario aprueba plan y ejecucion de F0)",
+      "date": "2026-09-15",
+      "phase": "M2"
+    }
+  ]
+}

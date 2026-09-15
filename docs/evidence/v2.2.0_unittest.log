@@ -1,0 +1,335 @@
+﻿python : test_flag_forzado_gana_siempre (test_harness.DetectLiteModeTests.test_flag_forzado_gana_siempre) ... ok
+En línea: 1 Carácter: 130
++ ... watch]::StartNew(); python -m unittest discover tests -v 2>&1 | Out-F ...
++                         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (test_flag_forza...siempre) ... ok:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+test_mencion_de_lite_como_opcion_no_activa 
+(test_harness.DetectLiteModeTests.test_mencion_de_lite_como_opcion_no_activa) ... ok
+test_quick_context_presente_activa (test_harness.DetectLiteModeTests.test_quick_context_presente_activa) ... ok
+test_valor_declarado_lite_activa (test_harness.DetectLiteModeTests.test_valor_declarado_lite_activa) ... ok
+test_bootstrap_genera_archivos_y_activa_rag (test_harness.EndToEndTests.test_bootstrap_genera_archivos_y_activa_rag) 
+... ok
+test_check_falla_tras_edicion_manual_sin_sync 
+(test_harness.EndToEndTests.test_check_falla_tras_edicion_manual_sin_sync) ... ok
+test_check_pasa_en_estado_recien_bootstrapeado 
+(test_harness.EndToEndTests.test_check_pasa_en_estado_recien_bootstrapeado)
+El estado inicial que emite bootstrap.py debe ser verde para el CI. ... ok
+test_ciclo_completo_genera_task_sin_cabecera_meta 
+(test_harness.EndToEndTests.test_ciclo_completo_genera_task_sin_cabecera_meta) ... ok
+test_fase_de_proceso_se_rechaza (test_harness.EndToEndTests.test_fase_de_proceso_se_rechaza) ... ok
+test_fase_inexistente_falla_listando_disponibles 
+(test_harness.EndToEndTests.test_fase_inexistente_falla_listando_disponibles) ... ok
+test_generador_auto_sana_el_estado_tras_edicion_manual 
+(test_harness.EndToEndTests.test_generador_auto_sana_el_estado_tras_edicion_manual) ... ok
+test_task_generator_avisa_mientras_no_haya_fases_f 
+(test_harness.EndToEndTests.test_task_generator_avisa_mientras_no_haya_fases_f) ... ok
+test_checkpoint_con_evidencia_cruda_pasa 
+(test_harness.EvidenceCheckpointTests.test_checkpoint_con_evidencia_cruda_pasa) ... ok
+test_checkpoint_sin_evidencia_cruda_falla 
+(test_harness.EvidenceCheckpointTests.test_checkpoint_sin_evidencia_cruda_falla) ... ok
+test_extrae_todas_las_secciones (test_harness.ExtractPrdMetadataTests.test_extrae_todas_las_secciones) ... ok
+test_prd_sin_encabezados_marca_unresolved 
+(test_harness.ExtractPrdMetadataTests.test_prd_sin_encabezados_marca_unresolved) ... ok
+test_captura_seccion_auth_y_corta_en_la_siguiente 
+(test_harness.ExtractSectionTests.test_captura_seccion_auth_y_corta_en_la_siguiente) ... ok
+test_captura_seccion_infraestructura (test_harness.ExtractSectionTests.test_captura_seccion_infraestructura) ... ok
+test_captura_tabla_del_gate_de_entrada_completa 
+(test_harness.ExtractSectionTests.test_captura_tabla_del_gate_de_entrada_completa) ... ok
+test_archivos_de_control_no_son_prd (test_harness.FindPrdFileTests.test_archivos_de_control_no_son_prd) ... ok
+test_las_tareas_y_plantillas_no_son_prd (test_harness.FindPrdFileTests.test_las_tareas_y_plantillas_no_son_prd) ... ok
+test_md_suelto_si_sirve_como_pista (test_harness.FindPrdFileTests.test_md_suelto_si_sirve_como_pista) ... ok
+test_nombre_estandar_tiene_prioridad (test_harness.FindPrdFileTests.test_nombre_estandar_tiene_prioridad) ... ok
+test_marcador_ausente_devuelve_found_false (test_harness.InjectMarkerTests.test_marcador_ausente_devuelve_found_false) 
+... ok
+test_sustituye_bloque_completo_con_marcadores 
+(test_harness.InjectMarkerTests.test_sustituye_bloque_completo_con_marcadores) ... ok
+test_entrevista_no_activa_nada (test_harness.KeywordHeuristicTests.test_entrevista_no_activa_nada) ... ok
+test_f1_modelo_de_datos_activa_solo_seguridad 
+(test_harness.KeywordHeuristicTests.test_f1_modelo_de_datos_activa_solo_seguridad) ... ok
+test_frontend_con_api_activa_seguridad_por_exceso 
+(test_harness.KeywordHeuristicTests.test_frontend_con_api_activa_seguridad_por_exceso) ... ok
+test_check_falla_sin_state_file (test_harness.MissingStateFileTests.test_check_falla_sin_state_file) ... ÔØî 
+progress.json no existe. Ejecuta: python task_generator.py --sync (o usa --state-optional para validar solo sobre 
+PROGRESS.md).
+ok
+test_check_state_optional_valida_solo_md (test_harness.MissingStateFileTests.test_check_state_optional_valida_solo_md) 
+...    [!] progress.json no existe; validando solo sobre PROGRESS.md (--state-optional).
+ok
+test_columna_combinada_no_se_duplica (test_harness.ParseProgressTableTests.test_columna_combinada_no_se_duplica) ... ok
+test_detecta_siguiente_fase_ejecucion (test_harness.ParseProgressTableTests.test_detecta_siguiente_fase_ejecucion) ... 
+ok
+test_extrae_objetivo_y_dependencias (test_harness.ParseProgressTableTests.test_extrae_objetivo_y_dependencias) ... ok
+test_filas_sin_codigo_de_fase_se_ignoran 
+(test_harness.ParseProgressTableTests.test_filas_sin_codigo_de_fase_se_ignoran) ... ok
+test_lee_varias_tablas_y_quita_negritas (test_harness.ParseProgressTableTests.test_lee_varias_tablas_y_quita_negritas) 
+... ok
+test_sin_fases_pendientes_devuelve_none (test_harness.ParseProgressTableTests.test_sin_fases_pendientes_devuelve_none) 
+... ok
+test_plantilla_prd_no_deja_campos_sin_resolver 
+(test_harness.PrdTemplateTests.test_plantilla_prd_no_deja_campos_sin_resolver) ... ok
+test_stub_de_init_es_extraible (test_harness.PrdTemplateTests.test_stub_de_init_es_extraible) ... ok
+test_mismo_numero_de_secciones_h2 (test_harness.ReadmeParityTests.test_mismo_numero_de_secciones_h2) ... ok
+test_reopen_bloqueado_por_dependiente_cerrado (test_harness.ReopenTests.test_reopen_bloqueado_por_dependiente_cerrado) 
+... ÔØî No se puede reabrir F0: F1 ya est├í(n) cerrada(s) y depende(n) de ella. Reabre antes esas dependencias.
+ok
+test_reopen_done_a_in_progress (test_harness.ReopenTests.test_reopen_done_a_in_progress) ... ok
+Ô£à Fase F0 reabierta (done ÔåÆ in_progress). Raz├│n: detectado un bug
+test_reopen_fase_no_cerrada_falla (test_harness.ReopenTests.test_reopen_fase_no_cerrada_falla) ... ÔØî La fase F0 no 
+est├í cerrada (estado: pending). Solo se puede reabrir una fase done.
+ok
+test_reopen_requiere_razon (test_harness.ReopenTests.test_reopen_requiere_razon) ... ÔØî --reopen exige un motivo 
+(--reason).
+ok
+Ô£à Documentos sellados: INICIO_PROYECTO.md, SECURITY.md, TASK_TEMPLATE.md
+test_doc_alterado_tras_sello_falla (test_harness.SealDocsTests.test_doc_alterado_tras_sello_falla) ... ÔØî 
+'SECURITY.md' cambi├│ desde el sellado: revisa el cambio y vuelve a sellarlo (--seal)
+ÔØî Estado del harness inv├ílido: 1 problema(s).
+ok
+Ô£à Documentos sellados: INICIO_PROYECTO.md, SECURITY.md, TASK_TEMPLATE.md
+test_seal_requerido_ausente_falla (test_harness.SealDocsTests.test_seal_requerido_ausente_falla) ... ÔØî Documento 
+normativo 'SECURITY.md' no sellado (ejecuta: python task_generator.py --seal)
+ÔØî Estado del harness inv├ílido: 1 problema(s).
+ok
+test_seal_y_check_ok (test_harness.SealDocsTests.test_seal_y_check_ok) ... ok
+Ô£à Documentos sellados: INICIO_PROYECTO.md, SECURITY.md, TASK_TEMPLATE.md
+test_approval_congela_hash_spec (test_harness.SpecSnapshotTests.test_approval_congela_hash_spec) ... ok
+Ô£à Aprobaci├│n registrada en DECISIONS.md: APPROVAL-001 (2026-09-15)
+   Cita este ID en el informe de la TASK (Fase L, punto 18); --check verifica que exista.
+   ­ƒöÆ Snapshot de SPEC.md congelado en progress.json (93a4889b33caÔÇª)
+Ô£à Aprobaci├│n registrada en DECISIONS.md: APPROVAL-001 (2026-09-15)
+   Cita este ID en el informe de la TASK (Fase L, punto 18); --check verifica que exista.
+   ­ƒöÆ Snapshot de SPEC.md congelado en progress.json (93a4889b33caÔÇª)
+test_check_spec_alterado_sin_aprobacion_falla 
+(test_harness.SpecSnapshotTests.test_check_spec_alterado_sin_aprobacion_falla) ... ÔØî SPEC.md cambi├│ sin nueva 
+aprobaci├│n: el ├║ltimo snapshot aprobado no coincide. Re-aprueba con --approval (o revisa el cambio).
+ÔØî Estado del harness inv├ílido: 1 problema(s).
+ok
+Ô£à Aprobaci├│n registrada en DECISIONS.md: APPROVAL-001 (2026-09-15)
+   Cita este ID en el informe de la TASK (Fase L, punto 18); --check verifica que exista.
+   ­ƒöÆ Snapshot de SPEC.md congelado en progress.json (93a4889b33caÔÇª)
+test_reaprobacion_spec_actualiza_hash_y_pasa_check 
+(test_harness.SpecSnapshotTests.test_reaprobacion_spec_actualiza_hash_y_pasa_check) ... ok
+test_compila_fases_y_checkpoints (test_harness.StateCompileTests.test_compila_fases_y_checkpoints) ... ok
+test_fingerprint_ignora_updated (test_harness.StateCompileTests.test_fingerprint_ignora_updated) ... ok
+test_texto_libre_en_dependencias_no_se_valida_como_fase 
+(test_harness.StateCompileTests.test_texto_libre_en_dependencias_no_se_valida_como_fase) ... ok
+test_aprobacion_citada_no_registrada (test_harness.StateValidateTests.test_aprobacion_citada_no_registrada) ... ok
+test_dependencia_inexistente (test_harness.StateValidateTests.test_dependencia_inexistente) ... ok
+test_entrada_aprobacion_incompleta (test_harness.StateValidateTests.test_entrada_aprobacion_incompleta) ... ok
+test_estado_fuera_del_enum (test_harness.StateValidateTests.test_estado_fuera_del_enum) ... ok
+test_estado_valido_no_produce_errores (test_harness.StateValidateTests.test_estado_valido_no_produce_errores) ... ok
+test_fase_cerrada_con_dependencia_pendiente 
+(test_harness.StateValidateTests.test_fase_cerrada_con_dependencia_pendiente) ... ok
+test_fase_duplicada (test_harness.StateValidateTests.test_fase_duplicada) ... ok
+test_mencion_aprobacion_sin_id_no_es_entrada 
+(test_harness.StateValidateTests.test_mencion_aprobacion_sin_id_no_es_entrada) ... ok
+Ô£à Aprobaci├│n registrada en DECISIONS.md: APPROVAL-002 (2026-09-15)
+   Cita este ID en el informe de la TASK (Fase L, punto 18); --check verifica que exista.
+   ­ƒöÆ Snapshot de SPEC.md congelado en progress.json (3da319e2e113ÔÇª)
+test_stats_resume_estado (test_harness.StatsTests.test_stats_resume_estado) ... ok
+test_stats_sin_state_cae_a_md (test_harness.StatsTests.test_stats_sin_state_cae_a_md) ... ok
+test_plantilla_completa_empieza_en_el_encabezado_de_tarea 
+(test_harness.StripTemplateHeaderTests.test_plantilla_completa_empieza_en_el_encabezado_de_tarea) ... ok
+test_plantilla_lite_empieza_en_task_quick 
+(test_harness.StripTemplateHeaderTests.test_plantilla_lite_empieza_en_task_quick) ... ok
+test_plantilla_sin_encabezado_de_tarea_se_devuelve_integra 
+(test_harness.StripTemplateHeaderTests.test_plantilla_sin_encabezado_de_tarea_se_devuelve_integra) ...    [!] La 
+plantilla x.md no contiene ning├║n encabezado '# TASK-': se copia ├¡ntegra, incluida su cabecera meta. Rev├¡sala a 
+mano.
+ok
+Ô£à Estado compilado y validado: C:\Users\Usuario\AppData\Local\Temp\tmpxolalqk5\progress.json
+   2 fases de proceso ┬À 3 de ejecuci├│n ┬À 1 checkpoints
+Ô£à Aprobaci├│n registrada en DECISIONS.md: APPROVAL-001 (2026-09-15)
+   Cita este ID en el informe de la TASK (Fase L, punto 18); --check verifica que exista.
+test_approval_registra_y_autoincrementa (test_harness.SyncCheckApprovalTests.test_approval_registra_y_autoincrementa) 
+... ok
+Ô£à Aprobaci├│n registrada en DECISIONS.md: APPROVAL-002 (2026-09-15)
+   Cita este ID en el informe de la TASK (Fase L, punto 18); --check verifica que exista.
+test_check_detecta_drift_tras_edicion_manual 
+(test_harness.SyncCheckApprovalTests.test_check_detecta_drift_tras_edicion_manual) ... ok
+Ô£à Estado compilado y validado: C:\Users\Usuario\AppData\Local\Temp\tmph4z9wijt\progress.json
+   2 fases de proceso ┬À 3 de ejecuci├│n ┬À 1 checkpoints
+test_sync_genera_y_check_pasa (test_harness.SyncCheckApprovalTests.test_sync_genera_y_check_pasa) ... ok
+Ô£à Estado compilado y validado: C:\Users\Usuario\AppData\Local\Temp\tmpc9rz2sp_\progress.json
+   2 fases de proceso ┬À 3 de ejecuci├│n ┬À 1 checkpoints
+======================================================================
+     ­ƒÜÇ FIA HARNESS v2.2.0 ÔÇö INSTALADOR DE PROYECTOS (init)
+======================================================================
+   [+] Creada carpeta: /src
+   [+] Creada carpeta: /tests
+   [+] Creada carpeta: /docs
+   [+] Creada carpeta: /infra
+
+-> Copiando plantillas del kit a /docs ...
+   [+] docs/INICIO_PROYECTO.md
+   [+] docs/SECURITY.md
+   [+] docs/AEO_GEO_SEO.md
+   [+] docs/UI_UX_EXCLUSIVA.md
+   [+] docs/SKILLS_MCP.md
+   [+] docs/TASK_TEMPLATE.md
+   [+] docs/TASK_LITE_TEMPLATE.md
+   [+] docs/QUICKSTART_LITE.md
+   [+] docs/AGENTS.md
+   [+] docs/PRD_TEMPLATE.md
+   [+] docs/MODELOS.md
+   [+] docs/RAG_VECTOR_EXTENSION.md (m├│dulo RAG/vectorial opcional)
+
+-> Copiando los dos scripts del kit a la ra├¡z ...
+   [+] bootstrap.py
+   [+] task_generator.py
+
+-> Preparando PRD.md de partida ...
+   [+] PRD.md generado (compl├®talo antes de la Fase 1).
+
+Ô£à Proyecto montado. Siguientes pasos:
+   1. Completa C:\Users\Usuario\AppData\Local\Temp\tmpsce2yzlm\PRD.md
+   2. cd C:\Users\Usuario\AppData\Local\Temp\tmpsce2yzlm && python bootstrap.py   (Fase M0)
+   3. Abre tu agente con la carpeta: leer├í CONTEXT.md y empezar├í la entrevista (M1).
+test_init_es_idempotente_y_no_pisa (test_packaging.InitEndToEndTest.test_init_es_idempotente_y_no_pisa) ... ok
+======================================================================
+     ­ƒÜÇ FIA HARNESS v2.2.0 ÔÇö INSTALADOR DE PROYECTOS (init)
+======================================================================
+   [.] Ya existe carpeta: /src
+   [.] Ya existe carpeta: /tests
+   [.] Ya existe carpeta: /docs
+   [.] Ya existe carpeta: /infra
+
+-> Copiando plantillas del kit a /docs ...
+   [.] Ya existe (no sobrescrito): docs/INICIO_PROYECTO.md
+   [.] Ya existe (no sobrescrito): docs/SECURITY.md
+   [.] Ya existe (no sobrescrito): docs/AEO_GEO_SEO.md
+   [.] Ya existe (no sobrescrito): docs/UI_UX_EXCLUSIVA.md
+   [.] Ya existe (no sobrescrito): docs/SKILLS_MCP.md
+   [.] Ya existe (no sobrescrito): docs/TASK_TEMPLATE.md
+   [.] Ya existe (no sobrescrito): docs/TASK_LITE_TEMPLATE.md
+   [.] Ya existe (no sobrescrito): docs/QUICKSTART_LITE.md
+   [.] Ya existe (no sobrescrito): docs/AGENTS.md
+   [.] Ya existe (no sobrescrito): docs/PRD_TEMPLATE.md
+   [.] Ya existe (no sobrescrito): docs/MODELOS.md
+   [.] Ya existe (no sobrescrito): docs/RAG_VECTOR_EXTENSION.md (m├│dulo RAG/vectorial opcional)
+
+-> Copiando los dos scripts del kit a la ra├¡z ...
+   [.] Ya existe (no sobrescrito): bootstrap.py
+   [.] Ya existe (no sobrescrito): task_generator.py
+
+-> Preparando PRD.md de partida ...
+   [.] PRD.md ya existe (no sobrescrito).
+
+Ô£à Proyecto montado. Siguientes pasos:
+   1. Completa C:\Users\Usuario\AppData\Local\Temp\tmpsce2yzlm\PRD.md
+   2. cd C:\Users\Usuario\AppData\Local\Temp\tmpsce2yzlm && python bootstrap.py   (Fase M0)
+   3. Abre tu agente con la carpeta: leer├í CONTEXT.md y empezar├í la entrevista (M1).
+test_init_monta_estructura_completa (test_packaging.InitEndToEndTest.test_init_monta_estructura_completa) ... ok
+======================================================================
+     ­ƒÜÇ FIA HARNESS v2.2.0 ÔÇö INSTALADOR DE PROYECTOS (init)
+======================================================================
+   [+] Creada carpeta: /src
+   [+] Creada carpeta: /tests
+   [+] Creada carpeta: /docs
+   [+] Creada carpeta: /infra
+
+-> Copiando plantillas del kit a /docs ...
+   [+] docs/INICIO_PROYECTO.md
+   [+] docs/SECURITY.md
+   [+] docs/AEO_GEO_SEO.md
+   [+] docs/UI_UX_EXCLUSIVA.md
+   [+] docs/SKILLS_MCP.md
+   [+] docs/TASK_TEMPLATE.md
+   [+] docs/TASK_LITE_TEMPLATE.md
+   [+] docs/QUICKSTART_LITE.md
+   [+] docs/AGENTS.md
+   [+] docs/PRD_TEMPLATE.md
+   [+] docs/MODELOS.md
+   [+] docs/RAG_VECTOR_EXTENSION.md (m├│dulo RAG/vectorial opcional)
+
+-> Copiando los dos scripts del kit a la ra├¡z ...
+   [+] bootstrap.py
+   [+] task_generator.py
+
+-> Preparando PRD.md de partida ...
+   [+] PRD.md generado (compl├®talo antes de la Fase 1).
+
+Ô£à Proyecto montado. Siguientes pasos:
+   1. Completa C:\Users\Usuario\AppData\Local\Temp\tmpo453nith\PRD.md
+   2. cd C:\Users\Usuario\AppData\Local\Temp\tmpo453nith && python bootstrap.py   (Fase M0)
+   3. Abre tu agente con la carpeta: leer├í CONTEXT.md y empezar├í la entrevista (M1).
+test_proyecto_generado_arranca_en_verde (test_packaging.InitEndToEndTest.test_proyecto_generado_arranca_en_verde) ... 
+ok
+======================================================================
+     ­ƒÜÇ FIA HARNESS v2.2.0 ÔÇö INSTALADOR DE PROYECTOS (init)
+======================================================================
+   [+] Creada carpeta: /src
+   [+] Creada carpeta: /tests
+   [+] Creada carpeta: /docs
+   [+] Creada carpeta: /infra
+
+-> Copiando plantillas del kit a /docs ...
+   [+] docs/INICIO_PROYECTO.md
+   [+] docs/SECURITY.md
+   [+] docs/AEO_GEO_SEO.md
+   [+] docs/UI_UX_EXCLUSIVA.md
+   [+] docs/SKILLS_MCP.md
+   [+] docs/TASK_TEMPLATE.md
+   [+] docs/TASK_LITE_TEMPLATE.md
+   [+] docs/QUICKSTART_LITE.md
+   [+] docs/AGENTS.md
+   [+] docs/PRD_TEMPLATE.md
+   [+] docs/MODELOS.md
+   [+] docs/RAG_VECTOR_EXTENSION.md (m├│dulo RAG/vectorial opcional)
+
+-> Copiando los dos scripts del kit a la ra├¡z ...
+   [+] bootstrap.py
+   [+] task_generator.py
+
+-> Preparando PRD.md de partida ...
+   [+] PRD.md generado (compl├®talo antes de la Fase 1).
+
+Ô£à Proyecto montado. Siguientes pasos:
+   1. Completa C:\Users\Usuario\AppData\Local\Temp\tmpw7b8ysg3\PRD.md
+   2. cd C:\Users\Usuario\AppData\Local\Temp\tmpw7b8ysg3 && python bootstrap.py   (Fase M0)
+   3. Abre tu agente con la carpeta: leer├í CONTEXT.md y empezar├í la entrevista (M1).
+test_scripts_no_rompen_con_consola_cp1252 (test_packaging.InitEndToEndTest.test_scripts_no_rompen_con_consola_cp1252) 
+... ok
+test_rag_module_matches_repo_root (test_packaging.PackageDataSyncTest.test_rag_module_matches_repo_root) ... ok
+test_scripts_match_repo_root (test_packaging.PackageDataSyncTest.test_scripts_match_repo_root) ... ok
+test_templates_match_repo_root (test_packaging.PackageDataSyncTest.test_templates_match_repo_root) ... ok
+
+----------------------------------------------------------------------
+Ran 75 tests in 2.210s
+
+OK
+======================================================================
+     ­ƒÜÇ FIA HARNESS v2.2.0 ÔÇö INSTALADOR DE PROYECTOS (init)
+======================================================================
+   [+] Creada carpeta: /src
+   [+] Creada carpeta: /tests
+   [+] Creada carpeta: /docs
+   [+] Creada carpeta: /infra
+
+-> Copiando plantillas del kit a /docs ...
+   [+] docs/INICIO_PROYECTO.md
+   [+] docs/SECURITY.md
+   [+] docs/AEO_GEO_SEO.md
+   [+] docs/UI_UX_EXCLUSIVA.md
+   [+] docs/SKILLS_MCP.md
+   [+] docs/TASK_TEMPLATE.md
+   [+] docs/TASK_LITE_TEMPLATE.md
+   [+] docs/QUICKSTART_LITE.md
+   [+] docs/AGENTS.md
+   [+] docs/PRD_TEMPLATE.md
+   [+] docs/MODELOS.md
+   [+] docs/RAG_VECTOR_EXTENSION.md (m├│dulo RAG/vectorial opcional)
+
+-> Copiando los dos scripts del kit a la ra├¡z ...
+   [+] bootstrap.py
+   [+] task_generator.py
+
+-> Preparando PRD.md de partida ...
+   [+] PRD.md generado (compl├®talo antes de la Fase 1).
+
+Ô£à Proyecto montado. Siguientes pasos:
+   1. Completa C:\Users\Usuario\AppData\Local\Temp\tmpbtbhzzi0\PRD.md
+   2. cd C:\Users\Usuario\AppData\Local\Temp\tmpbtbhzzi0 && python bootstrap.py   (Fase M0)
+   3. Abre tu agente con la carpeta: leer├í CONTEXT.md y empezar├í la entrevista (M1).
