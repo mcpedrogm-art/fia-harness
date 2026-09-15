@@ -23,6 +23,7 @@
 | F5 | Evidence Engine | Schema EV-NNN, `fia evidence`, cadena claim→command→execution→artifact→hash | F4 | [x] Listo |
 | F6 | Verification Engine | `fia verify` (STATE/DEPS/EVIDENCE/PROVENANCE/SEALS/SPEC) + smoke de tampering | F5 | [x] Listo |
 | F7 | CI / Merge Gate mínimo | harness.yml con `fia verify`, local vs CI confiable, demo en rojo/verde | F6 | [x] Listo |
+| F8 | Puerta de validación externa (3–5 usuarios) | 3–5 usuarios reales + fricción reportada + `fia verify` en un CI ajeno | F7 | [~] En curso |
 
 ## Checkpoints de Contexto Recientes
 
@@ -102,3 +103,4 @@
 - **F7 (CI / Merge Gate):** el workflow generado pasa a ser `fia verify` (instala el paquete; patrón `trusted` documentado con artifacts + digest, ADR-005) y el job `estado-harness` del propio repo también. Demo `fia-harness-demo` migrado a v3 en local: F0/F1 con evidencia real re-ejecutada (EV-001 greet, EV-002 suite), estado 3.0 con backup, `fia verify` PASS (2 con procedencia, 0 solo existencia) y la trampa F2 bloquea el merge (FAIL por deriva; `sync` fail-closed con los errores de checkpoint/TASK). Cambios del demo sin commitear (pendientes de la release v3.0.0 y de autorización de push).
   Evidencia: EV-003
   EV-003 es la ejecución real de `fia verify` sobre este repo (registrada con `fia run`); su cadena se valida en el `--check` de este cierre.
+- **F8 (puerta externa):** EN CURSO (2026-09-15). v3.0.0 publicada en PyPI; demo migrado y empujado con CI v3 en verde; materiales de lanzamiento actualizados a v3 (`lanzamiento/1_SHOW_HN.md`, `2_DEVHUNT.md`, `3_POSTS_ES.md`) y puerta de seguimiento en `lanzamiento/6_PUERTA_F8_VALIDACION_EXTERNA.md`. Criterios: 3–5 usuarios externos reales, fricción reportada y `fia verify` estable en un CI ajeno. Time-box: 4–6 semanas.

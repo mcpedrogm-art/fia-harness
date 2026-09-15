@@ -118,6 +118,16 @@
       ],
       "depends_on_notes": "",
       "status": "done"
+    },
+    {
+      "id": "F8",
+      "title": "",
+      "objective": "Puerta de validación externa (3–5 usuarios) / 3–5 usuarios reales + fricción reportada + fia verify en un CI ajeno",
+      "depends_on": [
+        "F7"
+      ],
+      "depends_on_notes": "",
+      "status": "in_progress"
     }
   ],
   "checkpoints": [
@@ -214,8 +224,16 @@
       "summary": "el workflow generado pasa a ser `fia verify` (instala el paquete; patrón `trusted` documentado con artifacts + digest, ADR-005) y el job `estado-harness` del propio repo también. Demo `fia-harness-demo` migrado a v3 en local: F0/F1 con evidencia real re-ejecutada (EV-001 greet, EV-002 suite), estado 3.0 con backup, `fia verify` PASS (2 con procedencia, 0 solo existencia) y la trampa F2 bloquea el merge (FAIL por deriva; `sync` fail-closed con los errores de checkpoint/TASK). Cambios del demo sin commitear (pendientes de la release v3.0.0 y de autorización de push).",
       "evidence": "",
       "evidence_file": "EV-003",
-      "id": "CP-F7",
-      "recorded_at": "2026-09-15T18:18:26"
+      "recorded_at": "2026-09-15T18:18:26",
+      "id": "CP-F7"
+    },
+    {
+      "phase": "F8",
+      "summary": "EN CURSO (2026-09-15). v3.0.0 publicada en PyPI; demo migrado y empujado con CI v3 en verde; materiales de lanzamiento actualizados a v3 (`lanzamiento/1_SHOW_HN.md`, `2_DEVHUNT.md`, `3_POSTS_ES.md`) y puerta de seguimiento en `lanzamiento/6_PUERTA_F8_VALIDACION_EXTERNA.md`. Criterios: 3–5 usuarios externos reales, fricción reportada y `fia verify` estable en un CI ajeno. Time-box: 4–6 semanas.",
+      "evidence": "",
+      "evidence_file": null,
+      "recorded_at": "2026-09-15T18:24:46",
+      "id": "CP-F8"
     }
   ],
   "updated": "2026-09-15",
@@ -233,6 +251,6 @@
       "id": "SNAP-001"
     }
   ],
-  "compiled_at": "2026-09-15T18:18:26",
-  "state_sha256": "4a09f780b3eaf5464b6e99fc667d63d87e33864a9ab510bc4b4f13afa20544b2"
+  "compiled_at": "2026-09-15T18:24:53",
+  "state_sha256": "211e9d41a244bfb80f58b76fb09757c0d2956771fd82855de1b0a5a50e25254d"
 }
