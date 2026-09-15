@@ -8,6 +8,7 @@ import unittest
 from pathlib import Path
 
 from fia_harness.core import commands
+from fia_harness.core import state as st
 from fia_harness.core.state import REQUIRED_SEALED
 
 VALID_MD = """# PROGRESS.md
@@ -76,6 +77,36 @@ class CommandsTests(unittest.TestCase):
             commands.cmd_stats(self.dir)
         self.assertIn("Fases de ejecución", out.getvalue())
         self.assertIn("calculado desde PROGRESS.md", err.getvalue())
+
+    def _legacy_state_md(self):
+        state = st.compile_state_from_md(VALID_MD)
+        state.pop("schema_version")
+        state["schema"] = st.LEGACY_SCHEMA
+        return state
+
+    def test_check_acepta_estado_legacy_con_aviso(self):
+        (self.dir / st.STATE_FILE).write_text(json.dumps(self._legacy_state_md()),
+                                              encoding="utf-8")
+        out, err = io.StringIO(), io.StringIO()
+        with contextlib.redirect_stdout(out), contextlib.redirect_stderr(err):
+            commands.cmd_check(self.dir)
+        self.assertIn("válido", out.getvalue())
+        self.assertIn("schema legado", err.getvalue())
+
+    def test_sync_migra_legacy_con_backup(self):
+        (self.dir / st.STATE_FILE).write_text(json.dumps(self._legacy_state_md()),
+                                              encoding="utf-8")
+        commands.cmd_sync(self.dir)
+        self.assertTrue((self.dir / (st.STATE_FILE + ".bak")).exists())
+        self.assertEqual(st.load_state_json(self.dir)["schema_version"], st.SCHEMA_VERSION)
+
+    def test_check_detecta_artefacto_editado_a_mano(self):
+        commands.cmd_sync(self.dir)
+        stored = st.load_state_json(self.dir)
+        stored["compiled_at"] = "2020-01-01T00:00:00"  # altera el artefacto, no la autoridad
+        (self.dir / st.STATE_FILE).write_text(json.dumps(stored), encoding="utf-8")
+        with self.assertRaises(SystemExit):
+            commands.cmd_check(self.dir)
 
 
 if __name__ == "__main__":

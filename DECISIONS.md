@@ -21,6 +21,13 @@
 *   **ADR-003 (2026-09-15):** Benchmark oficial diferido a v3.1+; en F6/F7 se incluye
     un smoke de gobernanza (tampering / evidencia fabricada → FAIL) como test de
     regresión, no como benchmark.
+*   **ADR-004 (2026-09-15):** Política de migración para proyectos anteriores a v2.1
+    (fases F cerradas sin evidencia cruda): **fail-closed**. La migración a 3.0 no
+    acepta fases cerradas sin evidencia; la recuperación es (a) añadir la evidencia
+    real que exista en el proyecto, o (b) reabrir con `--reopen` (en orden inverso de
+    cierre si hay dependientes) y volver a cerrar con evidencia. No se introduce flag
+    de escape en v3.0-core: debilitaría la garantía central del kit. La actualización
+    del proyecto demo (`fia-harness-demo`, era v2.0) con evidencia real se hará en F7.
 
 ## Reaperturas
 

@@ -5,6 +5,30 @@ con `DECISIONS.md` del propio sistema.
 
 ---
 
+## v3.0.0a3 — State Engine incremental: schema 3.0, huellas y migración (F3 de v3.0-core)
+
+1. **Schema `3.0`** (`schema_version`) con migración incremental (ADR-002): se
+   conservan los campos de `harness-state/1` y se añaden IDs estables
+   (`CP-<fase>` en checkpoints, `SNAP-NNN` en snapshots de SPEC), timestamps
+   (`compiled_at`, `recorded_at` por checkpoint) y huellas.
+2. **Huellas separadas** (`core/fingerprints.py`): `state_fingerprint` cubre solo la
+   autoridad (fases + contenido de checkpoints), por lo que es comparable entre
+   schemas y robusta a `evidence=None` de estados antiguos; `state_sha256` cubre el
+   artefacto completo y `--check` detecta ediciones manuales de progress.json.
+3. **Doble lectura y backup** (ADR-002): `--check` acepta el schema legado con aviso
+   y lo valida tal cual; `--sync` migra a 3.0 y guarda `progress.json.bak` antes de
+   reescribir; `--stats` muestra el schema del estado.
+4. **Extracción por tamaño**: `core/seals.py` (sellado de documentos normativos),
+   `parser/discovery.py` (localización del PRD) y `core/reports.py` (`status`).
+   Ningún módulo supera 250 líneas.
+5. **Verificado**: el estado legacy del propio repo migró en verde (dogfood) con
+   backup; tests 161 → 178. Nota (ADR-004): un proyecto anterior a v2.1 (demo, sin
+   evidencia cruda en sus checkpoints) falla cerrado al migrar, como debe; el error
+   explica la recuperación (`--reopen` en orden inverso + re-cierre con evidencia).
+   La actualización del demo con evidencia real se hará en F7.
+
+---
+
 ## v3.0.0a2 — Parser Engine con niveles de confianza (F2 de v3.0-core)
 
 1. **`extract_field(content, field) -> ExtractionResult(value, confidence, method)`**

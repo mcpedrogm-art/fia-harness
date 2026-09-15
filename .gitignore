@@ -19,3 +19,6 @@ Thumbs.db
 
 # Documento de trabajo local (no forma parte del producto)
 PLAN_V2.1_ENFORCEMENT.md
+
+# Backup local de migración de schema del estado (ADR-002)
+progress.json.bak

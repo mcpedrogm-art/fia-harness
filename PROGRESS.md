@@ -1,6 +1,6 @@
 # PROGRESS.md — Hoja de Ruta e Historial de Fases (repo FIA Harness)
 
-**Fase activa:** F3
+**Fase activa:** F4
 
 ## Fases del Proceso (Harness — dogfood del propio kit)
 
@@ -18,7 +18,7 @@
 | F0 | Baseline v2.2 y dogfood del repo | docs/V3_BASELINE.md, suite 75/75 registrada, rama v3.0-core, CI con --check | — | [x] Listo |
 | F1 | Extracción del Core + superficie `fia` | Módulos core/parser/generators, fachadas generadas, entry point `fia` | F0 | [x] Listo |
 | F2 | Parser Engine con niveles de confianza | `extract_field(...) -> ExtractionResult`, config de sinónimos, corpus de PRDs, métrica % | F1 | [x] Listo |
-| F3 | State Engine (migración incremental) | schema_version, IDs estables, timestamps, fingerprints, migración con backup | F2 | [ ] Pendiente |
+| F3 | State Engine (migración incremental) | schema_version, IDs estables, timestamps, fingerprints, migración con backup | F2 | [x] Listo |
 | F4 | Spike: mecanismo de captura de evidencia | docs/EVIDENCE_CAPTURE_DECISION.md + ejemplo end-to-end | F3 | [ ] Pendiente |
 | F5 | Evidence Engine | Schema EV-NNN, `fia evidence`, cadena claim→command→execution→artifact→hash | F4 | [ ] Pendiente |
 | F6 | Verification Engine | `fia verify` (STATE/DEPS/EVIDENCE/PROVENANCE/SEALS/SPEC) + smoke de tampering | F5 | [ ] Pendiente |
@@ -63,4 +63,19 @@
 
   python task_generator.py --check
   ✅ Estado del harness válido: 4 fases de proceso, 8 de ejecución, 7 checkpoints, aprobaciones íntegras.
+  ```
+- **F3 (State Engine incremental):** schema 3.0 con IDs estables (`CP-*`, `SNAP-*`), timestamps (`compiled_at`, `recorded_at`), huellas separadas (autoridad vs artefacto) y migración con doble lectura + backup. Extracciones por tamaño: `core/seals.py`, `parser/discovery.py`, `core/reports.py`. Hallazgo pre-v2.1 resuelto con ADR-004 (fail-closed + mensaje guiado de recuperación). Tests: 161 → 178.
+  Evidencia: CHANGELOG_FIXES.md (v3.0.0a3) · tests/test_core_fingerprints.py · tests/test_core_state.py
+  ```text
+  python -m unittest discover tests -v   (Python 3.11.15, Windows)
+  Ran 178 tests in 2.397s
+  OK
+
+  Migración dogfood del propio repo (harness-state/1 → 3.0):
+    --check (legacy): ✅ válido con aviso "schema legado" (doble lectura)
+    --sync:           ✅ migrado · backup progress.json.bak creado
+    --stats:          Schema del estado: 3.0
+
+  python task_generator.py --check
+  ✅ Estado del harness válido: 4 fases de proceso, 8 de ejecución, 8 checkpoints, aprobaciones íntegras.
   ```

@@ -14,6 +14,7 @@ from pathlib import Path
 from fia_harness.core import state as st
 from fia_harness.core.approvals import APPROVAL_ENTRY_RE
 from fia_harness.core.console import fail, fix_windows_console_encoding, warn
+from fia_harness.core.reports import cmd_stats  # noqa: F401  (re-export histórico)
 from fia_harness.parser.markdown import flip_phase_status, load_file
 
 
@@ -44,8 +45,9 @@ def cmd_sync(project_dir: Path):
 
 def cmd_check(project_dir: Path, state_optional: bool = False):
     """--check: valida el estado sin modificar nada. Es el comando que ejecuta el CI
-    generado por bootstrap.py (.github/workflows/harness.yml). Si falta progress.json,
-    falla salvo con --state-optional (el escape hatch explícito)."""
+    generado por bootstrap.py (.github/workflows/harness.yml). Doble lectura (ADR-002):
+    acepta el schema legado `harness-state/1` con aviso, y en 3.0 verifica además la
+    huella de integridad del artefacto."""
     fix_windows_console_encoding()
     md_text = load_file(project_dir / st.DEFAULT_FILES["progress"])
     compiled = st.compile_state_from_md(md_text)
@@ -58,6 +60,16 @@ def cmd_check(project_dir: Path, state_optional: bool = False):
         if st.state_fingerprint(stored) != st.state_fingerprint(compiled):
             fail(f"PROGRESS.md y {st.STATE_FILE} están desincronizados (¿edición manual sin compilar?). "
                  "Ejecuta: python task_generator.py --sync")
+        if st.is_legacy_state(stored):
+            warn(f"{st.STATE_FILE} usa el schema legado '{st.LEGACY_SCHEMA}': se valida tal cual. "
+                 f"Ejecuta --sync para migrar a {st.SCHEMA_VERSION} (se guardará un backup .bak).")
+        else:
+            integrity_errors = st.validate_state_integrity(stored)
+            if integrity_errors:
+                print_errors_and_fail(
+                    integrity_errors,
+                    f"{st.STATE_FILE} no es íntegro: fue editado a mano o está corrupto. "
+                    "Ejecuta --sync para regenerarlo.")
         state = stored
     elif state_optional:
         state = compiled
@@ -201,47 +213,3 @@ def cmd_reopen(project_dir: Path, phase: str, reason: str):
         print_errors_and_fail(errors, "Estado inválido tras reabrir; revisa y ejecuta --sync.")
     st.write_state(project_dir, updated)
     print(f"✅ Fase {phase} reabierta (done → in_progress). Razón: {reason}")
-
-
-def _count_approvals(project_dir: Path) -> int:
-    decisions_path = project_dir / "DECISIONS.md"
-    if not decisions_path.exists():
-        return 0
-    return len(APPROVAL_ENTRY_RE.findall(decisions_path.read_text(encoding="utf-8")))
-
-
-def cmd_stats(project_dir: Path):
-    """--stats: resumen legible del estado del proyecto (fases, checkpoints,
-    aprobaciones, sellos, snapshots) leído de progress.json."""
-    fix_windows_console_encoding()
-    state = st.load_state_json(project_dir)
-    if state is None:
-        md_text = load_file(project_dir / st.DEFAULT_FILES["progress"], required=False)
-        if md_text:
-            state = st.compile_state_from_md(md_text)
-            warn(f"{st.STATE_FILE} no existe; resumen calculado desde PROGRESS.md.")
-        else:
-            fail(f"No hay estado que resumir: falta {st.STATE_FILE} y {st.DEFAULT_FILES['progress']}.")
-
-    def counts(phases):
-        c = {"done": 0, "in_progress": 0, "blocked": 0, "pending": 0}
-        for p in phases:
-            c[p.get("status", "pending")] += 1
-        return c
-
-    process = state.get("process_phases", [])
-    execution = state.get("execution_phases", [])
-    pc = counts(process)
-    ec = counts(execution)
-    next_phase = next((p["id"] for p in execution
-                       if p.get("status") in ("pending", "in_progress", "blocked")), None)
-
-    print("=== FIA HARNESS — Estado del proyecto ===")
-    print(f"Fases de proceso (M):    {len(process):>3}  (done {pc['done']}, pendiente {pc['pending']})")
-    print(f"Fases de ejecución (F):  {len(execution):>3}  (done {ec['done']}, en curso {ec['in_progress']}, "
-          f"bloqueada {ec['blocked']}, pendiente {ec['pending']})")
-    print(f"Próxima fase pendiente:  {next_phase or '—'}")
-    print(f"Checkpoints de contexto: {len(state.get('checkpoints', []))}")
-    print(f"Aprobaciones registradas:{_count_approvals(project_dir)}")
-    print(f"Snapshots de SPEC.md:    {len(state.get('spec_hashes', []))}")
-    print(f"Documentos sellados:     {len(state.get('sealed_docs', {}))}")

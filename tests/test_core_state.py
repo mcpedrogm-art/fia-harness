@@ -1,5 +1,6 @@
 """Tests unitarios del modelo de estado (`fia_harness.core.state`)."""
 
+import json
 import tempfile
 import unittest
 from pathlib import Path
@@ -28,7 +29,7 @@ class CompileTests(unittest.TestCase):
         state = st.compile_state_from_md(VALID_MD)
         self.assertEqual([p["id"] for p in state["process_phases"]], ["M0"])
         self.assertEqual([p["id"] for p in state["execution_phases"]], ["F0", "F1"])
-        self.assertEqual(state["schema"], st.SCHEMA_NAME)
+        self.assertEqual(state["schema_version"], st.SCHEMA_VERSION)
 
     def test_dependencias_separan_ids_y_notas(self):
         md = VALID_MD.replace("| F0 | Repo | Funcionando | — |",
@@ -63,6 +64,18 @@ class ValidateTests(unittest.TestCase):
                               "| F0 | Repo | Funcionando | — | [x] Listo |")
         errors = st.validate_state(self._state(md), self.dir)
         self.assertTrue(any("checkpoint" in e for e in errors), errors)
+
+    def test_evidencia_ausente_sugiere_la_recuperacion(self):
+        """ADR-004: el error de evidencia explica cómo salir del atasco (--reopen)."""
+        md = VALID_MD.replace("| F0 | Repo | Funcionando | — | [ ] Pendiente |",
+                              "| F0 | Repo | Funcionando | — | [x] Listo |")
+        md = md.replace("## Checkpoints de Contexto Recientes\n- **M0:** Arranque completado.\n",
+                        "## Checkpoints de Contexto Recientes\n- **M0:** Arranque completado.\n"
+                        "- **F0:** Repo listo.\n")
+        _write(self.dir / "PROGRESS.md", md)
+        _write(self.dir / "TASK-F0.md", "# TASK-F0\nInforme.\n")
+        errors = st.validate_state(st.compile_state_from_md(md), self.dir)
+        self.assertTrue(any("--reopen F0" in e for e in errors), errors)
 
     def test_dependencia_inexistente(self):
         md = VALID_MD.replace("| F0 | Repo | Funcionando | — |",
@@ -114,6 +127,53 @@ class SealedAndSpecTests(unittest.TestCase):
         self.assertEqual(st.validate_spec_snapshot(state, self.dir), [])
         _write(self.dir / "SPEC.md", "# SPEC v2\n")
         self.assertTrue(st.validate_spec_snapshot(state, self.dir))
+
+
+class SchemaAndMigrationTests(unittest.TestCase):
+    """F3: schema 3.0, IDs estables, timestamps, huella y migración con backup."""
+
+    def setUp(self):
+        tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(tmp.cleanup)
+        self.dir = Path(tmp.name)
+        _write(self.dir / "PROGRESS.md", VALID_MD)
+
+    def test_write_state_asigna_ids_timestamps_y_huella(self):
+        st.write_state(self.dir, st.compile_state_from_md(VALID_MD))
+        stored = st.load_state_json(self.dir)
+        self.assertEqual(stored["schema_version"], st.SCHEMA_VERSION)
+        self.assertIn("compiled_at", stored)
+        self.assertTrue(stored["state_sha256"])
+        self.assertEqual(stored["checkpoints"][0]["id"], "CP-M0")
+        self.assertIn("recorded_at", stored["checkpoints"][0])
+        self.assertEqual(st.validate_state_integrity(stored), [])
+
+    def test_recorded_at_se_conserva_entre_syncs(self):
+        st.write_state(self.dir, st.compile_state_from_md(VALID_MD))
+        first = st.load_state_json(self.dir)["checkpoints"][0]["recorded_at"]
+        carried = st.carry_over_aux_fields(st.compile_state_from_md(VALID_MD),
+                                           st.load_state_json(self.dir))
+        st.write_state(self.dir, carried)
+        self.assertEqual(st.load_state_json(self.dir)["checkpoints"][0]["recorded_at"], first)
+
+    def test_migracion_legacy_crea_backup_y_reescribe_3_0(self):
+        legacy = {"schema": st.LEGACY_SCHEMA, "process_phases": [], "execution_phases": [],
+                  "checkpoints": []}
+        (self.dir / st.STATE_FILE).write_text(json.dumps(legacy), encoding="utf-8")
+        st.write_state(self.dir, st.compile_state_from_md(VALID_MD))
+        self.assertTrue((self.dir / (st.STATE_FILE + ".bak")).exists())
+        self.assertEqual(st.load_state_json(self.dir)["schema_version"], st.SCHEMA_VERSION)
+
+    def test_validate_acepta_schema_legacy(self):
+        legacy = st.compile_state_from_md(VALID_MD)
+        legacy.pop("schema_version")
+        legacy["schema"] = st.LEGACY_SCHEMA
+        self.assertEqual(st.validate_state(legacy, self.dir), [])
+
+    def test_validate_rechaza_schema_desconocido(self):
+        state = st.compile_state_from_md(VALID_MD)
+        state["schema_version"] = "9.9"
+        self.assertTrue(any("schema_version" in e for e in st.validate_state(state, self.dir)))
 
 
 class PersistenceTests(unittest.TestCase):

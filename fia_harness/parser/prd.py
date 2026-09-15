@@ -21,6 +21,7 @@ import unicodedata
 from dataclasses import dataclass
 from pathlib import Path
 
+from fia_harness.parser.discovery import NON_PRD_FILES, find_prd_file  # noqa: F401
 from fia_harness.parser.markdown import strip_md
 
 CONFIDENCE_LEVELS = ("alta", "media", "ninguna")
@@ -29,20 +30,6 @@ LIST_FIELDS = ("features", "out_of_scope")
 ALL_FIELDS = ("title",) + TEXT_FIELDS + LIST_FIELDS
 DEFAULT_TEXT = "No especificado. Por favor, completa este campo."
 CONFIG_PATH = Path(__file__).resolve().parent.parent / "data" / "parser" / "synonyms.json"
-
-# Archivos de control/soporte del harness que NUNCA deben considerarse PRD en la
-# búsqueda difusa: un CHANGELOG.md, un NOTES.md o un README.md suelto en la raíz
-# no es un documento de negocio. Incluye los 9 nombres de REQUIRED_TEMPLATES del
-# bootstrap (superset verificado por tests): una plantilla del kit nunca es PRD.
-NON_PRD_FILES = {
-    "README.md", "CONTEXT.md", "PROGRESS.md", "SPEC.md", "DECISIONS.md",
-    "QUICK_CONTEXT.md", "PROGRESS_ARCHIVE.md", "SESSION.md", "AGENTS.md",
-    "DESIGN_DIRECTION.md", "CHANGELOG.md", "CHANGELOG_FIXES.md", "TODO.md",
-    "NOTES.md", "RAG_VECTOR_EXTENSION.md", "INICIO_PROYECTO.md",
-    "SECURITY.md", "AEO_GEO_SEO.md", "UI_UX_EXCLUSIVA.md", "SKILLS_MCP.md",
-    "TASK_TEMPLATE.md", "TASK_LITE_TEMPLATE.md", "QUICKSTART_LITE.md",
-    "PRD_TEMPLATE.md", "MODELOS.md",
-}
 
 # Palabras clave para activar el módulo de extensión RAG/vectorial si el PRD lo pide.
 RAG_KEYWORDS = re.compile(
@@ -192,29 +179,6 @@ def extract_field(content: str, field_name: str, config: dict = None) -> Extract
     if field_name not in config["fields"]:
         raise ValueError(f"Campo desconocido para el parser PRD: {field_name!r}")
     return _extract_fields(content or "", [field_name], config)[field_name]
-
-
-def find_prd_file(root_dir: Path) -> Path:
-    """Busca un archivo PRD, MVP, brief o especificación de requisitos en la raíz."""
-    candidates = [
-        "PRD.md", "prd.md", "MVP.md", "mvp.md",
-        "brief.md", "BRIEF.md", "requisitos.md", "REQUISITOS.md"
-    ]
-    for candidate in candidates:
-        path = root_dir / candidate
-        if path.exists():
-            return path
-
-    # Búsqueda difusa: cualquier md en la raíz que no sea un archivo de control del
-    # harness (plantillas, archivos de control, tareas TASK-*, changelogs...).
-    for path in root_dir.glob("*.md"):
-        if path.name in NON_PRD_FILES:
-            continue
-        if path.name.startswith("TASK-"):
-            continue
-        return path
-
-    return None
 
 
 def extract_prd_metadata(prd_path: Path) -> dict:

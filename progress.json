@@ -1,5 +1,5 @@
 {
-  "schema": "harness-state/1",
+  "schema_version": "3.0",
   "process_phases": [
     {
       "id": "M0",
@@ -77,7 +77,7 @@
         "F2"
       ],
       "depends_on_notes": "",
-      "status": "pending"
+      "status": "done"
     },
     {
       "id": "F4",
@@ -125,43 +125,65 @@
       "phase": "M0",
       "summary": "Estructura de gobierno activa en el repo (SPEC.md, PROGRESS.md, DECISIONS.md, progress.json) creada en F0.",
       "evidence": "",
-      "evidence_file": null
+      "evidence_file": null,
+      "recorded_at": "2026-09-15T17:57:56",
+      "id": "CP-M0"
     },
     {
       "phase": "M1",
       "summary": "Análisis comparativo D1/D2/D3 completado; ADR-001/002/003 registradas.",
       "evidence": "",
-      "evidence_file": null
+      "evidence_file": null,
+      "recorded_at": "2026-09-15T17:57:56",
+      "id": "CP-M1"
     },
     {
       "phase": "M2",
       "summary": "SPEC.md v3.0-core aprobado por el humano (APPROVAL-001).",
       "evidence": "",
-      "evidence_file": null
+      "evidence_file": null,
+      "recorded_at": "2026-09-15T17:57:56",
+      "id": "CP-M2"
     },
     {
       "phase": "M3",
       "summary": "Tabla F0–F7 definida y derivada de SPEC.md.",
       "evidence": "",
-      "evidence_file": null
+      "evidence_file": null,
+      "recorded_at": "2026-09-15T17:57:56",
+      "id": "CP-M3"
     },
     {
       "phase": "F0",
       "summary": "Suite v2.2 en verde (75/75), baseline documentado y dogfood activo en el repo (SPEC.md, PROGRESS.md, DECISIONS.md, progress.json, TASK-F0.md, job de CI `--check`).",
       "evidence": "python -m unittest discover tests -v   (Python 3.11.15, Windows)\nRan 75 tests in 2.210s\nOK\n\npython task_generator.py --check\n✅ Estado del harness válido: 4 fases de proceso, 8 de ejecución, 5 checkpoints, aprobaciones íntegras.",
-      "evidence_file": "docs/V3_BASELINE.md"
+      "evidence_file": "docs/V3_BASELINE.md",
+      "recorded_at": "2026-09-15T17:57:56",
+      "id": "CP-F0"
     },
     {
       "phase": "F1",
       "summary": "Núcleo extraído a `fia_harness/core|parser|generators` (17 módulos, ninguno >250 líneas), fachadas finas generadas (ADR-001, sin duplicación) y CLI `fia` con 8 subcomandos. Suite 75 → 144 tests, todos en verde; comportamiento equivalente a v2.2 (tests originales intactos).",
       "evidence": "python -m unittest discover tests -v   (Python 3.11.15, Windows)\nRan 144 tests in 2.127s\nOK\n\npython task_generator.py --check\n✅ Estado del harness válido: 4 fases de proceso, 8 de ejecución, 6 checkpoints, aprobaciones íntegras.",
-      "evidence_file": "CHANGELOG_FIXES.md (v3.0.0a1) · docs/V3_BASELINE.md (referencia de equivalencia)"
+      "evidence_file": "CHANGELOG_FIXES.md (v3.0.0a1) · docs/V3_BASELINE.md (referencia de equivalencia)",
+      "recorded_at": "2026-09-15T17:57:56",
+      "id": "CP-F1"
     },
     {
       "phase": "F2",
       "summary": "`extract_field` con estrategias en cascada (heading exacto → parcial → densidad → ninguna), config versionada de sinónimos (añadir sinónimo no toca código), normalización de acentos/mayúsculas, confianza reflejada en CONTEXT.md y consola, corpus de 20 PRDs con test de regresión. Tests: 144 → 161.",
       "evidence": "python -m unittest discover tests -v   (Python 3.11.15, Windows)\nRan 161 tests in 2.482s\nOK\n\nMétrica del corpus (20 PRDs, 100 campos):\nresueltos (alta+media): 81/100 = 81.0%\nconfianza alta:         70/100 = 70.0%\n\npython task_generator.py --check\n✅ Estado del harness válido: 4 fases de proceso, 8 de ejecución, 7 checkpoints, aprobaciones íntegras.",
-      "evidence_file": "CHANGELOG_FIXES.md (v3.0.0a2) · tests/fixtures/prds/ · tests/test_prd_corpus.py"
+      "evidence_file": "CHANGELOG_FIXES.md (v3.0.0a2) · tests/fixtures/prds/ · tests/test_prd_corpus.py",
+      "recorded_at": "2026-09-15T17:57:56",
+      "id": "CP-F2"
+    },
+    {
+      "phase": "F3",
+      "summary": "schema 3.0 con IDs estables (`CP-*`, `SNAP-*`), timestamps (`compiled_at`, `recorded_at`), huellas separadas (autoridad vs artefacto) y migración con doble lectura + backup. Extracciones por tamaño: `core/seals.py`, `parser/discovery.py`, `core/reports.py`. Hallazgo pre-v2.1 resuelto con ADR-004 (fail-closed + mensaje guiado de recuperación). Tests: 161 → 178.",
+      "evidence": "python -m unittest discover tests -v   (Python 3.11.15, Windows)\nRan 178 tests in 2.397s\nOK\n\nMigración dogfood del propio repo (harness-state/1 → 3.0):\n--check (legacy): ✅ válido con aviso \"schema legado\" (doble lectura)\n--sync:           ✅ migrado · backup progress.json.bak creado\n--stats:          Schema del estado: 3.0\n\npython task_generator.py --check\n✅ Estado del harness válido: 4 fases de proceso, 8 de ejecución, 8 checkpoints, aprobaciones íntegras.",
+      "evidence_file": "CHANGELOG_FIXES.md (v3.0.0a3) · tests/test_core_fingerprints.py · tests/test_core_state.py",
+      "recorded_at": "2026-09-15T17:59:36",
+      "id": "CP-F3"
     }
   ],
   "updated": "2026-09-15",
@@ -175,7 +197,10 @@
       "sha256": "1384682d2fab220115ee16ef9955dad934b1b0ed8fb6ce2bf6be1c0dcbe9bb61",
       "ref": "sesion 2026-09-15 (usuario aprueba plan y ejecucion de F0)",
       "date": "2026-09-15",
-      "phase": "M2"
+      "phase": "M2",
+      "id": "SNAP-001"
     }
-  ]
+  ],
+  "compiled_at": "2026-09-15T18:03:07",
+  "state_sha256": "e96d6803a31b05e084df37714d4003ffd76014069975f689fcbe61cd73e6901c"
 }

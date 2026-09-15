@@ -1,29 +1,30 @@
-"""Modelo de estado del harness: compilación, fingerprints y validación estricta.
+"""Modelo de estado del harness: compilación, validación estricta y persistencia.
 
 `STATE = authority; MARKDOWN = projection`. PROGRESS.md se compila a `progress.json`
-(schema `harness-state/1`) y se valida contra las Reglas de Oro detectables por
-máquina. F3 ampliará este modelo de forma incremental (schema_version, IDs
-estables, timestamps) sin romper proyectos v2.2 (ADR-002).
+(schema `3.0`, migración incremental desde `harness-state/1` según ADR-002) y se
+valida contra las Reglas de Oro detectables por máquina. Las huellas (deriva e
+integridad) viven en `core.fingerprints`.
 """
 
-import hashlib
+import datetime
 import json
 import re
+import shutil
 from pathlib import Path
 
 from fia_harness.core import approvals, evidence
+from fia_harness.core.fingerprints import (sha256_hex, state_fingerprint,
+                                           state_sha256, validate_state_integrity)
+from fia_harness.core.seals import (REQUIRED_SEALED, compute_doc_hashes,  # noqa: F401
+                                    validate_sealed_docs)
 from fia_harness.parser.markdown import extract_checkpoints, parse_progress_table
 
 STATE_FILE = "progress.json"
-SCHEMA_NAME = "harness-state/1"
+SCHEMA_VERSION = "3.0"
+LEGACY_SCHEMA = "harness-state/1"
+SCHEMA_NAME = LEGACY_SCHEMA  # alias histórico: API v2.2 que re-exportan las fachadas
 STATUS_VALUES = ("pending", "in_progress", "blocked", "done")
 STATUS_SYMBOLS = {"x": "done", "X": "done", "~": "in_progress", "!": "blocked"}
-# Documentos normativos que el CI exige sellados (SHA-256 en progress.json).
-# Si el agente los edita para relajar sus propias reglas, --check lo detecta.
-REQUIRED_SEALED = ["INICIO_PROYECTO.md", "SECURITY.md", "TASK_TEMPLATE.md"]
-# Campos del estado que NO derivan de PROGRESS.md (se conservan entre --sync y
-# se excluyen del fingerprint de deriva): se validan aparte.
-_VOLATILE_KEYS = ("updated", "sealed_docs", "spec_hashes", "approvers")
 PHASE_ID_RE = re.compile(r"^[MF]\d+$")
 
 # Registro de archivos del proyecto que el kit conoce por nombre.
@@ -37,6 +38,15 @@ DEFAULT_FILES = {
     "template": "TASK_TEMPLATE.md",
     "template_lite": "TASK_LITE_TEMPLATE.md",
 }
+
+
+def schema_of(state: dict) -> str:
+    """Identificador de schema del estado (3.0 o el legado harness-state/1)."""
+    return state.get("schema_version") or state.get("schema") or ""
+
+
+def is_legacy_state(state: dict) -> bool:
+    return schema_of(state) == LEGACY_SCHEMA
 
 
 def phase_status(status_raw: str) -> str:
@@ -55,7 +65,7 @@ def _split_dependencies(raw: str):
 
 
 def compile_state_from_md(md_text: str, updated: str = None) -> dict:
-    """Compila PROGRESS.md al modelo de estado validable."""
+    """Compila PROGRESS.md al modelo de estado validable (schema 3.0)."""
     process, execution, seen = [], [], set()
     for row in parse_progress_table(md_text):
         phase_id = row["phase"].upper()
@@ -73,7 +83,7 @@ def compile_state_from_md(md_text: str, updated: str = None) -> dict:
         }
         (process if phase_id.startswith("M") else execution).append(entry)
     state = {
-        "schema": SCHEMA_NAME,
+        "schema_version": SCHEMA_VERSION,
         "process_phases": process,
         "execution_phases": execution,
         "checkpoints": extract_checkpoints(md_text),
@@ -81,47 +91,6 @@ def compile_state_from_md(md_text: str, updated: str = None) -> dict:
     if updated:
         state["updated"] = updated
     return state
-
-
-def state_fingerprint(state: dict) -> str:
-    """Huella canónica del estado, ignorando campos no derivables del Markdown
-    ('updated', 'sealed_docs', 'spec_hashes', 'approvers')."""
-    relevant = {k: v for k, v in state.items() if k not in _VOLATILE_KEYS}
-    return json.dumps(relevant, sort_keys=True, ensure_ascii=False)
-
-
-def sha256_hex(data: bytes) -> str:
-    return hashlib.sha256(data).hexdigest()
-
-
-def compute_doc_hashes(project_dir: Path, names) -> dict:
-    """Devuelve {nombre: sha256} de los documentos existentes del proyecto."""
-    hashes = {}
-    for name in names:
-        path = project_dir / name
-        if path.exists():
-            hashes[name] = sha256_hex(path.read_bytes())
-    return hashes
-
-
-def validate_sealed_docs(state: dict, project_dir: Path):
-    """Los documentos normativos sellados no pueden haber cambiado sin un nuevo
-    --seal. Si el documento no está presente en el proyecto, no aplica (proyectos
-    no bootstrapeados o docs retirados). Si está y no está sellado → violación."""
-    errors = []
-    sealed = state.get("sealed_docs", {})
-    for name in REQUIRED_SEALED:
-        path = project_dir / name
-        if not path.exists():
-            continue
-        if name not in sealed:
-            errors.append(f"Documento normativo '{name}' no sellado "
-                          f"(ejecuta: python task_generator.py --seal)")
-            continue
-        if sha256_hex(path.read_bytes()) != sealed[name]:
-            errors.append(f"'{name}' cambió desde el sellado: revisa el cambio "
-                          f"y vuelve a sellarlo (--seal)")
-    return errors
 
 
 def validate_spec_snapshot(state: dict, project_dir: Path):
@@ -152,19 +121,44 @@ def load_state_json(project_dir: Path):
         return None
 
 
+def _ensure_ids_and_timestamps(state: dict, now: str):
+    """IDs estables y timestamps para los objetos del estado (idempotente: los que
+    ya existen se conservan)."""
+    for checkpoint in state.get("checkpoints", []):
+        checkpoint.setdefault("id", f"CP-{checkpoint.get('phase', '?')}")
+        checkpoint.setdefault("recorded_at", now)
+    for index, snapshot in enumerate(state.get("spec_hashes", []), start=1):
+        snapshot.setdefault("id", f"SNAP-{index:03d}")
+    state["compiled_at"] = now
+
+
 def write_state(project_dir: Path, state: dict):
-    (project_dir / STATE_FILE).write_text(
-        json.dumps(state, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    """Escribe el estado con IDs, timestamps y huella de integridad. Si el schema
+    cambia (migración legacy → 3.0), guarda antes un backup `progress.json.bak`."""
+    state_path = project_dir / STATE_FILE
+    previous = load_state_json(project_dir)
+    if previous is not None and schema_of(previous) != schema_of(state):
+        shutil.copy2(state_path, state_path.with_name(state_path.name + ".bak"))
+    _ensure_ids_and_timestamps(state, datetime.datetime.now().replace(microsecond=0).isoformat())
+    state["state_sha256"] = state_sha256(state)
+    state_path.write_text(json.dumps(state, ensure_ascii=False, indent=2) + "\n",
+                          encoding="utf-8")
 
 
 def carry_over_aux_fields(state: dict, previous) -> dict:
-    """Preserva los campos no derivables del MD (sellos, snapshots, aprobadores)
-    al recompilar, para que --sync no los pierda."""
+    """Preserva los campos no derivables del MD (sellos, snapshots, aprobadores) y
+    los timestamps de checkpoints ya registrados, para que --sync no los pierda."""
     if not previous:
         return state
     for key in ("sealed_docs", "spec_hashes", "approvers"):
         if key in previous:
             state[key] = previous[key]
+    previous_times = {c.get("phase"): c.get("recorded_at")
+                      for c in previous.get("checkpoints", [])}
+    for checkpoint in state.get("checkpoints", []):
+        recorded = previous_times.get(checkpoint.get("phase"))
+        if recorded:
+            checkpoint["recorded_at"] = recorded
     return state
 
 
@@ -178,8 +172,10 @@ def validate_state(state: dict, project_dir: Path):
     """Devuelve la lista de violaciones de las reglas de oro detectables por máquina.
     Lista vacía = estado coherente. Nunca modifica nada."""
     errors = []
-    if state.get("schema") != SCHEMA_NAME:
-        errors.append(f"'schema' debe ser '{SCHEMA_NAME}' (encontrado: {state.get('schema')!r})")
+    schema = schema_of(state)
+    if schema not in (SCHEMA_VERSION, LEGACY_SCHEMA):
+        errors.append(f"'schema_version' debe ser '{SCHEMA_VERSION}' "
+                      f"(o '{LEGACY_SCHEMA}' en lectura legacy); encontrado: {schema!r}")
 
     phases = {}
     for key in ("process_phases", "execution_phases"):

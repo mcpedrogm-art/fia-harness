@@ -56,7 +56,7 @@ class BootstrapStateTests(unittest.TestCase):
                 (d / name).write_text(f"# {name}\n", encoding="utf-8")
             bootstrap.generate_state_file(d, d / "PROGRESS.md")
             state = json.loads((d / "progress.json").read_text(encoding="utf-8"))
-            self.assertEqual(state["schema"], "harness-state/1")
+            self.assertEqual(state["schema_version"], "3.0")
             self.assertEqual(sorted(state["sealed_docs"]),
                              ["INICIO_PROYECTO.md", "SECURITY.md", "TASK_TEMPLATE.md"])
 

@@ -118,7 +118,7 @@ def generate_state_file(root_dir: Path, progress_path: Path):
         print("   [⚠️] El estado inicial es inválido: progress.json NO se ha generado. "
               "Corrige PROGRESS.md y ejecuta `python task_generator.py --sync`.", file=sys.stderr)
         return
-    state_path.write_text(json.dumps(state, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    st.write_state(root_dir, state)
     print("   [+] Estado compilado y validable generado: progress.json")
 
 
