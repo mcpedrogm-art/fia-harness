@@ -21,17 +21,17 @@
 
 **Objetivo:** que el repo diga exactamente qué garantiza y qué no.
 
-- [ ] Hero EN/ES: `merge checks no agent can skip` →
+- [x] Hero EN/ES: `merge checks no agent can skip` →
       **"merge checks the agent cannot silently skip — inside your Git + CI trust boundary"**.
-- [ ] Claim: **"A local-first governance harness for AI-assisted software development"**
+- [x] Claim: **"A local-first governance harness for AI-assisted software development"**
       / ES: *"Un protocolo de ingeniería para trabajar con agentes sin entregarles el control"*.
-- [ ] Tabla en *Limitations*: **Qué garantiza FIA · Qué NO garantiza · Qué debe hacer el humano**
+- [x] Tabla en *Limitations*: **Qué garantiza FIA · Qué NO garantiza · Qué debe hacer el humano**
       (freno de mano, no piloto automático).
-- [ ] Lanzamiento alineado (`lanzamiento/1_SHOW_HN.md`, `2_DEVHUNT.md`, `3_POSTS_ES.md`)
+- [x] Lanzamiento alineado (`lanzamiento/1_SHOW_HN.md`, `2_DEVHUNT.md`, `3_POSTS_ES.md`)
       + destacar las 3 demostraciones: trampa → detección → **por qué se bloqueó**.
-- [ ] Demo README: añadir el caso de **evidencia manipulada** (`evidence/EV-*.txt`
+- [x] Demo README: añadir el caso de **evidencia manipulada** (`evidence/EV-*.txt`
       editado → `PROVENANCE` FAIL), junto a la trampa de fase.
-- [ ] `CHANGELOG_FIXES.md` v3.0.2 + bump de versión.
+- [x] `CHANGELOG_FIXES.md` v3.0.2 + bump de versión.
 
 **Criterio de salida:** paridad H2 EN/ES · suite verde · `fia verify -d governance`
 verde · CI verde.
@@ -39,6 +39,9 @@ verde · CI verde.
 ---
 
 ## Etapa 1 — "Hacer lo existente sólido" · `v3.1.0`
+
+> **COMPLETADA y publicada (2026-09-15, tag `v3.1.0`).** Detalle del cierre en
+> `CHANGELOG_FIXES.md` (v3.1.0) y en la sección 10 del plan de sesión.
 
 **Objetivo:** cerrar los dos huecos reales detectados por las reviews, sin ampliar
 producto.
