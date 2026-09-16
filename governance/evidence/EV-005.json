@@ -1,0 +1,34 @@
+{
+  "id": "EV-005",
+  "type": "test",
+  "source": "local-run",
+  "command": [
+    "python",
+    "-m",
+    "fia_harness.cli",
+    "verify",
+    "-d",
+    "."
+  ],
+  "cwd": "C:\\Users\\Usuario\\Documents\\MIS SKILLS Y MCP\\INICIO DE PROYECTO\\FIA HARNESS COMPLETO\\governance",
+  "exit_code": 0,
+  "started_at": "2026-09-16T09:12:59.511260+00:00",
+  "finished_at": "2026-09-16T09:12:59.571134+00:00",
+  "duration_s": 0.067,
+  "stdout_sha256": "c1e4034712503ee852fb0bfa945cadea2cdfee8fe39d4e9a31e167be14b09dea",
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "artifacts": [
+    {
+      "name": "EV-005.stdout.txt",
+      "sha256": "c1e4034712503ee852fb0bfa945cadea2cdfee8fe39d4e9a31e167be14b09dea"
+    },
+    {
+      "name": "EV-005.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "environment": {
+    "python": "3.11.15",
+    "os": "Windows-10-10.0.26200-SP0"
+  }
+}
