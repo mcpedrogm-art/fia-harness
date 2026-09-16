@@ -241,6 +241,8 @@ fia verify      # merge gate: state + dependencies + evidence + provenance + sea
 fia run -- pytest -q                 # execute + record evidence (EV-NNN, hashed artifacts)
 fia evidence --ingest manifest.json  # anchor CI artifact digests (trusted provenance)
 fia seal / fia approve / fia reopen  # seals, human approvals, audited reopen
+fia verify --reproduce EV-001        # re-runs allowlisted evidence and compares output (opt-in)
+fia verify --scope-base origin/main  # post-hoc scope: diff vs the TASK's declared scope
 ```
 
 > The v2.2 flags (`python task_generator.py --sync/--check/--seal/--approval/--reopen`)
@@ -258,6 +260,8 @@ fia seal / fia approve / fia reopen  # seals, human approvals, audited reopen
 | Provenance | — | `local` vs **`trusted`** (CI platform artifact digest, ADR-005) |
 | PRD parsing | binary regex | **confidence levels** (high/medium/none) + versioned synonyms + regression corpus |
 | Distribution | copyable scripts | **package + thin facades** (`pip install fia-harness`) |
+| Scope | — | **post-hoc**: the diff must match the TASK's declared scope (`fia verify --scope-base`) |
+| Reproduction | — | **opt-in**: `fia verify --reproduce` re-runs allowlisted commands and compares output |
 
 ---
 
@@ -315,7 +319,7 @@ These limits are the honest boundary of a kit that runs on *your* machine with
 
 This repository is governed by the kit it ships:
 
-- The badge above is this repo's own CI: **213 tests**, a **self-application job**
+- The badge above is this repo's own CI: **248 tests**, a **self-application job**
   (`fia-harness init` → `bootstrap.py` → `--check` on a fresh temp project) and a
   **governance job** that runs `fia verify` on this repo itself — its own evidence
   records (`EV-001…EV-003`) are revalidated on every push.
@@ -336,8 +340,9 @@ The tests cover the `PROGRESS.md` parser, the **PRD parser with confidence level
 the **state machine 3.0** (fingerprints, integrity, migration with backup,
 dependencies, checkpoints, evidence, approvals, seals, spec snapshot, fail-closed,
 reopen), the **evidence engine** (hashed artifacts, tamper detection, CI digests),
-the **verification engine** (PASS/FAIL report) and the **packaging** (facades,
-`init` e2e, cp1252 consoles) plus a **complete e2e cycle** in a temp folder.
+the **verification engine** (PASS/FAIL report, risk gate, scope, reproduction) and
+the **packaging** (facades, `init` e2e, cp1252 consoles) plus a **complete e2e
+cycle** in a temp folder.
 
 In a bootstrapped project, check its state at any time:
 

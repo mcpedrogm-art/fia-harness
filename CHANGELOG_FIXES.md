@@ -5,6 +5,29 @@ con `DECISIONS.md` del propio sistema.
 
 ---
 
+## v3.2.0 — "Más difícil de engañar": scope post-hoc y evidencia reproducible
+
+1. **Scope post-hoc** (`core/scope.py` + `adapters/git.py`): la TASK puede declarar
+   su **alcance permitido** (sección con globs en `TASK_TEMPLATE.md`, v3.2). Mientras
+   la fase está en curso, `fia verify` compara el diff (working tree, o
+   `--scope-base origin/main` en CI) con ese alcance y **bloquea cambios fuera**.
+   Sin alcance declarado el gate se omite (compatibilidad); los archivos de
+   gobernanza de la fase están siempre permitidos. Requiere que el proyecto sea la
+   raíz de un repo git.
+2. **Evidencia reproducible (opt-in)** (`core/reproduce.py`):
+   `fia verify --reproduce [EV-NNN]` re-ejecuta el comando del registro y compara
+   **exit code + salida normalizada** (tiempos, timestamps y rutas se neutralizan)
+   contra los artifacts originales. **Nunca por defecto** (efectos secundarios y
+   flakiness) y con **allowlist explícita** del proyecto (`reproduce.json` →
+   `allow_prefixes`); sin allowlist no se reproduce nada.
+3. **Dos secciones nuevas en el reporte**: `SCOPE` y `REPRODUCTION` (esta última
+   solo se evalúa con `--reproduce`; sin el flag se muestra como omitida).
+4. **Plantilla TASK** con la sección `## Alcance permitido (scope)` (placeholder;
+   vacía = gate omitido). Sincronizada con la copia del paquete (anti-drift).
+5. Tests: 227 → 248. Docs: README EN/ES y `docs/ROADMAP_V3_1.md` actualizados.
+
+---
+
 ## v3.1.0 — Gates de calidad: riesgo → decisión humana y avisos (Etapa 1)
 
 1. **Gate de riesgo → decisión humana** (`core/quality.py`, fail-closed): una fase

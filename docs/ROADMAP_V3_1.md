@@ -85,13 +85,17 @@ dogfood · CI verde · evidencia (EV) citada en el checkpoint de la fase.
 
 ## Etapa 2 — v3.2 (solo con fricción real; visión)
 
+> **Núcleo «más difícil de engañar» EN CURSO (2026-09-15, decisión humana sin esperar
+> a F8):** 2.4 (scope post-hoc) y 2.5 (evidencia reproducible opt-in). El resto
+> (2.1–2.3, 2.6–2.8) sigue como visión, solo con fricción real.
+
 | # | Mejora | Diseño clave | Activación |
 |---|---|---|---|
 | 2.1 | Completitud de SPEC (M2) | lista de secciones **configurable por tipo de proyecto**; WARN primero, `--strict` opcional | fricción F8 |
 | 2.2 | Informe TASK completo al cerrar | secciones 2/8/10/11/12 (acepta `N/A (motivo)`); FAIL en `--sync` | fricción F8 |
 | 2.3 | ADR obligatorio en fases arquitectónicas | la aprobación de riesgo cita `ADR-NNN` | tras 1.1 |
-| 2.4 | Scope enforcement post-hoc | la TASK declara alcance; `verify` compara con el diff (`adapters/git.py`) | fricción F8 |
-| 2.5 | Evidence reproducible (opt-in) | `fia verify --reproduce EV-NNN`, comandos allowlisted, comparar exit + hash | fricción F8 |
+| 2.4 | Scope enforcement post-hoc | la TASK declara alcance; `verify` compara con el diff (`adapters/git.py`) | ✅ v3.2.0 |
+| 2.5 | Evidence reproducible (opt-in) | `fia verify --reproduce [EV-NNN]`, comandos allowlisted (`reproduce.json`), comparar exit + salida normalizada | ✅ v3.2.0 |
 | 2.6 | Approval levels (intent/execution/release) + hash/firma | amplía el mecanismo existente | tras 2.3 |
 | 2.7 | MICRO acotado | alcance máximo, evidencia obligatoria, promoción por riesgo | fricción F8 |
 | 2.8 | Benchmark | mide desviaciones (reabiertas, retrabajo, issues). No mide "buena arquitectura" | F8 + instrumento |

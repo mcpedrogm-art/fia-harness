@@ -244,6 +244,8 @@ fia verify      # merge gate: estado + dependencias + evidencia + procedencia + 
 fia run -- pytest -q                 # ejecuta y registra evidencia (EV-NNN, artifacts hasheados)
 fia evidence --ingest manifest.json  # ancla los digests de CI (procedencia trusted)
 fia seal / fia approve / fia reopen  # sellos, aprobaciones humanas, reapertura auditada
+fia verify --reproduce EV-001        # re-ejecuta evidencia allowlisted y compara la salida (opt-in)
+fia verify --scope-base origin/main  # alcance post-hoc: diff vs el alcance declarado en la TASK
 ```
 
 > Los flags de v2.2 (`python task_generator.py --sync/--check/--seal/--approval/--reopen`)
@@ -261,6 +263,8 @@ fia seal / fia approve / fia reopen  # sellos, aprobaciones humanas, reapertura 
 | Procedencia | — | `local` vs **`trusted`** (digest del artifact de la plataforma CI, ADR-005) |
 | Parser de PRD | regex binario | **niveles de confianza** (alta/media/ninguna) + sinónimos versionados + corpus de regresión |
 | Distribución | scripts copiables | **paquete + fachadas finas** (`pip install fia-harness`) |
+| Alcance | — | **post-hoc**: el diff debe caer dentro del alcance declarado en la TASK (`fia verify --scope-base`) |
+| Reproducción | — | **opt-in**: `fia verify --reproduce` re-ejecuta comandos allowlisted y compara la salida |
 
 ---
 
@@ -320,7 +324,7 @@ correcto.
 
 Este repositorio se gobierna con el kit que distribuye:
 
-- El badge de arriba es el CI de este propio repo: **213 tests**, un job de
+- El badge de arriba es el CI de este propio repo: **248 tests**, un job de
   **auto-aplicación** (`fia-harness init` → `bootstrap.py` → `--check` sobre un
   proyecto temporal nuevo) y un job de **gobernanza** que ejecuta `fia verify`
   sobre este mismo repo — sus registros de evidencia (`EV-001…EV-003`) se
@@ -342,8 +346,9 @@ marcadores, la heurística de palabras clave, la **máquina de estado 3.0**
 (huellas, integridad, migración con backup, dependencias, checkpoints, evidencia,
 aprobaciones, sellos, snapshot de spec, fail-closed, reapertura), el **motor de
 evidencia** (artifacts hasheados, detección de manipulación, digests de CI), el
-**motor de verificación** (reporte PASS/FAIL) y el **empaquetado** (fachadas,
-`init` e2e, consolas cp1252) más un **ciclo completo e2e** en carpeta temporal.
+**motor de verificación** (reporte PASS/FAIL, gate de riesgo, alcance, reproducción)
+y el **empaquetado** (fachadas, `init` e2e, consolas cp1252) más un **ciclo completo
+e2e** en carpeta temporal.
 
 En un proyecto ya arrancado, puedes comprobar su estado en cualquier momento:
 

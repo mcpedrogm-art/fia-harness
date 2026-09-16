@@ -23,6 +23,14 @@
 - [ ] Seguridad / hardening (auth, RLS, servidor, secretos)
 - [ ] Otro: <especificar>
 
+## Alcance permitido (scope)
+
+<!-- Globs de archivos que esta tarea puede tocar. `fia verify` bloquea cambios fuera
+     de este alcance (v3.2). Ejemplo (en una línea, sin viñetas dentro del comentario):
+     src/auth/**, tests/test_auth.py
+     Si no se declara nada, el gate de scope se omite para esta fase. -->
+- <pendiente de completar>
+
 ## Contexto y rol
 
 Actúa como <rol senior, p. ej. "desarrollador backend", "arquitecto de datos", "especialista en frontend"> especializado en <dominio> dentro del proyecto **<NOMBRE DEL PROYECTO>**.

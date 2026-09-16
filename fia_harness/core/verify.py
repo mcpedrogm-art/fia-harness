@@ -1,12 +1,17 @@
-"""Verification Engine (`fia verify`, F6; gates de riesgo/calidad en v3.1).
+"""Verification Engine (`fia verify`, F6; gates de riesgo/calidad v3.1; scope y
+reproducción v3.2).
 
 `verify` no confía en afirmaciones del agente: inspecciona artefactos y compone el
-reporte STATE / DEPENDENCIES / EVIDENCE / PROVENANCE / RISK / SEALS / SPEC SNAPSHOT.
-No modifica nada y es fail-closed (exit 1 si algo no cierra).
+reporte STATE / DEPENDENCIES / EVIDENCE / PROVENANCE / RISK / SCOPE / REPRODUCTION /
+SEALS / SPEC SNAPSHOT. No modifica nada y es fail-closed (exit 1 si algo no cierra).
 
 - PROVENANCE (ADR-005): `trusted` (digests de CI verificados) vs `local`.
 - RISK (v3.1): fases con señales de riesgo exigen decisión humana registrada.
-- QUALITY (v3.1): avisos que **nunca** bloquean (informe TASK incompleto, riesgo futuro).
+- SCOPE (v3.2): el diff debe caer dentro del alcance declarado en la TASK de la
+  fase en curso (`--scope-base REF` para comparar contra una rama en CI).
+- REPRODUCTION (v3.2, opt-in): `--reproduce [EV-NNN]` re-ejecuta comandos
+  allowlisted y compara exit code + salida normalizada.
+- QUALITY (v3.1): avisos que **nunca** bloquean.
 """
 
 from pathlib import Path
@@ -14,12 +19,14 @@ from pathlib import Path
 from fia_harness.core import approvals
 from fia_harness.core import evidence as ev
 from fia_harness.core import quality
+from fia_harness.core import reproduce
+from fia_harness.core import scope
 from fia_harness.core import state as st
 from fia_harness.core.console import fix_windows_console_encoding
 from fia_harness.parser.markdown import load_file
 
 SECTION_ORDER = ("STATE", "DEPENDENCIES", "EVIDENCE", "PROVENANCE", "RISK",
-                 "SEALS", "SPEC SNAPSHOT")
+                 "SCOPE", "REPRODUCTION", "SEALS", "SPEC SNAPSHOT")
 
 
 def _finalize(sections: dict, advisories=()) -> dict:
@@ -28,7 +35,33 @@ def _finalize(sections: dict, advisories=()) -> dict:
     return {"sections": sections, "reasons": reasons, "advisories": list(advisories)}
 
 
-def build_report(project_dir: Path) -> dict:
+def _reproduction_section(sections: dict, project_dir: Path, reproduce_arg):
+    """Rellena la sección REPRODUCTION solo si se pidió (`--reproduce`)."""
+    if reproduce_arg is None:
+        sections["REPRODUCTION"]["note"] = "omitida (opt-in: `fia verify --reproduce`)"
+        return
+    if reproduce_arg:
+        record = ev.load_record(project_dir, reproduce_arg)
+        if record is None:
+            sections["REPRODUCTION"]["errors"].append(
+                f"no existe la evidencia '{reproduce_arg}' en {ev.EVIDENCE_DIR}/")
+            return
+        records = [record]
+    else:
+        records = ev.list_records(project_dir)
+    results = reproduce.reproduce_records(project_dir, records)
+    mismatches = [r for r in results if r["status"] == "mismatch"]
+    skipped = [r for r in results if r["status"] == "skipped"]
+    reproduced = [r for r in results if r["status"] == "reproduced"]
+    sections["REPRODUCTION"]["note"] = (
+        f"{len(reproduced)} reproducida(s) · {len(mismatches)} no reproducible(s) · "
+        f"{len(skipped)} omitida(s)")
+    for result in mismatches:
+        sections["REPRODUCTION"]["errors"].append(
+            f"{result['id']}: {result['detail']}")
+
+
+def build_report(project_dir: Path, reproduce_arg=None, scope_base=None) -> dict:
     """Compone el reporte sin imprimir ni salir: secciones con errores + razones."""
     sections = {name: {"errors": [], "note": ""} for name in SECTION_ORDER}
     md_text = load_file(project_dir / st.DEFAULT_FILES["progress"], required=False)
@@ -69,17 +102,21 @@ def build_report(project_dir: Path) -> dict:
         f"{len(existence_only)} solo existencia")
 
     sections["RISK"]["errors"] += quality.validate_risk_decisions(stored, project_dir)
+    scope_errors, scope_note = scope.validate_scope(project_dir, stored, scope_base)
+    sections["SCOPE"]["errors"] += scope_errors
+    sections["SCOPE"]["note"] = scope_note
+    _reproduction_section(sections, project_dir, reproduce_arg)
     sections["SEALS"]["errors"] += st.validate_sealed_docs(stored, project_dir)
     sections["SPEC SNAPSHOT"]["errors"] += st.validate_spec_snapshot(stored, project_dir)
     return _finalize(sections, quality.quality_advisories(stored, project_dir))
 
 
-def cmd_verify(project_dir: Path) -> int:
+def cmd_verify(project_dir: Path, reproduce_arg=None, scope_base=None) -> int:
     """`fia verify`: imprime el reporte y devuelve 0 (PASS) o 1 (FAIL).
 
     La sección QUALITY es informativa: sus avisos nunca cambian el exit code."""
     fix_windows_console_encoding()
-    report = build_report(project_dir)
+    report = build_report(project_dir, reproduce_arg, scope_base)
     print("FIA Verification Report")
     print()
     for name in SECTION_ORDER:

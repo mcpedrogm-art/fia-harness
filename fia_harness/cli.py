@@ -185,8 +185,12 @@ def main(argv=None) -> int:
     evidence_parser.add_argument("-d", "--dir", default=".")
 
     verify_parser = subparsers.add_parser(
-        "verify", help="Reporte de verificación (STATE/DEPS/EVIDENCE/PROVENANCE/SEALS/SPEC).")
+        "verify", help="Reporte de verificación (STATE/DEPS/EVIDENCE/PROVENANCE/RISK/SCOPE/REPRODUCTION/SEALS/SPEC).")
     verify_parser.add_argument("-d", "--dir", default=".")
+    verify_parser.add_argument("--reproduce", nargs="?", const="", default=None, metavar="EV-NNN",
+                               help="Reproduce evidencia (opt-in): sin valor, todas las allowlisted.")
+    verify_parser.add_argument("--scope-base", default=None, metavar="REF",
+                               help="Compara el scope contra una ref de git (p. ej. origin/main).")
 
     args = parser.parse_args(argv)
     target = Path(args.dir)
@@ -231,7 +235,7 @@ def main(argv=None) -> int:
         return cmd_evidence(target, args.evidence_id, args.ingest)
     if args.command == "verify":
         from fia_harness.core.verify import cmd_verify
-        return cmd_verify(target)
+        return cmd_verify(target, args.reproduce, args.scope_base)
 
     parser.print_help()
     return 2
