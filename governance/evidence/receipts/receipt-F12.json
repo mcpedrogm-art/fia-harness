@@ -2,28 +2,36 @@
   "version": "1.0",
   "task_ref": "TASK-F12.md",
   "mode": "FULL",
-  "commit_or_tree_ref": "a86e6e015915f9104e21e85e3bad651b3b2991ea",
+  "commit_or_tree_ref": "83facabbc128519fd51fd6d9e40f33925c04820d",
   "dirty": false,
   "files": [
     {
       "path": "CHANGELOG_FIXES.md",
-      "content_sha256": "65d06890b74d3992684e7de5fa2ef1d1cda0a0e02e2f01bf6a5eb860a764a9ab"
+      "content_sha256": "85f48567300980d2202a7450e0e21d213831a7afe612e43158b00642c839dcb0"
     },
     {
       "path": "README.es.md",
-      "content_sha256": "12ffed59134259b5d5563d1238f6a271d09e1afd5c8aadea096a45c19cd66e4e"
+      "content_sha256": "f67e8eab99f60ea60d2c578858fd8896c692fcd1dcd3147b284689b2886a25f0"
     },
     {
       "path": "README.md",
-      "content_sha256": "33261eb634d4227cbdbf3e95f4143ccffd2c7b9cf7b16db6d13ee53617ba841e"
+      "content_sha256": "73d416525c9dd81ee26e1be6ca5bcc7c3654a0ace35f91c81328f1cfb6cb7043"
     },
     {
       "path": "fia_harness/__init__.py",
-      "content_sha256": "5a8df778abe87ccccd539d9c8f169e348cbcf77e4ab00e6d715660a127a8403b"
+      "content_sha256": "6da70701b90f2eb671d99650c3831ebadc6ed14b381cd9fc896a348e6373c89d"
+    },
+    {
+      "path": "fia_harness/data/templates/INICIO_PROYECTO.md",
+      "content_sha256": "ae7e6d4a2a417eeb65f4ac415976a1eb5bf11df60f1d688465b3fd59dd38a694"
     },
     {
       "path": "pyproject.toml",
-      "content_sha256": "e45e02d6b413ce85a9a1d180ac0e0d85f95ee5ae415927e89b3ae21dbec52a43"
+      "content_sha256": "e02ce54a54c0ca6a74f5be7c27e974e9c21f29525186ce97736406a553001e7d"
+    },
+    {
+      "path": "templates/INICIO_PROYECTO.md",
+      "content_sha256": "ae7e6d4a2a417eeb65f4ac415976a1eb5bf11df60f1d688465b3fd59dd38a694"
     }
   ],
   "checks": {
@@ -36,8 +44,8 @@
     "scope": "fail"
   },
   "evidence_refs": [
-    "EV-013"
+    "EV-014"
   ],
-  "generated_at": "2026-09-18T12:31:58",
-  "receipt_sha256": "e930a8f8ca6048d7218f94c27f1773df1573008c9edf357eb81f4671632d0132"
+  "generated_at": "2026-09-18T12:40:49",
+  "receipt_sha256": "da62cebae5aafba7f1586a723bc39a3478893d7f8547f0cddaa248f268a0ae14"
 }
