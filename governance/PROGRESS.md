@@ -27,7 +27,7 @@
 | F9 | Receipt Engine reducido: manifiesto canónico + `fia receipt create/verify` + regla de oro #16 | `core/receipts.py`, `receipt_ref` en checkpoints, sección RECEIPTS en `fia verify`, tests de determinismo y tampering | F7 | [x] Listo |
 | F10 | Router fail-closed fino (`fia route`) | `core/router.py`, comando `fia route`, tests negativos (red flags → Full) | F9 | [x] Listo |
 | F11 | Cierre v3.3: docs, plantillas, CHANGELOG, dogfood y demo | README EN/ES, plantillas (dos copias sincronizadas), `docs/RECEIPT_ROUTER.md`, CHANGELOG, demo con recibo manipulado | F10 | [x] Listo |
-| F12 | UI/UX: cuatro direcciones divergentes + esquema de recetas + `UI_RECIPES.md` | `UI_UX_EXCLUSIVA.md` §8.1–8.2, H3 de `TASK_TEMPLATE.md`, `QUICKSTART_LITE.md`, plantilla `UI_RECIPES.md` (copias sincronizadas) y biblioteca privada local | F11 | [x] Listo |
+| F12 | UI/UX: cuatro direcciones divergentes + esquema de recetas + `UI_RECIPES.md` | `UI_UX_EXCLUSIVA.md` §8.1–8.2, H3 de `TASK_TEMPLATE.md`, `QUICKSTART_LITE.md`, plantilla `UI_RECIPES.md` (copias sincronizadas) y biblioteca privada local | F11 | [~] Listo |
 
 ## Checkpoints de Contexto Recientes
 

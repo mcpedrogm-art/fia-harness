@@ -212,6 +212,32 @@ class ReceiptTests(unittest.TestCase):
         self.assertEqual(errors, [])
         self.assertIn("verificado contra", note)
 
+    def test_nombre_no_ascii_se_registra_con_hash(self):
+        _write(self.dir / "src" / "mi archivo ñ.py", "print('x')\n")
+        _git(self.dir, "add", ".")
+        _git(self.dir, "commit", "-qm", "unicode")
+        _write(self.dir / "src" / "mi archivo ñ.py", "print('y')\n")
+        self._create(allow_dirty=True)
+        _, receipt = self._receipt()
+        entry = next(f for f in receipt["files"] if f["path"].endswith("ñ.py"))
+        self.assertIsNotNone(entry["content_sha256"])
+        self.assertFalse(entry.get("deleted"))
+        errors, _ = receipts.verify_phase(self.dir, "F1")
+        self.assertEqual(errors, [])
+
+    def test_renombrado_registra_baja_y_alta(self):
+        _write(self.dir / "src" / "a.py", "print('a')\n")
+        _git(self.dir, "add", ".")
+        _git(self.dir, "commit", "-qm", "base rename")
+        _git(self.dir, "mv", "src/a.py", "src/b.py")
+        self._create(allow_dirty=True)
+        _, receipt = self._receipt()
+        paths = {(f["path"], f.get("deleted", False)) for f in receipt["files"]}
+        self.assertIn(("src/a.py", True), paths)
+        self.assertIn(("src/b.py", False), paths)
+        errors, _ = receipts.verify_phase(self.dir, "F1")
+        self.assertEqual(errors, [])
+
     def test_cli_create_y_verify(self):
         out = io.StringIO()
         with contextlib.redirect_stdout(out):

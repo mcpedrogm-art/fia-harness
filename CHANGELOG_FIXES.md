@@ -5,6 +5,21 @@ con `DECISIONS.md` del propio sistema.
 
 ---
 
+## v3.4.4 — Rutas git robustas: nombres no-ASCII y renombrados
+
+1. **Nombres con `ñ`/acentos/espacios (bug real detectado en pruebas adversarias):**
+   git devolvía las rutas entrecomilladas con escapes (`"src/mi archivo \303\261.py"`)
+   y el archivo se registraba como **borrado** con hash `null` (silenciosamente mal).
+   `changed_files` usa ahora salida `-z` (NUL-separada, sin comillas) → manifiesto y
+   verificación correctos. Crítico para proyectos en español.
+2. **Renombrados:** con la detección de renames activa, `git diff --name-only` solo
+   listaba el destino y la baja del origen no quedaba anclada. `--no-renames` hace
+   que un renombrado se registre como **baja + alta** (ambos paths en el manifiesto).
+3. Tests: 289 → 291 (nombre no-ASCII con hash; renombrado con baja y alta) + batería
+   adversaria manual (renombrado, unicode, binario, borrado de directorio) en verde.
+
+---
+
 ## v3.4.3 — Recibos con sellos, borrados y `fia run` en Windows
 
 1. **`receipt create` en proyectos con documentos sellados** (crítico, reportado y

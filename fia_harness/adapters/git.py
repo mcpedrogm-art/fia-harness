@@ -50,16 +50,31 @@ def show_file(project_dir: Path, ref: str, path: str):
     return proc.stdout if proc.returncode == 0 else None
 
 
+def _run_paths(project_dir: Path, *args) -> list:
+    """Salida de git con `-z`: rutas NUL-separadas, sin comillas ni escapes
+    (seguras con espacios, acentos, 'ñ' y otros caracteres no-ASCII)."""
+    try:
+        proc = subprocess.run(["git", *args], cwd=project_dir, capture_output=True)
+    except OSError:
+        return []
+    if proc.returncode != 0:
+        return []
+    return [chunk.decode("utf-8", "surrogateescape")
+            for chunk in proc.stdout.split(b"\x00") if chunk]
+
+
 def changed_files(project_dir: Path, base: str = None) -> list:
     """Archivos cambiados (rutas relativas a la raíz del repo): diff contra `base`
     si se da; si no, los cambios del working tree respecto a HEAD **incluyendo
     untracked** (`git diff` no lista archivos nuevos sin trackear).
 
-    Se ejecuta desde la raíz del repo para no limitar `ls-files` a una subcarpeta
-    cuando el estado del harness vive fuera de ella (p. ej. `-d governance`)."""
+    `--no-renames` para que un renombrado aparezca como borrado + alta (si no, git
+    solo lista el destino y la baja del origen no queda anclada). Se ejecuta desde
+    la raíz del repo para no limitar `ls-files` a una subcarpeta."""
     root = toplevel(project_dir) or project_dir
     if base:
-        return sorted(set(_run(root, "diff", "--name-only", f"{base}...HEAD")))
-    names = set(_run(root, "diff", "--name-only", "HEAD"))
-    names.update(_run(root, "ls-files", "--others", "--exclude-standard"))
+        return sorted(set(_run_paths(root, "diff", "--name-only", "--no-renames",
+                                      "-z", f"{base}...HEAD")))
+    names = set(_run_paths(root, "diff", "--name-only", "--no-renames", "-z", "HEAD"))
+    names.update(_run_paths(root, "ls-files", "--others", "--exclude-standard", "-z"))
     return sorted(names)

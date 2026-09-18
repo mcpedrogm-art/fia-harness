@@ -108,6 +108,7 @@
 - **F12** (2026-09-18) · Reapertura · Razón: v3.4.1: corregir numeracion de reglas en README EN/ES y nota de enforcement de INICIO_PROYECTO (referencia colgante a la 16 y regla 8 no verificada)
 - **F12** (2026-09-18) · Reapertura · Razón: v3.4.2: init con mensaje claro ante OSError (cwd/ruta no escribible: OneDrive, Carpetas controladas) y cd absoluto en los pasos
 - **F12** (2026-09-18) · Reapertura · Razón: v3.4.3: fixes del reporte externo (carry_over en receipt create, borrados en el manifiesto, shutil.which en fia run) + bateria de pruebas
+- **F12** (2026-09-18) · Reapertura · Razón: v3.4.4: rutas git con -z/quotepath y --no-renames (nombres no-ASCII y renombrados quedaban mal en el manifiesto) + bateria adversaria
 ## Aprobaciones
 - **APPROVAL-001** · (2026-09-15) · Fase: M2 · Acción: Plan v3.0-core aprobado: SPEC.md congelado (fases F0-F8) · Aprobado por: Humano · Ref: sesion 2026-09-15 (usuario aprueba plan y ejecucion de F0)
 - **APPROVAL-002** · (2026-09-15) · Fase: F3 · Acción: Autorización humana del plan v3.0-core (fases F0-F7) · Aprobado por: Humano · Ref: sesion 2026-09-15 (usuario autoriza cada fase)
