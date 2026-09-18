@@ -167,7 +167,7 @@
         "F11"
       ],
       "depends_on_notes": "",
-      "status": "done"
+      "status": "in_progress"
     }
   ],
   "checkpoints": [
@@ -321,8 +321,8 @@
       "evidence": "",
       "evidence_file": "EV-012",
       "receipt_ref": "evidence/receipts/receipt-F12.json",
-      "id": "CP-F12",
-      "recorded_at": "2026-09-18T12:12:12"
+      "recorded_at": "2026-09-18T12:12:12",
+      "id": "CP-F12"
     }
   ],
   "updated": "2026-09-18",
@@ -361,6 +361,6 @@
       "id": "SNAP-004"
     }
   ],
-  "compiled_at": "2026-09-18T12:12:12",
-  "state_sha256": "3875da79e9375b2014af10f94aed3d79b9b305720d6696da96d2ef68e53da75d"
+  "compiled_at": "2026-09-18T12:31:40",
+  "state_sha256": "b9be3d537e4d9d6ed50c569d670381bf00022b8f8c6b1fa30c0e96d742dd369a"
 }

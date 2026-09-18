@@ -288,6 +288,21 @@ fia verify --scope-base origin/main  # alcance post-hoc: diff vs el alcance decl
 
 ---
 
+## 🧭 Qué añade la v3.4
+
+| | v3.3 | **v3.4** |
+|---|---|---|
+| Direcciones UI/UX | "tres direcciones" libres | **cuatro direcciones divergentes** con roles fijos (segura, composición opuesta, interacción/movimiento, arquetipo inesperado) |
+| Chequeo de divergencia | — | **esquema de receta (12 campos) + matriz de divergencia (6 ejes)**: extremo en ≥3 ejes, ningún par coincidiendo en >2, autochequeo antes de mostrar |
+| Artefacto de proyecto | — | `UI_RECIPES.md` registra las recetas, la matriz y la decisión humana |
+
+> Límite honesto: es un **método para el agente**, no un gate mecánico todavía
+> (diferido a v3.5, ADR-011). Las recetas de referencia concretas viven en una
+> **biblioteca privada local** (`*.local.md`, no se distribuye); el kit público lleva
+> el esquema y el flujo, y los assets siempre se autohospedan.
+
+---
+
 ## 🛡️ Las reglas que nunca se rompen
 
 1. 🚫 **Nunca codificar sin spec aprobada** — ni una línea antes del M3.

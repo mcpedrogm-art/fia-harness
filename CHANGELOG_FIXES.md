@@ -5,6 +5,30 @@ con `DECISIONS.md` del propio sistema.
 
 ---
 
+## v3.4.0 — UI/UX: cuatro direcciones divergentes y recetas de sección
+
+1. **Cuatro direcciones divergentes (H3):** el prompt maestro entrega **4**
+   direcciones con roles fijos (segura/control, composición opuesta,
+   interacción/movimiento, arquetipo inesperado) en lugar de "tres direcciones"
+   abstractas. Problema real observado en pruebas: la selección convergía en dos
+   variantes cosméticas.
+2. **Esquema de receta de sección (12 campos)** y **matriz de divergencia (6 ejes)**
+   en `UI_UX_EXCLUSIVA.md` §8.1–8.2: cada dirección extrema en ≥3 ejes, ningún par
+   coincidiendo en más de 2, y **autochequeo obligatorio antes de mostrarlas**.
+   Nueva plantilla de proyecto `UI_RECIPES.md` (raíz + paquete + `fia init`/
+   `bootstrap` + `NON_PRD_FILES`).
+3. **Modo Lite:** dos direcciones divergentes (antes: una dirección y una
+   alternativa).
+4. **Biblioteca privada local** (`UI_LIBRARY.local.md`, gitignored): el kit público
+   (MIT) solo lleva el esquema y el flujo, **nunca prompts ni assets de terceros**;
+   los assets se autohospedan antes de publicar.
+5. **Diferido a v3.5:** gate mecánico de UI (decisión humana registrada para fases
+   de UI, mismo patrón que el gate de riesgo v3.1) — ADR-011.
+6. Tests: 282 (anti-drift e `init` e2e incluyen la plantilla nueva). Prueba de flujo
+   sobre brief neutro: 4 direcciones + matriz sin convergencia (pairwise ≤1).
+
+---
+
 ## v3.3.1 — Hotfix de CI: historial completo para verificar recibos
 
 1. **`fetch-depth: 0`** en el job de gobernanza del workflow generado

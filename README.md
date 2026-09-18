@@ -285,6 +285,21 @@ fia verify --scope-base origin/main  # post-hoc scope: diff vs the TASK's declar
 
 ---
 
+## 🧭 What v3.4 adds
+
+| | v3.3 | **v3.4** |
+|---|---|---|
+| UI/UX directions | free-form "three directions" | **four divergent directions** with fixed roles (safe, opposite composition, interaction/motion, unexpected archetype) |
+| Divergence check | — | **recipe schema (12 fields) + divergence matrix (6 axes)**: extreme in ≥3 axes, no pair sharing >2, self-check before showing |
+| Project artifact | — | `UI_RECIPES.md` records the recipes, the matrix and the human decision |
+
+> Honest limit: this is a **method for the agent**, not a mechanical gate yet
+> (deferred to v3.5, ADR-011). Concrete reference recipes live in a **private local
+> library** (`*.local.md`, not distributed); the public kit ships the schema and the
+> flow, and assets are always self-hosted.
+
+---
+
 ## 🛡️ The rules that never break
 
 1. 🚫 **Never code without an approved spec** — not a line before M3.
