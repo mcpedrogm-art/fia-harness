@@ -2,42 +2,63 @@
   "version": "1.0",
   "task_ref": "TASK-F12.md",
   "mode": "FULL",
-  "commit_or_tree_ref": "c75d35d80731d54ca5ca98aed6f19928dcd96aa7",
+  "commit_or_tree_ref": "69afa028124ede6118cb5f125345f089d1e71049",
   "dirty": false,
   "files": [
     {
       "path": "CHANGELOG_FIXES.md",
-      "content_sha256": "f59c6ca85377b53f5f1115867bcad46103cd457769cd3fc2f5a6bd5ce409af12"
+      "content_sha256": "77f33073143339640714a6e7a05cb459570b6cda995bdcfb681fcf7b1144dde8"
+    },
+    {
+      "path": "docs/RECEIPT_DESIGN.md",
+      "content_sha256": "bb63d6ebad348d9edc9debf8eddbdb615476e6c4fdea60c1710f63fb84aa7835"
     },
     {
       "path": "fia_harness/__init__.py",
-      "content_sha256": "4bc579140f2ec400eac8901b59cda39495284027881aa84b5ac367750a755313"
+      "content_sha256": "01eb0ec7de8c4229f285e1af6abaf718605120dbef41c6fc75493b5b90339c70"
     },
     {
-      "path": "fia_harness/cli.py",
-      "content_sha256": "4ca238e0837c1201a006f2f5c60dd274c27a52dd2902ef4192837dfaa026009e"
+      "path": "fia_harness/core/commands.py",
+      "content_sha256": "c08abdcb66cd45b64a74ebe817c2513ac6460f022cfbce5a0933ac427193da6e"
+    },
+    {
+      "path": "fia_harness/core/receipts.py",
+      "content_sha256": "d27ae9868d0ecc139a8608b151702025a59c3cbac9a6f62814ffc90ececcb681"
+    },
+    {
+      "path": "fia_harness/core/runner.py",
+      "content_sha256": "94d80247e2ec2807c57b46f4b0e13f92eb29be07015078e06e89bf342b41c253"
     },
     {
       "path": "pyproject.toml",
-      "content_sha256": "2275aa2af457e3b012e65fea11ed6f81cbe783047ea50483e8062d18d8085828"
+      "content_sha256": "0c559b5794b6bd3b89e9a5cda24dc2922bb430f44568d8b6d29a3b698fb20388"
     },
     {
-      "path": "tests/test_packaging.py",
-      "content_sha256": "c07b838e271ea51c3316c838e6b85e407c073e1c036453d55f21b83548ba9cf4"
+      "path": "tests/e2e_manual.py",
+      "content_sha256": "0d2de76526b7d96bda8e54c0546db36df2bffbe5d44f0aedcb5504b85b661616"
+    },
+    {
+      "path": "tests/test_core_receipts.py",
+      "content_sha256": "be5ed741a1753ee235217b34551245c6b9cfa515174f1cfec3f24bbc32c99710"
+    },
+    {
+      "path": "tests/test_core_runner.py",
+      "content_sha256": "23863abcec607a797cc6ad7c115820263ecc6046527b5a6139cca92fba0185f0"
     }
   ],
   "checks": {
     "golden_rules": "pass",
     "tests": {
-      "passed": 284,
-      "total": 284
+      "passed": 289,
+      "total": 289
     },
     "lint": "skip",
     "scope": "fail"
   },
   "evidence_refs": [
-    "EV-015"
+    "EV-016",
+    "EV-017"
   ],
-  "generated_at": "2026-09-18T12:59:41",
-  "receipt_sha256": "eeab419587b8f2fdc5d5a1e889284c05461709b0b28a9aac4febd586364a2254"
+  "generated_at": "2026-09-18T18:12:29",
+  "receipt_sha256": "56ef14cb0467eea51dd9f7bb3ef299ce4f38c9c66bf619a6537df1f83c7d8521"
 }

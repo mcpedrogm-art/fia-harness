@@ -167,7 +167,7 @@
         "F11"
       ],
       "depends_on_notes": "",
-      "status": "in_progress"
+      "status": "done"
     }
   ],
   "checkpoints": [
@@ -317,9 +317,9 @@
     },
     {
       "phase": "F12",
-      "summary": "cuatro direcciones divergentes con roles fijos (segura, composición opuesta, interacción/movimiento, arquetipo inesperado) + **esquema de receta de 12 campos** (§8.1) + **matriz de divergencia de 6 ejes** (§8.2: extremo en ≥3, ningún par >2, autochequeo antes de mostrar) para corregir la convergencia observada en pruebas; plantilla `UI_RECIPES.md` (raíz + paquete + `fia init`/`bootstrap` + `NON_PRD_FILES`); H3 y Lite actualizados; README EN/ES; **biblioteca privada local** `UI_LIBRARY.local.md` (gitignored, 12 recetas aportadas por el humano; el kit MIT solo lleva esquema y flujo, nunca prompts/assets de terceros). Release **v3.4.0** reflejada como propiedad del harness. **v3.4.1:** corrección de la numeración de reglas (README EN/ES: se añade la 9 del recibo y se elimina la referencia colgante a la 16; nota de enforcement de `INICIO_PROYECTO.md` ajustada a la realidad: verificadas 4/5/7/16, gates 9/13, sin gate 8/12). **v3.4.2:** `init` robusto (caso real en un equipo con `Documents` redirigido/protegido: `os.mkdir('src')` → `[WinError 2]`): captura `OSError`, mensaje claro con pistas (ruta absoluta, OneDrive, Carpetas controladas), exit 1 y `cd` absoluto en los pasos. Diferido a v3.5: gate mecánico de UI (ADR-011). Tests: 284.",
+      "summary": "cuatro direcciones divergentes con roles fijos (segura, composición opuesta, interacción/movimiento, arquetipo inesperado) + **esquema de receta de 12 campos** (§8.1) + **matriz de divergencia de 6 ejes** (§8.2: extremo en ≥3, ningún par >2, autochequeo antes de mostrar) para corregir la convergencia observada en pruebas; plantilla `UI_RECIPES.md` (raíz + paquete + `fia init`/`bootstrap` + `NON_PRD_FILES`); H3 y Lite actualizados; README EN/ES; **biblioteca privada local** `UI_LIBRARY.local.md` (gitignored, 12 recetas aportadas por el humano; el kit MIT solo lleva esquema y flujo, nunca prompts/assets de terceros). Release **v3.4.0** reflejada como propiedad del harness. **v3.4.1:** corrección de la numeración de reglas (README EN/ES y nota de enforcement). **v3.4.2:** `init` robusto (mensaje claro ante carpetas no escribibles + `cd` absoluto). **v3.4.3 (reporte externo, verificado y reproducido):** `receipt create` hacía `carry_over_aux_fields` con el estado guardado (fallaba siempre con documentos sellados); los **borrados** se representan en el manifiesto (`deleted: true`) y se verifican por ausencia; `fia run` resuelve el ejecutable con `shutil.which` (PATHEXT: `npm` → `npm.cmd` en Windows) y da error claro si no existe. Batería E2E reproducible (`tests/e2e_manual.py`, EV-017): init/bootstrap/sellos/borrado/tampering/recibo limpio/CI estricto/demo legacy. Tests: 289. Diferido a v3.5: gate mecánico de UI (ADR-011).",
       "evidence": "",
-      "evidence_file": "EV-015",
+      "evidence_file": "EV-016",
       "receipt_ref": "evidence/receipts/receipt-F12.json",
       "recorded_at": "2026-09-18T12:12:12",
       "id": "CP-F12"
@@ -361,6 +361,6 @@
       "id": "SNAP-004"
     }
   ],
-  "compiled_at": "2026-09-18T18:11:58",
-  "state_sha256": "b6ae522cc47e943b0e91397d9c2f10dcb89803ffcbc91dd9653498a4a19dd80e"
+  "compiled_at": "2026-09-18T18:12:48",
+  "state_sha256": "356d1e9099fbe2bba85965d6dbac8c7b24c82183f6593a3a4d5434d8eb5c201c"
 }
