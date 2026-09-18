@@ -84,9 +84,35 @@ def copy_if_absent(source: Path, target: Path, label: str) -> None:
     print(f"   [+] {label}")
 
 
+def _absolute(path: Path) -> Path:
+    try:
+        return path.expanduser().resolve()
+    except OSError:
+        return path
+
+
+def _init_failure_hint(target_dir: Path, error: OSError) -> int:
+    """Mensaje claro cuando la carpeta destino no se puede preparar (v3.4.2)."""
+    print()
+    print(f"❌ No se pudo preparar el proyecto en: {_absolute(target_dir)}")
+    print(f"   Error del sistema: {error}")
+    print("   Pistas:")
+    print('   - Usa una ruta absoluta y local, fuera de OneDrive: '
+          'fia-harness init -d "C:\\dev\\mi-proyecto"')
+    print("   - Revisa la Protección contra ransomware (Carpetas controladas) y los")
+    print("     permisos de escritura de la carpeta.")
+    return 1
+
+
 def run_init(target_dir: Path) -> int:
     _print_banner()
+    try:
+        return _init_project(target_dir)
+    except OSError as error:
+        return _init_failure_hint(target_dir, error)
 
+
+def _init_project(target_dir: Path) -> int:
     for folder in DEFAULT_FOLDERS:
         folder_path = target_dir / folder
         if not folder_path.exists():
@@ -119,10 +145,11 @@ def run_init(target_dir: Path) -> int:
         prd_path.write_text(PRD_STUB, encoding="utf-8")
         print("   [+] PRD.md generado (complétalo antes de la Fase 1).")
 
+    location = _absolute(target_dir)
     print()
     print("✅ Proyecto montado. Siguientes pasos:")
-    print(f"   1. Completa {target_dir / 'PRD.md'}")
-    print(f"   2. cd {target_dir} && python bootstrap.py   (Fase M0)")
+    print(f"   1. Completa {location / 'PRD.md'}")
+    print(f"   2. cd {location} && python bootstrap.py   (Fase M0)")
     print("   3. Abre tu agente con la carpeta: leerá CONTEXT.md y empezará la entrevista (M1).")
     return 0
 

@@ -5,6 +5,18 @@ con `DECISIONS.md` del propio sistema.
 
 ---
 
+## v3.4.2 — `init` robusto ante carpetas no escribibles
+
+1. **`fia init`** captura los `OSError` al preparar la carpeta destino y muestra un
+   mensaje claro (ruta absoluta local, OneDrive, Carpetas controladas) en lugar de
+   un traceback; devuelve exit code 1.
+2. Los pasos finales muestran `cd <ruta absoluta>` (antes `cd .`).
+3. Caso real reportado: en un equipo con `Documents` redirigido/protegido,
+   `os.mkdir('src')` fallaba con `[WinError 2]` y el traceback no explicaba nada.
+4. Tests: 282 → 284 (ruta inválida → error claro; `cd` absoluto).
+
+---
+
 ## v3.4.1 — Corrección de documentación: numeración de reglas
 
 1. **README EN/ES:** la nota de enforcement citaba la regla **nº16** (numeración del

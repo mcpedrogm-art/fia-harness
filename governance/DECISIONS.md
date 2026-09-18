@@ -106,6 +106,7 @@
 - **F11** (2026-09-18) · Reapertura · Razón: CI de release: checkout shallow rompe receipt verify (faltan commits historicos); requiere fetch-depth 0 en el workflow generado y en el del repo
 - **F12** (2026-09-18) · Reapertura · Razón: release v3.4.0: reflejar el flujo de 4 direcciones como propiedad del harness (CHANGELOG, README EN/ES y bump) antes de publicar
 - **F12** (2026-09-18) · Reapertura · Razón: v3.4.1: corregir numeracion de reglas en README EN/ES y nota de enforcement de INICIO_PROYECTO (referencia colgante a la 16 y regla 8 no verificada)
+- **F12** (2026-09-18) · Reapertura · Razón: v3.4.2: init con mensaje claro ante OSError (cwd/ruta no escribible: OneDrive, Carpetas controladas) y cd absoluto en los pasos
 ## Aprobaciones
 - **APPROVAL-001** · (2026-09-15) · Fase: M2 · Acción: Plan v3.0-core aprobado: SPEC.md congelado (fases F0-F8) · Aprobado por: Humano · Ref: sesion 2026-09-15 (usuario aprueba plan y ejecucion de F0)
 - **APPROVAL-002** · (2026-09-15) · Fase: F3 · Acción: Autorización humana del plan v3.0-core (fases F0-F7) · Aprobado por: Humano · Ref: sesion 2026-09-15 (usuario autoriza cada fase)

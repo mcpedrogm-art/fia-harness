@@ -8,6 +8,8 @@ Dos garantías:
    arranca de verdad: `bootstrap.py` genera el estado y `--check` sale en verde.
 """
 
+import contextlib
+import io
 import os
 import subprocess
 import sys
@@ -111,6 +113,28 @@ class InitEndToEndTest(unittest.TestCase):
                            encoding="utf-8")
             self.assertEqual(cli.main(["init", "-d", str(target)]), 0)
             self.assertIn("Mi PRD personal", prd.read_text(encoding="utf-8"))
+
+    def test_init_con_ruta_invalida_da_error_claro(self):
+        from fia_harness import cli
+        with tempfile.TemporaryDirectory() as td:
+            blocker = Path(td) / "archivo.txt"
+            blocker.write_text("x", encoding="utf-8")
+            out = io.StringIO()
+            with contextlib.redirect_stdout(out):
+                code = cli.main(["init", "-d", str(blocker / "sub")])
+            self.assertEqual(code, 1)
+            self.assertIn("No se pudo preparar el proyecto", out.getvalue())
+            self.assertIn("-d", out.getvalue())
+
+    def test_init_muestra_cd_con_ruta_absoluta(self):
+        from fia_harness import cli
+        with tempfile.TemporaryDirectory() as td:
+            target = Path(td) / "proyecto"
+            out = io.StringIO()
+            with contextlib.redirect_stdout(out):
+                code = cli.main(["init", "-d", str(target)])
+            self.assertEqual(code, 0)
+            self.assertIn(f"cd {target.resolve()}", out.getvalue())
 
     def test_proyecto_generado_arranca_en_verde(self):
         from fia_harness import cli
