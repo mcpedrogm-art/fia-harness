@@ -5,6 +5,21 @@ con `DECISIONS.md` del propio sistema.
 
 ---
 
+## v3.4.1 — Corrección de documentación: numeración de reglas
+
+1. **README EN/ES:** la nota de enforcement citaba la regla **nº16** (numeración del
+   protocolo de 16 reglas) sin que existiera en el resumen de 8 del README. Se añade
+   la regla **9 (recibo de fase)** y la nota pasa a "4, 5, 7, 8 y 9", precisando
+   cómo se aplica cada una (la 5 como decisión humana registrada en riesgo, la 8 con
+   gitleaks, la 9 con `fia verify --strict-receipts`).
+2. **`INICIO_PROYECTO.md` (2 copias):** la nota afirmaba que la regla 8 (AEO) se
+   verificaba mecánicamente y no es cierto. Ahora enumera las verificadas (4, 5, 7
+   y 16), las reforzadas por gate (9 y 13) y las que aún no tienen gate mecánico
+   (8 y 12, esta diferida a v3.5 por ADR-011).
+3. Tests: 282 (sin cambios; corrección documental).
+
+---
+
 ## v3.4.0 — UI/UX: cuatro direcciones divergentes y recetas de sección
 
 1. **Cuatro direcciones divergentes (H3):** el prompt maestro entrega **4**

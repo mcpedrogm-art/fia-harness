@@ -310,9 +310,12 @@ fia verify --scope-base origin/main  # post-hoc scope: diff vs the TASK's declar
 6. 🙋 **Never install/search/connect a Skill, MCP or library without human approval** — silence is not permission.
 7. 🧪 **Never invent results** — tests that didn't run don't exist.
 8. 🛑 **Never commit/push/deploy without explicit authorization.**
+9. 🧾 **Never close an F phase without its verifiable receipt** — the manifest (files + checks) is bound to a commit.
 
-> 🚨 Since v3, rules 4, 5, 7, 8 and 16 are also **verified automatically in CI** on
-> every project that starts with `bootstrap.py` (previous section).
+> 🚨 Since v3, rules 4, 5, 7, 8 and 9 are also **verified automatically in CI** on
+> every project that starts with `bootstrap.py` (previous section). Rule 5 is
+> enforced as a recorded human decision on risk phases (v3.1); rule 8 via gitleaks;
+> rule 9 with `fia verify --strict-receipts`.
 
 ---
 

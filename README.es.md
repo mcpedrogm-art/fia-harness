@@ -313,8 +313,9 @@ fia verify --scope-base origin/main  # alcance post-hoc: diff vs el alcance decl
 6. 🙋 **Nunca instalar/buscar/conectar una Skill, MCP o librería sin aprobación humana** — el silencio no es permiso.
 7. 🧪 **Nunca inventar resultados** — los tests que no se ejecutaron no existen.
 8. 🛑 **Nunca hacer commit/push/deploy sin autorización explícita.**
+9. 🧾 **Nunca cerrar una fase F sin su recibo verificable** — el manifiesto (archivos + checks) queda atado a un commit.
 
-> 🚨 Desde la v3, las reglas 4, 5, 7, 8 y 16 además se **verifican automáticamente en CI** en cada proyecto que arranca con `bootstrap.py` (sección anterior).
+> 🚨 Desde la v3, las reglas 4, 5, 7, 8 y 9 además se **verifican automáticamente en CI** en cada proyecto que arranca con `bootstrap.py` (sección anterior). La regla 5 se aplica como decisión humana registrada en fases de riesgo (v3.1); la 8 con gitleaks; la 9 con `fia verify --strict-receipts`.
 
 ---
 
