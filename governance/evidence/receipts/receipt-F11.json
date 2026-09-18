@@ -1,0 +1,91 @@
+{
+  "version": "1.0",
+  "task_ref": "TASK-F11.md",
+  "mode": "FULL",
+  "commit_or_tree_ref": "618ca617f4a7f8f81b2fcae3ae0533399a134d36",
+  "dirty": false,
+  "files": [
+    {
+      "path": ".github/workflows/tests.yml",
+      "content_sha256": "ed0146153eb9c66653b0bd0cf6abc9af5e26f153d98fb833a3912718bafabbc8"
+    },
+    {
+      "path": "CHANGELOG_FIXES.md",
+      "content_sha256": "69e50dd585bc4744e3f8bf74327cca6dc6044f6fb9cf37769a96f2f5a83eae9d"
+    },
+    {
+      "path": "README.es.md",
+      "content_sha256": "23b85e3ec0b26d77f0d595f482907bf03ca25c06c4ca2aba1490a3831d1e7b52"
+    },
+    {
+      "path": "README.md",
+      "content_sha256": "ee61d2cf68a47b2dc9423d50ec1eb3bd86fb0c950876cd6f48f2108bcaf8c38f"
+    },
+    {
+      "path": "docs/RECEIPT_ROUTER.md",
+      "content_sha256": "61539699ef3e21d0151a7e2c904579aa725bbf68b2382dbe6a8507aa538e8565"
+    },
+    {
+      "path": "docs/ROADMAP_V3_1.md",
+      "content_sha256": "c8f1cd30e0121cd18177ab95483d2dfa5fb8352e29c0655bdca1d772d9e7bbee"
+    },
+    {
+      "path": "fia_harness/__init__.py",
+      "content_sha256": "6b16aa0e8be5d74c77889bfd86e217a40ff200d6a046781c1663874b2c21d53c"
+    },
+    {
+      "path": "fia_harness/data/templates/AGENTS.md",
+      "content_sha256": "46577aa26198d64cf21fa5acbf95b0cba4c603fd75ffe3704fdf0289805f2b17"
+    },
+    {
+      "path": "fia_harness/data/templates/INICIO_PROYECTO.md",
+      "content_sha256": "708e9454f2e098ac2a93749689d6a61a81f84878c237450042ac7042e601ab17"
+    },
+    {
+      "path": "fia_harness/data/templates/QUICKSTART_LITE.md",
+      "content_sha256": "491960c79d010b2666f8582bc4726ad08ec7071fba8090e7c03e7a7c950e9529"
+    },
+    {
+      "path": "fia_harness/data/templates/TASK_TEMPLATE.md",
+      "content_sha256": "2c80b4a7e6b2f1d5772ead95755b222ed3d9a2973306e958cfcb3bfc5a7179f7"
+    },
+    {
+      "path": "fia_harness/generators/scaffold.py",
+      "content_sha256": "8e44cd15400884414bc7f450f7468bf140369e35cfccdac41762086211f9ba94"
+    },
+    {
+      "path": "pyproject.toml",
+      "content_sha256": "c758808a574f84a5d11a73c43d00517042b8877a8f9c44683105f864922c32ab"
+    },
+    {
+      "path": "templates/AGENTS.md",
+      "content_sha256": "46577aa26198d64cf21fa5acbf95b0cba4c603fd75ffe3704fdf0289805f2b17"
+    },
+    {
+      "path": "templates/INICIO_PROYECTO.md",
+      "content_sha256": "708e9454f2e098ac2a93749689d6a61a81f84878c237450042ac7042e601ab17"
+    },
+    {
+      "path": "templates/QUICKSTART_LITE.md",
+      "content_sha256": "491960c79d010b2666f8582bc4726ad08ec7071fba8090e7c03e7a7c950e9529"
+    },
+    {
+      "path": "templates/TASK_TEMPLATE.md",
+      "content_sha256": "2c80b4a7e6b2f1d5772ead95755b222ed3d9a2973306e958cfcb3bfc5a7179f7"
+    }
+  ],
+  "checks": {
+    "golden_rules": "pass",
+    "tests": {
+      "passed": 282,
+      "total": 282
+    },
+    "lint": "skip",
+    "scope": "pass"
+  },
+  "evidence_refs": [
+    "EV-010"
+  ],
+  "generated_at": "2026-09-18T11:31:58",
+  "receipt_sha256": "373423cf230f589d4f0357da225e81499d20ca9bfcafae2478a26521a183b9ee"
+}

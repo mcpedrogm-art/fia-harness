@@ -157,7 +157,7 @@
         "F10"
       ],
       "depends_on_notes": "",
-      "status": "in_progress"
+      "status": "done"
     }
   ],
   "checkpoints": [
@@ -295,6 +295,15 @@
       "receipt_ref": "evidence/receipts/receipt-F10.json",
       "recorded_at": "2026-09-18T11:19:21",
       "id": "CP-F10"
+    },
+    {
+      "phase": "F11",
+      "summary": "regla nº16 documentada en `INICIO_PROYECTO.md`, `AGENTS.md` y `TASK_TEMPLATE.md` (plantillas raíz y paquete sincronizadas; anti-drift en verde), `QUICKSTART_LITE.md` con `fia route`; README EN/ES con recibo/router, sección «What v3.3 adds» y límites honestos; CI estricto (`fia verify --strict-receipts`) en el workflow generado y en el job de gobernanza; `docs/RECEIPT_ROUTER.md`; CHANGELOG v3.3.0 y bump a 3.3.0; demo con CI estricto y nota de recibos (fases legacy grandfathered, commit `4e4a8f5`). Tests: 282.",
+      "evidence": "",
+      "evidence_file": "EV-010",
+      "receipt_ref": "evidence/receipts/receipt-F11.json",
+      "id": "CP-F11",
+      "recorded_at": "2026-09-18T11:32:06"
     }
   ],
   "updated": "2026-09-18",
@@ -326,6 +335,6 @@
       "id": "SNAP-003"
     }
   ],
-  "compiled_at": "2026-09-18T11:31:38",
-  "state_sha256": "e917bfe3f8f867c7a67815a2425599abf94ab8f3c154e03efdc6d1bafbbbe714"
+  "compiled_at": "2026-09-18T11:32:06",
+  "state_sha256": "def1b53e498e366340280343501153010cafd99941556a0871568e0a7bdbee28"
 }
