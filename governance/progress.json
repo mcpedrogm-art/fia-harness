@@ -127,7 +127,37 @@
         "F7"
       ],
       "depends_on_notes": "",
-      "status": "in_progress"
+      "status": "blocked"
+    },
+    {
+      "id": "F9",
+      "title": "",
+      "objective": "Receipt Engine reducido: manifiesto canónico + fia receipt create/verify + regla de oro #16 / core/receipts.py, receiptref en checkpoints, sección RECEIPTS en fia verify, tests de determinismo y tampering",
+      "depends_on": [
+        "F7"
+      ],
+      "depends_on_notes": "",
+      "status": "done"
+    },
+    {
+      "id": "F10",
+      "title": "",
+      "objective": "Router fail-closed fino (fia route) / core/router.py, comando fia route, tests negativos (red flags → Full)",
+      "depends_on": [
+        "F9"
+      ],
+      "depends_on_notes": "",
+      "status": "done"
+    },
+    {
+      "id": "F11",
+      "title": "",
+      "objective": "Cierre v3.3: docs, plantillas, CHANGELOG, dogfood y demo / README EN/ES, plantillas (dos copias sincronizadas), docs/RECEIPTROUTER.md, CHANGELOG, demo con recibo manipulado",
+      "depends_on": [
+        "F10"
+      ],
+      "depends_on_notes": "",
+      "status": "pending"
     }
   ],
   "checkpoints": [
@@ -136,6 +166,7 @@
       "summary": "Estructura de gobierno activa en el repo (SPEC.md, PROGRESS.md, DECISIONS.md, progress.json) creada en F0.",
       "evidence": "",
       "evidence_file": null,
+      "receipt_ref": null,
       "recorded_at": "2026-09-15T17:57:56",
       "id": "CP-M0"
     },
@@ -144,6 +175,7 @@
       "summary": "Análisis comparativo D1/D2/D3 completado; ADR-001/002/003 registradas.",
       "evidence": "",
       "evidence_file": null,
+      "receipt_ref": null,
       "recorded_at": "2026-09-15T17:57:56",
       "id": "CP-M1"
     },
@@ -152,6 +184,7 @@
       "summary": "SPEC.md v3.0-core aprobado por el humano (APPROVAL-001).",
       "evidence": "",
       "evidence_file": null,
+      "receipt_ref": null,
       "recorded_at": "2026-09-15T17:57:56",
       "id": "CP-M2"
     },
@@ -160,6 +193,7 @@
       "summary": "Tabla F0–F7 definida y derivada de SPEC.md.",
       "evidence": "",
       "evidence_file": null,
+      "receipt_ref": null,
       "recorded_at": "2026-09-15T17:57:56",
       "id": "CP-M3"
     },
@@ -168,6 +202,7 @@
       "summary": "Suite v2.2 en verde (75/75), baseline documentado y dogfood activo en el repo (SPEC.md, PROGRESS.md, DECISIONS.md, progress.json, TASK-F0.md, job de CI `--check`).",
       "evidence": "python -m unittest discover tests -v   (Python 3.11.15, Windows)\nRan 75 tests in 2.210s\nOK\n\npython task_generator.py --check\n✅ Estado del harness válido: 4 fases de proceso, 8 de ejecución, 5 checkpoints, aprobaciones íntegras.",
       "evidence_file": "docs/V3_BASELINE.md",
+      "receipt_ref": null,
       "recorded_at": "2026-09-15T17:57:56",
       "id": "CP-F0"
     },
@@ -176,6 +211,7 @@
       "summary": "Núcleo extraído a `fia_harness/core|parser|generators` (17 módulos, ninguno >250 líneas), fachadas finas generadas (ADR-001, sin duplicación) y CLI `fia` con 8 subcomandos. Suite 75 → 144 tests, todos en verde; comportamiento equivalente a v2.2 (tests originales intactos).",
       "evidence": "python -m unittest discover tests -v   (Python 3.11.15, Windows)\nRan 144 tests in 2.127s\nOK\n\npython task_generator.py --check\n✅ Estado del harness válido: 4 fases de proceso, 8 de ejecución, 6 checkpoints, aprobaciones íntegras.",
       "evidence_file": "CHANGELOG_FIXES.md (v3.0.0a1) · docs/V3_BASELINE.md (referencia de equivalencia)",
+      "receipt_ref": null,
       "recorded_at": "2026-09-15T17:57:56",
       "id": "CP-F1"
     },
@@ -184,6 +220,7 @@
       "summary": "`extract_field` con estrategias en cascada (heading exacto → parcial → densidad → ninguna), config versionada de sinónimos (añadir sinónimo no toca código), normalización de acentos/mayúsculas, confianza reflejada en CONTEXT.md y consola, corpus de 20 PRDs con test de regresión. Tests: 144 → 161.",
       "evidence": "python -m unittest discover tests -v   (Python 3.11.15, Windows)\nRan 161 tests in 2.482s\nOK\n\nMétrica del corpus (20 PRDs, 100 campos):\nresueltos (alta+media): 81/100 = 81.0%\nconfianza alta:         70/100 = 70.0%\n\npython task_generator.py --check\n✅ Estado del harness válido: 4 fases de proceso, 8 de ejecución, 7 checkpoints, aprobaciones íntegras.",
       "evidence_file": "CHANGELOG_FIXES.md (v3.0.0a2) · tests/fixtures/prds/ · tests/test_prd_corpus.py",
+      "receipt_ref": null,
       "recorded_at": "2026-09-15T17:57:56",
       "id": "CP-F2"
     },
@@ -192,6 +229,7 @@
       "summary": "schema 3.0 con IDs estables (`CP-*`, `SNAP-*`), timestamps (`compiled_at`, `recorded_at`), huellas separadas (autoridad vs artefacto) y migración con doble lectura + backup. Extracciones por tamaño: `core/seals.py`, `parser/discovery.py`, `core/reports.py`. Hallazgo pre-v2.1 resuelto con ADR-004 (fail-closed + mensaje guiado de recuperación). Tests: 161 → 178.",
       "evidence": "python -m unittest discover tests -v   (Python 3.11.15, Windows)\nRan 178 tests in 2.397s\nOK\n\nMigración dogfood del propio repo (harness-state/1 → 3.0):\n--check (legacy): ✅ válido con aviso \"schema legado\" (doble lectura)\n--sync:           ✅ migrado · backup progress.json.bak creado\n--stats:          Schema del estado: 3.0\n\npython task_generator.py --check\n✅ Estado del harness válido: 4 fases de proceso, 8 de ejecución, 8 checkpoints, aprobaciones íntegras.",
       "evidence_file": "CHANGELOG_FIXES.md (v3.0.0a3) · tests/test_core_fingerprints.py · tests/test_core_state.py",
+      "receipt_ref": null,
       "recorded_at": "2026-09-15T17:59:36",
       "id": "CP-F3"
     },
@@ -200,6 +238,7 @@
       "summary": "prototipadas las dos opciones (wrapper y artifacts) sobre un fixture mínimo; decisión híbrida (ADR-005) documentada en `docs/EVIDENCE_CAPTURE_DECISION.md`. Hallazgos clave: los runners escriben en streams distintos (unittest → stderr); sin ancla de CI la fabricación local no es detectable; la distinción local/trusted es la frontera de la garantía. Sin cambios de producto (spike).",
       "evidence": "Spike F4 (fixture mínimo, Python 3.11.15, stdlib-only):\n(a) wrapper verde:  exit_code=0 · stdout_sha256=e3b0c442… (vacío) · stderr_sha256=a4ca7fdb…\nhallazgo: unittest escribe el informe en stderr → capturar ambos streams\n(a) wrapper rojo:   exit_code=1 · FAILED (failures=1)\n(b) verificación verde: PASS (10/10 checks) — artifact↔manifest, claim↔artifact, resultado↔exit\n(b) verificación roja:  PASS (FAILED es coherente con exit 1)\n(b) tras manipular el artifact (FAILED→OK): FAIL (3 detecciones: hash, binding, coherencia)\n\npython task_generator.py --check\n✅ Estado del harness válido: 4 fases de proceso, 8 de ejecución, 9 checkpoints, aprobaciones íntegras.",
       "evidence_file": "docs/EVIDENCE_CAPTURE_DECISION.md · DECISIONS.md (ADR-005)",
+      "receipt_ref": null,
       "recorded_at": "2026-09-15T18:05:00",
       "id": "CP-F4"
     },
@@ -208,6 +247,7 @@
       "summary": "registros `EV-NNN` con schema del contrato F4 (comando, exit code, timestamps, hashes de stdout/stderr, artifacts, entorno, `source`), almacén `evidence/`, wrapper opcional `fia run -- <cmd>` (transparente: propaga el exit code) y comandos `fia evidence` (lista/muestra/valida) y `fia evidence --ingest` (digests de CI). La regla de cierre de fase acepta `Evidencia: EV-NNN` y valida procedencia + integridad (hash de cada artifact y digest de CI si existe). Tests: 178 → 197.",
       "evidence": "",
       "evidence_file": "EV-001",
+      "receipt_ref": null,
       "recorded_at": "2026-09-15T18:10:02",
       "id": "CP-F5"
     },
@@ -216,6 +256,7 @@
       "summary": "`fia verify` compone el reporte STATE / DEPENDENCIES / EVIDENCE / PROVENANCE / SEALS / SPEC SNAPSHOT, no confía en afirmaciones (inspecciona artefactos) y es fail-closed (exit 1 con razones). PROVENANCE distingue `trusted` (digests de CI, ADR-005) de `local` y cuenta la evidencia \"solo existencia\" (compat v2.2). `validate_state` se refactorizó en secciones (estructura/dependencias) sin cambiar comportamiento. Tests: 197 → 212.",
       "evidence": "",
       "evidence_file": "EV-002",
+      "receipt_ref": null,
       "recorded_at": "2026-09-15T18:14:30",
       "id": "CP-F6"
     },
@@ -224,6 +265,7 @@
       "summary": "el workflow generado pasa a ser `fia verify` (instala el paquete; patrón `trusted` documentado con artifacts + digest, ADR-005) y el job `estado-harness` del propio repo también. Demo `fia-harness-demo` migrado a v3 en local: F0/F1 con evidencia real re-ejecutada (EV-001 greet, EV-002 suite), estado 3.0 con backup, `fia verify` PASS (2 con procedencia, 0 solo existencia) y la trampa F2 bloquea el merge (FAIL por deriva; `sync` fail-closed con los errores de checkpoint/TASK). Cambios del demo sin commitear (pendientes de la release v3.0.0 y de autorización de push).",
       "evidence": "",
       "evidence_file": "EV-003",
+      "receipt_ref": null,
       "recorded_at": "2026-09-15T18:18:26",
       "id": "CP-F7"
     },
@@ -232,11 +274,30 @@
       "summary": "EN CURSO (2026-09-15). v3.0.0 publicada en PyPI; demo migrado y empujado con CI v3 en verde; materiales de lanzamiento actualizados a v3 (`lanzamiento/1_SHOW_HN.md`, `2_DEVHUNT.md`, `3_POSTS_ES.md`) y puerta de seguimiento en `lanzamiento/6_PUERTA_F8_VALIDACION_EXTERNA.md`. Criterios: 3–5 usuarios externos reales, fricción reportada y `fia verify` estable en un CI ajeno. Time-box: 4–6 semanas.",
       "evidence": "",
       "evidence_file": null,
+      "receipt_ref": null,
       "recorded_at": "2026-09-15T18:24:46",
       "id": "CP-F8"
+    },
+    {
+      "phase": "F9",
+      "summary": "recibo canónico operativo (`fia receipt create/verify`): manifiesto JSON con hash determinista (metadata fuera del hash), normalización BOM/CRLF, gobernanza implícita excluida del manifiesto y verificación contra commit o árbol (dirty). `receipt_ref` compilado desde la línea `Recibo:` del checkpoint; regla de oro #16 en `--check`/`sync`; sección `RECEIPTS` en `fia verify`. 14 archivos vinculados al commit `d066e5d` (recibo local dirty). Hallazgos del dogfood corregidos: `is_repo`/`changed_files` para estado en subcarpeta y re-emisión en fase `done` (evita el deadlock de reparación). Tests: 248 → 266.",
+      "evidence": "",
+      "evidence_file": "EV-007",
+      "receipt_ref": "evidence/receipts/receipt-F9.json",
+      "recorded_at": "2026-09-18T11:14:22",
+      "id": "CP-F9"
+    },
+    {
+      "phase": "F10",
+      "summary": "`fia route` determinista y fail-closed: señales de riesgo (`policy.RISK_KEYWORDS`, sin duplicar listas) → Full; allowlist cerrada de 5 categorías (bug acotado, refactor local, solo tests, lint/typos, docs) → propone Lite con razones; sin coincidencia → Full. Sin estado nuevo ni presupuesto autodeclarado (ADR-010); `fia run --` y el resto de la CLI intactos. 14 tests nuevos. Hallazgo de cierre: semántica local/estricta de recibos (`--strict-receipts`; el trabajo posterior no bloquea el verify local pero sí el CI). Tests: 266 → 281.",
+      "evidence": "",
+      "evidence_file": "EV-009",
+      "receipt_ref": "evidence/receipts/receipt-F10.json",
+      "recorded_at": "2026-09-18T11:19:21",
+      "id": "CP-F10"
     }
   ],
-  "updated": "2026-09-15",
+  "updated": "2026-09-18",
   "sealed_docs": {
     "INICIO_PROYECTO.md": "49207ffcfdf3d796f3fdc2b69fa4424a7db383a9fbdaf11501b23b1f95a51581",
     "SECURITY.md": "e0dbd7fa011c95c0dccf40402698f68be7df5f6067ca24cdc05b0bf9ad8f62db",
@@ -256,8 +317,15 @@
       "date": "2026-09-15",
       "phase": "F3",
       "id": "SNAP-002"
+    },
+    {
+      "sha256": "7d2c5020c79458f72d716d60eb9ef8c5b386a0df94270bb4d5906114ed8bff0b",
+      "ref": "sesion 2026-09-18 (usuario aprueba docs/PLAN_RECIBO_ROUTER.md)",
+      "date": "2026-09-18",
+      "phase": "M2",
+      "id": "SNAP-003"
     }
   ],
-  "compiled_at": "2026-09-15T19:40:15",
-  "state_sha256": "af0ebd0b84289741c759caba47cdfa2ce2130704ccc7506faa1c43601483ab08"
+  "compiled_at": "2026-09-18T11:21:01",
+  "state_sha256": "db88ec84927c62a39c51f016bc8faaa139e07db412746ab460e1ea128eefbb27"
 }

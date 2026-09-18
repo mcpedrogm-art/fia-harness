@@ -149,6 +149,10 @@ class VerifyRiskIntegrationTests(unittest.TestCase):
         _write(self.dir / "TASK-F1.md", "# TASK-F1\nInforme: login listo.\n")
         _write(self.dir / "DECISIONS.md", "# DECISIONS.md\n\n## Aprobaciones\n")
         st.write_state(self.dir, st.compile_state_from_md(self.MD))
+        state = st.load_state_json(self.dir)  # legacy de recibos (ADR-009)
+        for checkpoint in state.get("checkpoints", []):
+            checkpoint["recorded_at"] = "2026-09-15T10:00:00"
+        st.write_state(self.dir, state)
 
     def _status(self, report, section):
         return "PASS" if not report["sections"][section]["errors"] else "FAIL"

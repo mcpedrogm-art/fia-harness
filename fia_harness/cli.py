@@ -4,9 +4,10 @@
 (`templates/INICIO_PROYECTO.md`): plantillas del kit en /docs, fachadas de los
 scripts en la raíz (que importan el paquete instalado, ADR-001) y un `PRD.md` de
 partida. El resto de subcomandos (`check`, `sync`, `task`, `status`, `approve`,
-`seal`, `reopen`, `run`, `evidence`, `verify`) delegan en el núcleo: `fia` y
-`fia-harness` son el mismo comando. Igual que el resto del kit: solo librería
-estándar, idempotente (nunca sobrescribe lo que ya existe) y sin telemetría.
+`seal`, `reopen`, `run`, `evidence`, `receipt`, `route`, `verify`) delegan en el
+núcleo: `fia` y `fia-harness` son el mismo comando. Igual que el resto del kit:
+solo librería estándar, idempotente (nunca sobrescribe lo que ya existe) y sin
+telemetría.
 """
 
 import argparse
@@ -185,12 +186,39 @@ def main(argv=None) -> int:
     evidence_parser.add_argument("-d", "--dir", default=".")
 
     verify_parser = subparsers.add_parser(
-        "verify", help="Reporte de verificación (STATE/DEPS/EVIDENCE/PROVENANCE/RISK/SCOPE/REPRODUCTION/SEALS/SPEC).")
+        "verify", help="Reporte de verificación (STATE/DEPS/EVIDENCE/PROVENANCE/RECEIPTS/RISK/SCOPE/REPRODUCTION/SEALS/SPEC).")
     verify_parser.add_argument("-d", "--dir", default=".")
     verify_parser.add_argument("--reproduce", nargs="?", const="", default=None, metavar="EV-NNN",
                                help="Reproduce evidencia (opt-in): sin valor, todas las allowlisted.")
     verify_parser.add_argument("--scope-base", default=None, metavar="REF",
                                help="Compara el scope contra una ref de git (p. ej. origin/main).")
+    verify_parser.add_argument("--strict-receipts", action="store_true",
+                               help="Exige recibos limpios: los dirty se verifican contra el árbol (CI).")
+
+    receipt_parser = subparsers.add_parser(
+        "receipt", help="Emite o verifica el recibo de una fase F (v3.3, regla de oro nº16).")
+    receipt_sub = receipt_parser.add_subparsers(dest="receipt_command", required=True)
+    receipt_create = receipt_sub.add_parser("create", help="Emite el recibo de una fase en curso.")
+    receipt_create.add_argument("fase", help="Código de fase (p. ej. F9).")
+    receipt_create.add_argument("--base", default=None, metavar="REF",
+                                help="Punto de partida de la fase (diff REF...HEAD).")
+    receipt_create.add_argument("--evidence", action="append", default=[], metavar="EV-NNN",
+                                help="Evidencia referenciada (repetible).")
+    receipt_create.add_argument("--tests", default="0/0", metavar="P/T",
+                                help="Tests pasados/total (p. ej. 248/248).")
+    receipt_create.add_argument("--lint", default="skip", choices=["pass", "fail", "skip"])
+    receipt_create.add_argument("--allow-dirty", action="store_true",
+                                help="Permite emitir el recibo con cambios sin commitear.")
+    receipt_create.add_argument("-d", "--dir", default=".")
+    receipt_verify = receipt_sub.add_parser("verify", help="Verifica el recibo de una fase.")
+    receipt_verify.add_argument("fase", help="Código de fase (p. ej. F9).")
+    receipt_verify.add_argument("-d", "--dir", default=".")
+
+    route_parser = subparsers.add_parser(
+        "route", help="Clasifica una tarea y propone carril Lite/Full (fail-closed, v3.3).")
+    route_parser.add_argument("descripcion", help="Descripción de la tarea.")
+    route_parser.add_argument("-d", "--dir", default=".",
+                              help="No usado por el router (sin estado); se acepta por consistencia.")
 
     args = parser.parse_args(argv)
     target = Path(args.dir)
@@ -235,7 +263,17 @@ def main(argv=None) -> int:
         return cmd_evidence(target, args.evidence_id, args.ingest)
     if args.command == "verify":
         from fia_harness.core.verify import cmd_verify
-        return cmd_verify(target, args.reproduce, args.scope_base)
+        return cmd_verify(target, args.reproduce, args.scope_base, args.strict_receipts)
+    if args.command == "receipt":
+        if args.receipt_command == "create":
+            commands.cmd_receipt_create(target, args.fase, args.base, args.evidence,
+                                        args.tests, args.lint, args.allow_dirty)
+            return 0
+        commands.cmd_receipt_verify(target, args.fase)
+        return 0
+    if args.command == "route":
+        from fia_harness.core.router import cmd_route
+        return cmd_route(args.descripcion)
 
     parser.print_help()
     return 2

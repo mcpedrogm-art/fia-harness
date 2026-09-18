@@ -1,6 +1,6 @@
 # PROGRESS.md — Hoja de Ruta e Historial de Fases (repo FIA Harness)
 
-**Fase activa:** F8 (puerta de validación externa)
+**Fase activa:** F11 (Cierre v3.3) — F8 en pausa (validación externa: sin usuarios todavía)
 
 ## Fases del Proceso (Harness — dogfood del propio kit)
 
@@ -11,7 +11,7 @@
 | M2 | Especificación v3.0-core aprobada por el humano | SPEC.md congelado con APPROVAL-001 | M1 | [x] Listo |
 | M3 | Plan de fases de ejecución derivado de SPEC.md | Tabla F0–F7 en PROGRESS.md | M2 | [x] Listo |
 
-## Fases de Ejecución del Proyecto (v3.0-core)
+## Fases de Ejecución del Proyecto (v3.0-core → v3.3)
 
 | Fase | Objetivo | Entregable | Depende de | Estado |
 | --- | --- | --- | --- | --- |
@@ -23,7 +23,10 @@
 | F5 | Evidence Engine | Schema EV-NNN, `fia evidence`, cadena claim→command→execution→artifact→hash | F4 | [x] Listo |
 | F6 | Verification Engine | `fia verify` (STATE/DEPS/EVIDENCE/PROVENANCE/SEALS/SPEC) + smoke de tampering | F5 | [x] Listo |
 | F7 | CI / Merge Gate mínimo | harness.yml con `fia verify`, local vs CI confiable, demo en rojo/verde | F6 | [x] Listo |
-| F8 | Puerta de validación externa (3–5 usuarios) | 3–5 usuarios reales + fricción reportada + `fia verify` en un CI ajeno | F7 | [~] En curso |
+| F8 | Puerta de validación externa (3–5 usuarios) | 3–5 usuarios reales + fricción reportada + `fia verify` en un CI ajeno | F7 | [!] En pausa |
+| F9 | Receipt Engine reducido: manifiesto canónico + `fia receipt create/verify` + regla de oro #16 | `core/receipts.py`, `receipt_ref` en checkpoints, sección RECEIPTS en `fia verify`, tests de determinismo y tampering | F7 | [x] Listo |
+| F10 | Router fail-closed fino (`fia route`) | `core/router.py`, comando `fia route`, tests negativos (red flags → Full) | F9 | [x] Listo |
+| F11 | Cierre v3.3: docs, plantillas, CHANGELOG, dogfood y demo | README EN/ES, plantillas (dos copias sincronizadas), `docs/RECEIPT_ROUTER.md`, CHANGELOG, demo con recibo manipulado | F10 | [ ] Pendiente |
 
 ## Checkpoints de Contexto Recientes
 
@@ -104,3 +107,9 @@
   Evidencia: EV-003
   EV-003 es la ejecución real de `fia verify` sobre este repo (registrada con `fia run`); su cadena se valida en el `--check` de este cierre.
 - **F8 (puerta externa):** EN CURSO (2026-09-15). v3.0.0 publicada en PyPI; demo migrado y empujado con CI v3 en verde; materiales de lanzamiento actualizados a v3 (`lanzamiento/1_SHOW_HN.md`, `2_DEVHUNT.md`, `3_POSTS_ES.md`) y puerta de seguimiento en `lanzamiento/6_PUERTA_F8_VALIDACION_EXTERNA.md`. Criterios: 3–5 usuarios externos reales, fricción reportada y `fia verify` estable en un CI ajeno. Time-box: 4–6 semanas.
+- **F9 (Recibo de fase):** recibo canónico operativo (`fia receipt create/verify`): manifiesto JSON con hash determinista (metadata fuera del hash), normalización BOM/CRLF, gobernanza implícita excluida del manifiesto y verificación contra commit o árbol (dirty). `receipt_ref` compilado desde la línea `Recibo:` del checkpoint; regla de oro #16 en `--check`/`sync`; sección `RECEIPTS` en `fia verify`. 14 archivos vinculados al commit `d066e5d` (recibo local dirty). Hallazgos del dogfood corregidos: `is_repo`/`changed_files` para estado en subcarpeta y re-emisión en fase `done` (evita el deadlock de reparación). Tests: 248 → 266.
+  Evidencia: EV-007
+  Recibo: evidence/receipts/receipt-F9.json
+- **F10 (Router de carril):** `fia route` determinista y fail-closed: señales de riesgo (`policy.RISK_KEYWORDS`, sin duplicar listas) → Full; allowlist cerrada de 5 categorías (bug acotado, refactor local, solo tests, lint/typos, docs) → propone Lite con razones; sin coincidencia → Full. Sin estado nuevo ni presupuesto autodeclarado (ADR-010); `fia run --` y el resto de la CLI intactos. 14 tests nuevos. Hallazgo de cierre: semántica local/estricta de recibos (`--strict-receipts`; el trabajo posterior no bloquea el verify local pero sí el CI). Tests: 266 → 281.
+  Evidencia: EV-009
+  Recibo: evidence/receipts/receipt-F10.json

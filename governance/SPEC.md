@@ -75,3 +75,24 @@ Un tercero puede instalar el kit, crear un proyecto, ejecutar una tarea, produci
 evidencia con procedencia, intentar saltarse una regla, recibir un fallo determinista,
 corregirlo y demostrar un `PASS` en CI. Además: 3–5 usuarios externos reales completan
 el flujo sin supervisión del creador (F8).
+
+---
+
+## 7. Enmienda v3.3 — Recibo de fase + Router (APPROVAL-003, 2026-09-18)
+
+**Objetivo:** cerrar el único hueco de enforcement real (nada ata el contenido de los
+archivos al cierre de una fase) y hacer explícita la elección de carril Lite/Full.
+Sin producto nuevo. Recorte aprobado de los planes ODD/RDD (ADR-008).
+
+| Fase | Entrega |
+| --- | --- |
+| F9 | Receipt Engine reducido: manifiesto canónico, `fia receipt create/verify`, `receipt_ref` en checkpoints, regla de oro #16, sección `RECEIPTS` en `fia verify`. Diseño: `docs/RECEIPT_DESIGN.md`. |
+| F10 | `fia route` fino: fail-closed, reutiliza `policy.RISK_KEYWORDS`, sin archivos de estado nuevos, sin tocar `fia run --`. |
+| F11 | Cierre v3.3: README EN/ES, plantillas (dos copias sincronizadas), `docs/RECEIPT_ROUTER.md`, CHANGELOG, dogfood y demo con caso de recibo manipulado. |
+
+**Fuera de alcance (congelado hasta fricción real de F8):** Outcomes `OUT-NNN`,
+Risks `RISK-NNN`, `fia outcome/risk/verify`, `fia trace`/`REQ-XXX`, migración
+asistida, YAML, carpeta `.fia/`, renombrado ODD/RDD, cobertura como gate,
+presupuesto anti-gaming autodeclarado.
+
+**Referencias:** `docs/PLAN_RECIBO_ROUTER.md` · ADR-008/009/010.

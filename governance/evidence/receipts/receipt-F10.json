@@ -1,0 +1,87 @@
+{
+  "version": "1.0",
+  "task_ref": "TASK-F10.md",
+  "mode": "FULL",
+  "commit_or_tree_ref": "d066e5d64cbb858d2d50c7d6b53bffafb1ec090b",
+  "dirty": true,
+  "files": [
+    {
+      "path": "docs/PLAN_RECIBO_ROUTER.md",
+      "content_sha256": "36857b499165749cc23dd8d38e2a6b14668006e63c60499bff64e48a1281049d"
+    },
+    {
+      "path": "docs/RECEIPT_DESIGN.md",
+      "content_sha256": "d19fe836b20b9deedbf5534bed6c87d1f4f048983d8536e2fa9af6b0d9f5fb68"
+    },
+    {
+      "path": "fia_harness/adapters/git.py",
+      "content_sha256": "1ae9ff4cb918c318d4d5093ddccc3052082392c756ffa8f37e499d53c0a4ce06"
+    },
+    {
+      "path": "fia_harness/cli.py",
+      "content_sha256": "b662e0094246c6c6d6fcc53c7a0172541642e8a4b5ea61a585ec2a5692729a75"
+    },
+    {
+      "path": "fia_harness/core/commands.py",
+      "content_sha256": "7b15fe94d5499585e7e83b788c21733d3beb3517a9c8ca23a924537c64d10b3b"
+    },
+    {
+      "path": "fia_harness/core/fingerprints.py",
+      "content_sha256": "8b67b284c7278d555685401923a9870a238b87e7a5fe3c9932f2e8a2ab8defb8"
+    },
+    {
+      "path": "fia_harness/core/receipts.py",
+      "content_sha256": "d164d87f4a98149664bc9d3ee44f3d55633dcf025db0702f7def977a65f4fe70"
+    },
+    {
+      "path": "fia_harness/core/router.py",
+      "content_sha256": "f8d64045c531746eda8adbbf31b084237083fa5f888ce6c5d399742d40327fd6"
+    },
+    {
+      "path": "fia_harness/core/state.py",
+      "content_sha256": "b47e5e44ee6f3bf0985d1db799d26cac5d841254f04ac9c70ab0e7d86911be95"
+    },
+    {
+      "path": "fia_harness/core/verify.py",
+      "content_sha256": "c00dac39f393483c78a1114ba7291cf33cd75c5e31c3a23b26cf6d89f02295ec"
+    },
+    {
+      "path": "fia_harness/parser/markdown.py",
+      "content_sha256": "3a023048a0864e883b76f77af3e16ecb02835eb4ef7a6928de0f46cbfcd2a1ec"
+    },
+    {
+      "path": "tests/test_core_quality.py",
+      "content_sha256": "0ae8b43e6184d19c1d1f388929c2c362fae65c2d942034cb628ecdb0e93723f1"
+    },
+    {
+      "path": "tests/test_core_receipts.py",
+      "content_sha256": "69be7e7c40136435410b8478d5818fbbdb8f7193429c19e9c605801630e940ab"
+    },
+    {
+      "path": "tests/test_core_router.py",
+      "content_sha256": "39f67d241123041dc275572e5f383b6721aa550999739b6757851085c4ccded8"
+    },
+    {
+      "path": "tests/test_core_verify.py",
+      "content_sha256": "fdb5b93a517cd509263982150d4b94a17e6d0dd8b9bd84964270eeb65174fda7"
+    },
+    {
+      "path": "tests/test_harness.py",
+      "content_sha256": "4dc75434f193ea7479ac738329843704375373fd37a2b1b6bf995b797e7aaeb7"
+    }
+  ],
+  "checks": {
+    "golden_rules": "pass",
+    "tests": {
+      "passed": 281,
+      "total": 281
+    },
+    "lint": "skip",
+    "scope": "pass"
+  },
+  "evidence_refs": [
+    "EV-009"
+  ],
+  "generated_at": "2026-09-18T11:20:53",
+  "receipt_sha256": "839bcb25c4c7abe0d2ff9ac3308fd6f026586a9a13c438130b29a88c3626699b"
+}

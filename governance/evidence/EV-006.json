@@ -1,0 +1,38 @@
+{
+  "id": "EV-006",
+  "type": "test",
+  "source": "local-run",
+  "command": [
+    "cmd",
+    "/c",
+    "cd /d C:\\Users\\Usuario\\Documents\\MIS",
+    "SKILLS",
+    "Y",
+    "MCP\\INICIO",
+    "DE",
+    "PROYECTO\\FIA",
+    "HARNESS",
+    "COMPLETO && python -m unittest discover tests"
+  ],
+  "cwd": "C:\\Users\\Usuario\\Documents\\MIS SKILLS Y MCP\\INICIO DE PROYECTO\\FIA HARNESS COMPLETO\\governance",
+  "exit_code": 0,
+  "started_at": "2026-09-18T09:13:28.729681+00:00",
+  "finished_at": "2026-09-18T09:13:36.760161+00:00",
+  "duration_s": 8.041,
+  "stdout_sha256": "e7aab684edc3ac3ab948349b210dbadbbe819eb16e266d321805c79f5c94fe44",
+  "stderr_sha256": "61819a1948f7f5acc692c69ca3f4ba4496e6fdec2e15189f5567f2b2cc3f57a1",
+  "artifacts": [
+    {
+      "name": "EV-006.stdout.txt",
+      "sha256": "e7aab684edc3ac3ab948349b210dbadbbe819eb16e266d321805c79f5c94fe44"
+    },
+    {
+      "name": "EV-006.stderr.txt",
+      "sha256": "61819a1948f7f5acc692c69ca3f4ba4496e6fdec2e15189f5567f2b2cc3f57a1"
+    }
+  ],
+  "environment": {
+    "python": "3.11.15",
+    "os": "Windows-10-10.0.26200-SP0"
+  }
+}

@@ -56,9 +56,41 @@
     evidencia reproducible opt-in y MICRO acotado. **Grandfathering:** las fases
     cuyo checkpoint es anterior al 2026-09-16 son legacy (como ADR-004) y no generan
     avisos. Se rechaza el LLM-juez en el core (no determinista y gameable).
+*   **ADR-008 (2026-09-18):** Recorte aprobado de los planes ODD/RDD (carpeta
+    `NUEVA ADOPCION DE ROLES/`). Se adopta **solo** lo que cierra un hueco real:
+    Receipt Engine reducido (F9) + `fia route` fino (F10) + actualización
+    documental (F11). Se **congelan** Outcomes `OUT-NNN`, Risks `RISK-NNN`,
+    `fia outcome/risk/verify`, `fia trace`/`REQ-XXX`, migración asistida, YAML,
+    `.fia/`, renombrado ODD/RDD y cobertura como gate: los planes eran ~90%
+    vocabulario sin enforcement nuevo y contradecían garantías vigentes
+    (stdlib-only, `fia run --`, determinismo del hash) además del principio "solo
+    con fricción real" (F8 sin usuarios todavía). Criterio de reapertura: 3–5
+    usuarios externos piden trazabilidad de negocio o registro de riesgos.
+    Ref: `docs/PLAN_RECIBO_ROUTER.md`, APPROVAL-003.
+*   **ADR-009 (2026-09-18):** Diseño del recibo de fase (F9). Manifiesto canónico
+    JSON (stdlib): `version, task_ref, mode, commit_or_tree_ref, dirty, files[],
+    checks, evidence_refs`; hash SHA-256 sobre JSON canónico **sin `generated_at`
+    ni `receipt_sha256`** (determinismo: mismo árbol + checks = mismo hash);
+    contenido de archivos normalizado (BOM fuera, CRLF→LF); recibo en
+    `evidence/receipts/receipt-<Fase>.json`; `receipt_ref` compilado desde la línea
+    `Recibo:` del checkpoint (el hash no se duplica: vive en el recibo); regla de
+    oro #16; grandfathering `recorded_at < 2026-09-18`; `fia receipt create/verify`;
+    v1 requiere repo git. Límite asumido: no prueba verdad local (ADR-005 se
+    mantiene); detecta manipulación post-cierre y da ancla de auditoría.
+    Ref: `docs/RECEIPT_DESIGN.md`.
+*   **ADR-010 (2026-09-18):** `fia route` fino (F10). Clasificador determinista
+    fail-closed: reutiliza `policy.RISK_KEYWORDS` (sin duplicar listas), red flags
+    o ambigüedad → carril Full; allowlist cerrada → propone Lite con razonamiento
+    explícito. **Sin** archivos de estado nuevos ni presupuesto autodeclarado
+    (gameable por el agente; si algún día se quiere, se calcula en CI desde el
+    diff de git). No toca `fia run --` ni la CLI existente. No añade regla de oro:
+    la #13 ya cubre Lite + riesgo y el gate v3.1 la hace mecánica.
 
 ## Reaperturas
 
+- **F9** (2026-09-18) · Reapertura · Razón: hallazgo del dogfood post-cierre: re-emision en done (evitar deadlock) y changed_files para estado en subcarpeta
+- **F10** (2026-09-18) · Reapertura · Razón: hallazgo al verificar F10: semantica local/estricta de recibos (--strict-receipts) y prueba negativa de trabajo posterior
 ## Aprobaciones
 - **APPROVAL-001** · (2026-09-15) · Fase: M2 · Acción: Plan v3.0-core aprobado: SPEC.md congelado (fases F0-F8) · Aprobado por: Humano · Ref: sesion 2026-09-15 (usuario aprueba plan y ejecucion de F0)
 - **APPROVAL-002** · (2026-09-15) · Fase: F3 · Acción: Autorización humana del plan v3.0-core (fases F0-F7) · Aprobado por: Humano · Ref: sesion 2026-09-15 (usuario autoriza cada fase)
+- **APPROVAL-003** · (2026-09-18) · Fase: M2 · Acción: Recorte v3.3 aprobado: Recibo de fase + router fino (F9-F11); Outcomes/Risks congelados hasta friccion real de F8 · Aprobado por: Humano · Ref: sesion 2026-09-18 (usuario aprueba docs/PLAN_RECIBO_ROUTER.md)

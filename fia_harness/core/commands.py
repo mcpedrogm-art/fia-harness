@@ -1,8 +1,9 @@
-"""Comandos de estado: sync, check, seal, approval, reopen y stats.
+"""Comandos de estado: sync, check, seal, approval, reopen, stats y recibo.
 
 Capa de acción sobre `core.state` (compilar/validar/persistir) y `parser.markdown`
 (editar la tabla de fases). La CLI `fia` y las fachadas legacy delegan aquí, de modo
-que el comportamiento es idéntico al de v2.2.
+que el comportamiento es idéntico al de v2.2. `cmd_receipt_create/verify` (v3.3)
+cubren la regla de oro nº16.
 """
 
 import datetime
@@ -11,6 +12,11 @@ import re
 import sys
 from pathlib import Path
 
+from fia_harness.adapters import git
+from fia_harness.core import evidence as ev
+from fia_harness.core import policy
+from fia_harness.core import receipts
+from fia_harness.core import scope
 from fia_harness.core import state as st
 from fia_harness.core.approvals import APPROVAL_ENTRY_RE
 from fia_harness.core.console import fail, fix_windows_console_encoding, warn
@@ -213,3 +219,102 @@ def cmd_reopen(project_dir: Path, phase: str, reason: str):
         print_errors_and_fail(errors, "Estado inválido tras reabrir; revisa y ejecuta --sync.")
     st.write_state(project_dir, updated)
     print(f"✅ Fase {phase} reabierta (done → in_progress). Razón: {reason}")
+
+
+def _parse_tests(raw: str) -> dict:
+    match = re.fullmatch(r"\s*(\d+)\s*/\s*(\d+)\s*", raw or "")
+    if not match:
+        fail(f"--tests debe ser P/T (p. ej. 248/248); recibido: {raw!r}")
+    passed, total = int(match.group(1)), int(match.group(2))
+    if passed > total:
+        fail(f"--tests inválido: passed ({passed}) > total ({total})")
+    return {"passed": passed, "total": total}
+
+
+def cmd_receipt_create(project_dir: Path, phase: str, base=None, evidence_ids=(),
+                       tests_raw="0/0", lint="skip", allow_dirty=False):
+    """Emite el recibo de una fase F en curso (regla de oro nº16, v3.3).
+
+    El recibo empaqueta archivos + checks; no certifica verdad (ADR-009). Se exige
+    el estado limpio y el recibo se crea ANTES de cerrar la fase."""
+    fix_windows_console_encoding()
+    phase = (phase or "").upper()
+    if not re.fullmatch(r"F\d+", phase):
+        fail(f"Solo las fases de ejecución (F#) llevan recibo; recibido: {phase!r}")
+    if lint not in receipts.CHECK_VALUES:
+        fail(f"--lint debe ser uno de: {', '.join(receipts.CHECK_VALUES)}")
+    md_text = load_file(project_dir / st.DEFAULT_FILES["progress"])
+    state = st.compile_state_from_md(md_text)
+    phases = {p["id"]: p for p in state.get("execution_phases", [])}
+    if phase not in phases:
+        fail(f"La fase {phase} no aparece en {st.DEFAULT_FILES['progress']}.")
+    status = phases[phase].get("status")
+    if status not in ("in_progress", "done"):
+        fail(f"El recibo se emite antes de cerrar la fase: {phase} está en "
+             f"'{status}' (se exige in_progress; en done solo para re-emisión/reparación).")
+    if status == "done":
+        warn(f"{phase} ya está cerrada: se re-emite el recibo (útil tras commitear para "
+             "pasar de dirty a limpio, o para reparar uno ausente).")
+    if not git.is_repo(project_dir):
+        fail("El recibo requiere un repositorio git (v1). Inicializa git o documenta la excepción.")
+    repo_root = git.toplevel(project_dir)
+    commit_ref = git.head_ref(project_dir)
+    if repo_root is None or not commit_ref:
+        fail("El repositorio git no tiene commits todavía.")
+    for evidence_id in evidence_ids:
+        if ev.load_record(project_dir, evidence_id) is None:
+            fail(f"No existe la evidencia '{evidence_id}' en evidence/.")
+    errors = st.collect_validation_errors(state, project_dir, include_receipts=False)
+    if errors:
+        print_errors_and_fail(errors, "El estado no está limpio: corrige antes de emitir el recibo.")
+    dirty = any(not receipts.is_governance_path(path, project_dir, repo_root)
+                for path in git.changed_files(project_dir, None))
+    if dirty and not allow_dirty:
+        fail("Hay cambios de producto sin commitear (recibo sucio): commitea o usa --allow-dirty "
+             "(el CI exige recibos limpios).")
+    files = []
+    for path in git.changed_files(project_dir, base):
+        if receipts.is_governance_path(path, project_dir, repo_root):
+            continue
+        absolute = repo_root / path
+        if not absolute.exists():
+            fail(f"Archivo cambiado ausente en el disco: {path}")
+        files.append({"path": path, "content_sha256": receipts.content_sha256(absolute)})
+    if not files:
+        fail("Sin archivos de producto cambiados: usa --base REF o revisa el alcance de la fase.")
+    scope_errors, scope_note = scope.validate_scope(project_dir, state, base)
+    checks = {
+        "golden_rules": "pass",
+        "tests": _parse_tests(tests_raw),
+        "lint": lint,
+        "scope": "fail" if scope_errors else ("skip" if scope_note.startswith("omitido") else "pass"),
+    }
+    context = load_file(project_dir / st.DEFAULT_FILES["context"], required=False)
+    mode = "LITE" if policy.detect_lite_mode(context, project_dir, False) else "FULL"
+    manifest = receipts.build_manifest(phase, files, checks, evidence_ids, mode,
+                                       dirty, commit_ref)
+    path = receipts.write_receipt(project_dir, phase, manifest)
+    receipt = json.loads(path.read_text(encoding="utf-8"))
+    print(f"✅ Recibo emitido: {path.relative_to(project_dir).as_posix()}")
+    print(f"   {len(files)} archivo(s) · modo {mode} · commit {commit_ref[:12]}"
+          f"{' · dirty' if dirty else ''} · sha256 {receipt['receipt_sha256'][:12]}…")
+    print(f"   Añade a su checkpoint: Recibo: {receipts.RECEIPTS_DIR.as_posix()}/receipt-{phase}.json")
+
+
+def cmd_receipt_verify(project_dir: Path, phase: str):
+    """Verifica el recibo de una fase: hash, archivos vs commit/árbol y evidencias."""
+    fix_windows_console_encoding()
+    phase = (phase or "").upper()
+    state = st.load_state_json(project_dir)
+    ref = None
+    if state is not None:
+        checkpoints = {c.get("phase"): c for c in state.get("checkpoints", [])}
+        ref = (checkpoints.get(phase) or {}).get("receipt_ref")
+    errors, note = receipts.verify_phase(project_dir, phase, ref)
+    print(f"Recibo de {phase}")
+    if errors:
+        for error in errors:
+            print(f"  ❌ {error}")
+        fail(f"Recibo inválido: {len(errors)} problema(s).")
+    print(f"  ✅ PASS — {note}")
+    return 0

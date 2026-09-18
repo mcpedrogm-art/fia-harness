@@ -31,6 +31,7 @@ def authority_projection(state: dict) -> dict:
             "summary": c.get("summary"),
             "evidence": c.get("evidence") or "",
             "evidence_file": c.get("evidence_file") or None,
+            "receipt_ref": c.get("receipt_ref") or None,
         } for c in state.get("checkpoints", [])],
     }
 

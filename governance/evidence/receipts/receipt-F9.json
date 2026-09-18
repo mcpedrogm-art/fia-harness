@@ -1,0 +1,79 @@
+{
+  "version": "1.0",
+  "task_ref": "TASK-F9.md",
+  "mode": "FULL",
+  "commit_or_tree_ref": "d066e5d64cbb858d2d50c7d6b53bffafb1ec090b",
+  "dirty": true,
+  "files": [
+    {
+      "path": "docs/PLAN_RECIBO_ROUTER.md",
+      "content_sha256": "2d6e157008a8906cf6406e2998c64ab8d740ffd9347f421505ca3f2eeb19c9f9"
+    },
+    {
+      "path": "docs/RECEIPT_DESIGN.md",
+      "content_sha256": "5579bf1445307263b9e5628249489a279a62e4c82743d20fd3fb702f685a3521"
+    },
+    {
+      "path": "fia_harness/adapters/git.py",
+      "content_sha256": "1ae9ff4cb918c318d4d5093ddccc3052082392c756ffa8f37e499d53c0a4ce06"
+    },
+    {
+      "path": "fia_harness/cli.py",
+      "content_sha256": "60aff058b2d456388eec27a11b6c021214b1f31895240570b183ba1c4bdfdf28"
+    },
+    {
+      "path": "fia_harness/core/commands.py",
+      "content_sha256": "7b15fe94d5499585e7e83b788c21733d3beb3517a9c8ca23a924537c64d10b3b"
+    },
+    {
+      "path": "fia_harness/core/fingerprints.py",
+      "content_sha256": "8b67b284c7278d555685401923a9870a238b87e7a5fe3c9932f2e8a2ab8defb8"
+    },
+    {
+      "path": "fia_harness/core/receipts.py",
+      "content_sha256": "b5c72bcf146d62fc18e4b02fdd61aae07ee5b6b49ab677bb7c6e9422d14c0c9d"
+    },
+    {
+      "path": "fia_harness/core/state.py",
+      "content_sha256": "b47e5e44ee6f3bf0985d1db799d26cac5d841254f04ac9c70ab0e7d86911be95"
+    },
+    {
+      "path": "fia_harness/core/verify.py",
+      "content_sha256": "ccb3eaad8ee0fab393d8eb939a472747a88db9e8adbcf42d6f1c65930302da07"
+    },
+    {
+      "path": "fia_harness/parser/markdown.py",
+      "content_sha256": "3a023048a0864e883b76f77af3e16ecb02835eb4ef7a6928de0f46cbfcd2a1ec"
+    },
+    {
+      "path": "tests/test_core_quality.py",
+      "content_sha256": "0ae8b43e6184d19c1d1f388929c2c362fae65c2d942034cb628ecdb0e93723f1"
+    },
+    {
+      "path": "tests/test_core_receipts.py",
+      "content_sha256": "c85182aaa8ceca0663988fcafac88c9fbe35933f6344a231442785526693ce30"
+    },
+    {
+      "path": "tests/test_core_verify.py",
+      "content_sha256": "fdb5b93a517cd509263982150d4b94a17e6d0dd8b9bd84964270eeb65174fda7"
+    },
+    {
+      "path": "tests/test_harness.py",
+      "content_sha256": "4dc75434f193ea7479ac738329843704375373fd37a2b1b6bf995b797e7aaeb7"
+    }
+  ],
+  "checks": {
+    "golden_rules": "pass",
+    "tests": {
+      "passed": 266,
+      "total": 266
+    },
+    "lint": "skip",
+    "scope": "pass"
+  },
+  "evidence_refs": [
+    "EV-007"
+  ],
+  "generated_at": "2026-09-18T11:15:53",
+  "receipt_sha256": "74ebb18ff7e80c930a4882553cff361649a45a8213c927e58280ea4fe3ab9f5a"
+}

@@ -162,7 +162,8 @@ def extract_checkpoints(md_text: str):
     Cada checkpoint puede llevar, debajo, un bloque de código cercado (``` ... ```)
     con la salida cruda de validación (tests/build/lint) o una línea
     `Evidencia: <archivo>` que apunte a un archivo de evidencia. Ambos se capturan
-    en los campos `evidence` y `evidence_file` respectivamente."""
+    en los campos `evidence` y `evidence_file` respectivamente. La línea
+    `Recibo: <ruta>` (v3.3) se captura en `receipt_ref`."""
     checkpoints, in_section = [], False
     lines = md_text.split("\n")
     i, current = 0, None
@@ -181,7 +182,7 @@ def extract_checkpoints(md_text: str):
         if match:
             current = {"phase": match.group(1).upper(),
                        "summary": match.group(2).strip(),
-                       "evidence": "", "evidence_file": None}
+                       "evidence": "", "evidence_file": None, "receipt_ref": None}
             checkpoints.append(current)
             i += 1
             continue
@@ -198,6 +199,9 @@ def extract_checkpoints(md_text: str):
             ev = re.match(r"^\s*Evidencia\s*:\s*(.+)$", line)
             if ev:
                 current["evidence_file"] = ev.group(1).strip()
+            receipt = re.match(r"^\s*Recibo\s*:\s*(.+)$", line)
+            if receipt:
+                current["receipt_ref"] = receipt.group(1).strip()
             i += 1
             continue
         i += 1

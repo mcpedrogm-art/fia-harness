@@ -21,6 +21,8 @@ import tempfile
 import unittest
 from pathlib import Path
 
+from fia_harness.core import state as st
+
 ROOT = Path(__file__).resolve().parent.parent
 
 TEMPLATE_FILES = [
@@ -35,6 +37,14 @@ def _load_module(name):
     module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(module)
     return module
+
+
+def _legacy_receipts(project_dir):
+    """Marca los checkpoints como legacy de recibos (proyectos pre-v3.3, ADR-009)."""
+    state = st.load_state_json(project_dir)
+    for checkpoint in state.get("checkpoints", []):
+        checkpoint["recorded_at"] = "2026-09-15T00:00:00"
+    st.write_state(project_dir, state)
 
 
 bootstrap = _load_module("bootstrap")
@@ -297,7 +307,7 @@ class StateCompileTests(unittest.TestCase):
         self.assertEqual(state["execution_phases"][1]["status"], "pending")
         self.assertEqual(state["checkpoints"],
                          [{"phase": "M0", "summary": "Arranque completado.",
-                           "evidence": "", "evidence_file": None}])
+                           "evidence": "", "evidence_file": None, "receipt_ref": None}])
 
     def test_texto_libre_en_dependencias_no_se_valida_como_fase(self):
         tabla = ("| Fase | Objetivo | Entregable | Depende de | Estado |\n"
@@ -397,6 +407,7 @@ class SyncCheckApprovalTests(unittest.TestCase):
     def test_sync_genera_y_check_pasa(self):
         task_generator.cmd_sync(self.dir)
         self.assertTrue((self.dir / "progress.json").exists())
+        _legacy_receipts(self.dir)
         stdout = io.StringIO()
         with contextlib.redirect_stdout(stdout):
             task_generator.cmd_check(self.dir)
@@ -609,6 +620,7 @@ class SealDocsTests(unittest.TestCase):
     def test_seal_y_check_ok(self):
         task_generator.cmd_seal(self.dir, [])
         self.assertTrue((self.dir / "progress.json").exists())
+        _legacy_receipts(self.dir)
         out = io.StringIO()
         with contextlib.redirect_stdout(out):
             task_generator.cmd_check(self.dir)
@@ -659,6 +671,7 @@ class SpecSnapshotTests(unittest.TestCase):
         task_generator.cmd_approval(self.dir, "aprobar spec", "M2", "chat 1", "Humano")
         _write(self.dir / "SPEC.md", "# SPEC\nversion 2 ampliada\n")
         task_generator.cmd_approval(self.dir, "ampliar alcance", "M2", "chat 2", "Humano")
+        _legacy_receipts(self.dir)
         out = io.StringIO()
         with contextlib.redirect_stdout(out):
             task_generator.cmd_check(self.dir)

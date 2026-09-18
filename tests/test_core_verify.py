@@ -57,6 +57,14 @@ def _make_record(project_dir, evidence_id="EV-001"):
     return record
 
 
+def _grandfather_receipts(project_dir):
+    """Marca los checkpoints como legacy (proyectos anteriores a v3.3, ADR-009)."""
+    state = st.load_state_json(project_dir)
+    for checkpoint in state.get("checkpoints", []):
+        checkpoint["recorded_at"] = "2026-09-15T00:00:00"
+    st.write_state(project_dir, state)
+
+
 class VerifyBase(unittest.TestCase):
     def setUp(self):
         tmp = tempfile.TemporaryDirectory()
@@ -68,6 +76,7 @@ class VerifyBase(unittest.TestCase):
         for name in st.REQUIRED_SEALED:
             _write(self.dir / name, f"# {name}\nv1\n")
         commands.cmd_seal(self.dir, [])
+        _grandfather_receipts(self.dir)
         commands.cmd_sync(self.dir)
 
     def _status(self, report, section):
