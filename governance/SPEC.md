@@ -96,3 +96,22 @@ asistida, YAML, carpeta `.fia/`, renombrado ODD/RDD, cobertura como gate,
 presupuesto anti-gaming autodeclarado.
 
 **Referencias:** `docs/PLAN_RECIBO_ROUTER.md` · ADR-008/009/010.
+
+---
+
+## 8. Enmienda v3.4 — UI/UX: cuatro direcciones divergentes + recetas (APPROVAL-004, 2026-09-18)
+
+**Objetivo:** evitar la convergencia de variantes en la fase H3. La exploración de
+UI entrega **cuatro direcciones divergentes** (roles fijos: segura, composición
+opuesta, interacción/movimiento, arquetipo inesperado), cada una partiendo de una
+**receta de sección** (esquema de 12 campos, §8.1 de `UI_UX_EXCLUSIVA.md`) y
+validadas con la **matriz de divergencia** (6 ejes, §8.2): extremo en ≥3 ejes y
+ningún par coincidiendo en >2. La receta se adapta con el Design DNA (nunca se
+clona); los assets se autohospedan.
+
+| Fase | Entrega |
+| --- | --- |
+| F12 | `UI_UX_EXCLUSIVA.md` (§3, §8, §8.1–8.2, §10, §12), H3 de `TASK_TEMPLATE.md`, `QUICKSTART_LITE.md`, plantilla `UI_RECIPES.md` (raíz + paquete + `fia init`/`bootstrap`), `NON_PRD_FILES`, README EN/ES y biblioteca privada local (`UI_LIBRARY.local.md`, gitignored) con las recetas aportadas por el humano. |
+
+**Fuera de alcance:** gate mecánico de UI (presencia de Design DNA/approval) queda
+como propuesta v3.5 (ADR-011 lo registra como decisión diferida).

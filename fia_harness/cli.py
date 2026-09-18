@@ -33,6 +33,7 @@ TEMPLATE_NAMES = [
     "SKILLS_MCP.md",
     "TASK_TEMPLATE.md",
     "TASK_LITE_TEMPLATE.md",
+    "UI_RECIPES.md",
     "QUICKSTART_LITE.md",
     "AGENTS.md",
     "PRD_TEMPLATE.md",

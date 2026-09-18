@@ -77,6 +77,8 @@ El Design DNA debe contener al menos un elemento propio en cada eje:
 
 No basta con cambiar colores o tipografías: la diferencia debe aparecer también en la composición, el comportamiento o la narrativa.
 
+Además, desde v3.4 la exploración debe entregar **cuatro direcciones realmente divergentes** (no variaciones cosméticas): cada una parte de una **receta de sección** distinta (§8.1) y se contrasta con la **matriz de divergencia** (§8.2) antes de mostrarse.
+
 ---
 
 ## 4. Selección de arquetipo sin encasillar el proyecto
@@ -200,22 +202,28 @@ REFERENCIAS
 
 PROCESO OBLIGATORIO
 1. Resume el problema UX y las decisiones que todavía faltan.
-2. Propón tres direcciones Design DNA realmente diferentes, variando composición,
-   tipografía/material, movimiento e interacción; no cambies solo el color.
+2. Propón CUATRO direcciones Design DNA realmente diferentes, con estos roles fijos:
+   D1 segura/esperada (control), D2 composición opuesta, D3 interacción/movimiento
+   distinto, D4 arquetipo inesperado o provocación con su riesgo declarado. Cada
+   dirección parte de una receta de sección (§8.1) con técnica de fondo distinta.
+   No cambies solo el color ni la tipografía.
 3. Para cada dirección indica: tesis, metáfora, layout, tipo de contenido,
    componentes, navegación, motion, accesibilidad, rendimiento, riesgos y por qué
    sería propia para este proyecto.
-4. Recomienda una dirección y explica qué sacrifican las otras dos.
-5. Detente y solicita aprobación humana de la dirección elegida.
-6. Tras la aprobación, entrega la arquitectura UX, mapa de secciones, estados,
+4. Rellena la matriz de divergencia (§8.2): cada dirección debe ser extrema en ≥3
+   ejes y ninguna pareja puede coincidir en más de 2. Si dos se parecen, reescribe
+   una y repite el chequeo ANTES de presentarlas.
+5. Recomienda una dirección y explica qué sacrifican las otras tres.
+6. Detente y solicita aprobación humana de la dirección elegida.
+7. Tras la aprobación, entrega la arquitectura UX, mapa de secciones, estados,
    Design Tokens conceptuales, reglas responsive y especificación de movimiento.
-7. Sustituye placeholders por contenido real o marca claramente lo que falta.
-8. Incluye una auditoría anti-clon: qué elementos podrían parecer genéricos,
+8. Sustituye placeholders por contenido real o marca claramente lo que falta.
+9. Incluye una auditoría anti-clon: qué elementos podrían parecer genéricos,
    qué referencia podrían recordar y cómo se han diferenciado.
 
 FORMATO DE SALIDA
 A. Resumen del producto y riesgos UX
-B. Tres direcciones Design DNA
+B. Cuatro direcciones Design DNA + matriz de divergencia (§8.2)
 C. Recomendación y decisión pendiente
 D. Arquitectura UX aprobable
 E. Sistema visual y de componentes
@@ -224,6 +232,48 @@ G. Responsive, accesibilidad y rendimiento
 H. Auditoría de originalidad
 I. Checklist de validación
 ```
+
+### 8.1 Recetas de sección (esquema de 12 campos)
+
+Una **receta** es la unidad de material para generar variantes. Puede venir de una
+biblioteca propia (privada, p. ej. `UI_LIBRARY.local.md`) o redactarse desde cero.
+Esquema:
+
+1. Objetivo UX y tipo de sección (hero, prueba, precio, integraciones…).
+2. Composición (layout, jerarquía, anchos, márgenes, alineaciones).
+3. Técnica de fondo/medio (shader procedural, 3D, vídeo, tipográfico, textura, estático).
+4. Tipografías y jerarquía (familias y pesos concretos).
+5. Paleta y contraste (hex de superficie, contenido y acento).
+6. Movimiento (entrada, stagger, causas, duración, fallback).
+7. Estados e interacción (hover, focus, carga, vacío, error, éxito).
+8. Responsive (breakpoints y comportamiento).
+9. Accesibilidad (contraste, foco, teclado, `prefers-reduced-motion`).
+10. Assets (propios o localizados; **nunca hotlink en producción**).
+11. Fallback (sin JS, sin vídeo, sin movimiento).
+12. Métrica o señal de éxito.
+
+Reglas: la receta se **adapta** con el Design DNA (no se clona); los assets se
+descargan y se alojan en el proyecto; el proyecto registra las recetas usadas y la
+matriz en `UI_RECIPES.md` (plantilla del kit).
+
+### 8.2 Matriz de divergencia (6 ejes)
+
+Antes de presentar las direcciones, rellena esta tabla (una columna por dirección):
+
+| Eje | D1 | D2 | D3 | D4 |
+|---|---|---|---|---|
+| Composición | | | | |
+| Tipografía / material | | | | |
+| Color / superficie | | | | |
+| Movimiento | | | | |
+| Interacción | | | | |
+| Narrativa | | | | |
+
+Reglas del chequeo: cada dirección debe ser **extrema en ≥3 ejes**; **ningún par
+puede coincidir en más de 2 ejes**; la diferencia no puede ser solo color o
+tipografía. Si el chequeo falla, reescribe la dirección convergente y repite antes
+de mostrarla. La matriz se entrega con las direcciones y se registra en
+`UI_RECIPES.md`.
 
 ---
 
@@ -264,6 +314,7 @@ La dirección puede considerarse suficientemente propia cuando cumple lo siguien
 
 - [ ] Tiene una tesis visual que se puede explicar en una frase.
 - [ ] Cambia al menos tres ejes respecto de cualquier referencia dominante.
+- [ ] Se han contrastado cuatro direcciones con la matriz §8.2 y ninguna pareja coincide en más de dos ejes.
 - [ ] Tiene un patrón de interacción o narrativa propio del producto.
 - [ ] El contenido real determina la jerarquía, no al revés.
 - [ ] No depende de nombres, textos, assets o código de terceros.
@@ -273,7 +324,7 @@ La dirección puede considerarse suficientemente propia cuando cumple lo siguien
 - [ ] La composición funciona sin degradados o animaciones si se desactivan.
 - [ ] La propuesta ha sido revisada y aprobada por una persona antes de implementarse.
 
-Si falla alguno de los tres primeros puntos, volver a la fase de direcciones y no pasar a implementación.
+Si falla alguno de los cuatro primeros puntos, volver a la fase de direcciones y no pasar a implementación.
 
 ---
 
@@ -299,6 +350,7 @@ Las correcciones se hacen de una en una, se registran y se vuelven a validar. No
 Antes de pasar a implementación deben existir:
 
 - `DESIGN_DIRECTION.md` o una sección equivalente en `SPEC.md`.
+- `UI_RECIPES.md` con las recetas usadas (esquema §8.1) y la matriz de divergencia (§8.2).
 - Design DNA aprobado.
 - Mapa de pantallas y recorrido principal.
 - Inventario de componentes y estados.

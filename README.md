@@ -172,7 +172,7 @@ so explicitly — never omitted in silence.
 |---|---|
 | ⚙️ `bootstrap.py` · 🤖 `task_generator.py` | Thin facades at the project root: the implementation lives in the installed package (ADR-001) |
 | 📦 `fia_harness/` + `pyproject.toml` | PyPI package and **single source of truth**: `fia init/check/sync/task/status/approve/seal/reopen/run/evidence/receipt/route/verify` |
-| 🗂️ `templates/` | Master templates of the kit: protocol (`INICIO_PROYECTO.md`), `SECURITY.md`, `AEO_GEO_SEO.md`, `UI_UX_EXCLUSIVA.md`, `SKILLS_MCP.md`, `TASK_TEMPLATE.md`, `TASK_LITE_TEMPLATE.md`, `QUICKSTART_LITE.md`, `AGENTS.md`, `PRD_TEMPLATE.md`, `MODELOS.md` and the RAG module |
+| 🗂️ `templates/` | Master templates of the kit: protocol (`INICIO_PROYECTO.md`), `SECURITY.md`, `AEO_GEO_SEO.md`, `UI_UX_EXCLUSIVA.md`, `UI_RECIPES.md`, `SKILLS_MCP.md`, `TASK_TEMPLATE.md`, `TASK_LITE_TEMPLATE.md`, `QUICKSTART_LITE.md`, `AGENTS.md`, `PRD_TEMPLATE.md`, `MODELOS.md` and the RAG module |
 | 🏛️ `governance/` | This repo's own dogfood project (operated with `-d governance`): `PROGRESS.md`, `SPEC.md`, `DECISIONS.md`, `progress.json`, `TASK-F0…F11.md`, `evidence/` (incl. phase receipts) |
 | 📖 `docs/` | v3 baseline (`V3_BASELINE.md`), the evidence-capture decision (ADR-005) and the v3.3 plan/design (`PLAN_RECIBO_ROUTER.md`, `RECEIPT_DESIGN.md`, `RECEIPT_ROUTER.md`) |
 | 🧪 `tests/` | Automated tests of the parsers, the state machine, evidence, verification, packaging and the full cycle |

@@ -85,6 +85,19 @@
     (gameable por el agente; si algún día se quiere, se calcula en CI desde el
     diff de git). No toca `fia run --` ni la CLI existente. No añade regla de oro:
     la #13 ya cubre Lite + riesgo y el gate v3.1 la hace mecánica.
+*   **ADR-011 (2026-09-18):** UI/UX (v3.4): cuatro direcciones divergentes + recetas
+    de sección. Problema real: en pruebas, la fase H3 convergía en dos variantes
+    cosméticas. Decisión: **4 direcciones con roles fijos** (segura/control,
+    composición opuesta, interacción/movimiento, arquetipo inesperado), **esquema
+    de receta de 12 campos** (§8.1 de `UI_UX_EXCLUSIVA.md`) y **matriz de
+    divergencia de 6 ejes** (§8.2: extremo en ≥3, ningún par coincidiendo en >2,
+    autochequeo antes de mostrar). Plantilla de proyecto `UI_RECIPES.md`.
+    **Biblioteca privada local** (`UI_LIBRARY.local.md`, gitignored) para material
+    de referencia con licencia propia (Dínamo Sites): el kit público (MIT) solo
+    lleva el esquema y el flujo, nunca los prompts/assets de terceros; los assets
+    se autohospedan. **Diferido a v3.5:** gate mecánico de UI (decisión humana
+    registrada para fases de UI, mismo patrón que el gate de riesgo v3.1).
+    Ref: SPEC §8, APPROVAL-004.
 
 ## Reaperturas
 
@@ -95,3 +108,4 @@
 - **APPROVAL-001** · (2026-09-15) · Fase: M2 · Acción: Plan v3.0-core aprobado: SPEC.md congelado (fases F0-F8) · Aprobado por: Humano · Ref: sesion 2026-09-15 (usuario aprueba plan y ejecucion de F0)
 - **APPROVAL-002** · (2026-09-15) · Fase: F3 · Acción: Autorización humana del plan v3.0-core (fases F0-F7) · Aprobado por: Humano · Ref: sesion 2026-09-15 (usuario autoriza cada fase)
 - **APPROVAL-003** · (2026-09-18) · Fase: M2 · Acción: Recorte v3.3 aprobado: Recibo de fase + router fino (F9-F11); Outcomes/Risks congelados hasta friccion real de F8 · Aprobado por: Humano · Ref: sesion 2026-09-18 (usuario aprueba docs/PLAN_RECIBO_ROUTER.md)
+- **APPROVAL-004** · (2026-09-18) · Fase: M2 · Acción: UI/UX v3.4: cuatro direcciones divergentes + esquema de recetas y plantilla UI_RECIPES.md · Aprobado por: Humano · Ref: sesion 2026-09-18 (usuario aprueba el flujo de 4 variantes y la integracion de recetas)

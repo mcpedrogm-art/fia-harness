@@ -22,3 +22,7 @@ progress.json.bak
 
 # Proyecto temporal del job de autoaplicación (CI)
 _dogfood/
+
+# Biblioteca privada de recetas UI (material de referencia con licencia propia;
+# no se distribuye con el kit MIT)
+*.local.md

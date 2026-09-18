@@ -86,7 +86,7 @@ Apoyo determinista (v3.3): `fia route "<descripción de la tarea>"` propone carr
 - Si se necesita buscar, instalar, crear, maquetar, seleccionar, activar o conectar una capacidad, seguir `SKILLS_MCP.md`.
 - Solicitar aprobación humana antes de cualquier búsqueda, incluida `find_skill`, Context7 o un catálogo MCP.
 - Usar Context7 para verificar librerías, SDKs, APIs y versiones después de recibir autorización.
-- Si hay interfaz, aplicar `UI_UX_EXCLUSIVA.md` en formato reducido: una dirección Design DNA, una alternativa descartada y una prueba anti-clon.
+- Si hay interfaz, aplicar `UI_UX_EXCLUSIVA.md` en formato reducido: **dos direcciones divergentes** (no variaciones de color), una dirección Design DNA elegida, una alternativa descartada y una prueba anti-clon.
 
 ### Gate 4 — Aprobación
 

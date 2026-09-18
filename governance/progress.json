@@ -158,6 +158,16 @@
       ],
       "depends_on_notes": "",
       "status": "done"
+    },
+    {
+      "id": "F12",
+      "title": "",
+      "objective": "UI/UX: cuatro direcciones divergentes + esquema de recetas + UIRECIPES.md / UIUXEXCLUSIVA.md §8.1–8.2, H3 de TASKTEMPLATE.md, QUICKSTARTLITE.md, plantilla UIRECIPES.md (copias sincronizadas) y biblioteca privada local",
+      "depends_on": [
+        "F11"
+      ],
+      "depends_on_notes": "",
+      "status": "in_progress"
     }
   ],
   "checkpoints": [
@@ -333,8 +343,15 @@
       "date": "2026-09-18",
       "phase": "M2",
       "id": "SNAP-003"
+    },
+    {
+      "sha256": "f5b823a8671b90b33550c2bde00e972cd7ac3252c4ea7a171790c4449a27ea9d",
+      "ref": "sesion 2026-09-18 (usuario aprueba el flujo de 4 variantes y la integracion de recetas)",
+      "date": "2026-09-18",
+      "phase": "M2",
+      "id": "SNAP-004"
     }
   ],
-  "compiled_at": "2026-09-18T11:41:37",
-  "state_sha256": "e5dec612eb6a1c96374b0fbb40ea8ece820d2693aef9929b605beccde0ee986c"
+  "compiled_at": "2026-09-18T12:11:43",
+  "state_sha256": "292045e45cf8556ea77e92be67180072ab9fd32931f0e21a41fec97bae13c1e5"
 }

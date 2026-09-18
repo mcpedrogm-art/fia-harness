@@ -197,8 +197,9 @@ Aplica el checklist correspondiente de `AEO_GEO_SEO.md` a la pieza tocada: metad
 Aplica `UI_UX_EXCLUSIVA.md` y verifica:
 
 - [ ] El problema UX, usuario, acción principal y contenido real están definidos.
+- [ ] Se han contrastado cuatro direcciones divergentes (matriz §8.2 de `UI_UX_EXCLUSIVA.md`), no variaciones cosméticas.
+- [ ] Las recetas usadas (esquema §8.1) están registradas en `UI_RECIPES.md`.
 - [ ] Se ha creado un Design DNA propio, no una copia de la referencia utilizada.
-- [ ] Se han considerado tres direcciones diferentes antes de recomendar una.
 - [ ] La dirección elegida tiene aprobación humana explícita antes de implementar.
 - [ ] Están definidos componentes, estados, responsive, accesibilidad, motion y fallback.
 - [ ] Se ha completado la auditoría anti-clon y de originalidad.
