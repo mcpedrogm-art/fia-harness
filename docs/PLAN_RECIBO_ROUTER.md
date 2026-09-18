@@ -141,5 +141,5 @@ antes de la siguiente.
   - *Pendiente operativo:* los recibos de F9/F10 son `dirty` (locales). Tras el commit autorizado, re-emitirlos limpios (`fia receipt create F9 --base <ref>` / `F10`); el CI debe verlos `dirty: false` (`fia verify --strict-receipts`).
 - [x] Fase X (X1–X3) — `fia route` operativo + `--strict-receipts`; suite 281/281 verde (2026-09-18).
 - [x] Fase D (D1–D7) — cierre v3.3 completo (2026-09-18).
-- [ ] Release v3.3.0 — **pendiente de decisión humana**: tag + publicación en PyPI + push (el push no está autorizado en esta sesión; los commits locales sí).
-- [x] Dogfood final: 3 recibos limpios (F9, F10, F11) verificados con `fia verify -d governance --strict-receipts`.
+- [x] Release **v3.3.0** (tag + PyPI + GitHub Release) y **hotfix v3.3.1**: `fetch-depth: 0` en el job de gobernanza (el checkout shallow rompía la verificación de recibos: `git show <commit>` necesita el historial). PyPI: **3.3.1** · GitHub Releases: v3.3.0 y v3.3.1 · demo actualizado (`aabc0dc`).
+- [x] Dogfood final: 3 recibos limpios (F9, F10, F11) verificados con `fia verify -d governance --strict-receipts` en CI.
