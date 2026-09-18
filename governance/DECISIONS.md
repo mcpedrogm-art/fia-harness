@@ -90,6 +90,7 @@
 
 - **F9** (2026-09-18) · Reapertura · Razón: hallazgo del dogfood post-cierre: re-emision en done (evitar deadlock) y changed_files para estado en subcarpeta
 - **F10** (2026-09-18) · Reapertura · Razón: hallazgo al verificar F10: semantica local/estricta de recibos (--strict-receipts) y prueba negativa de trabajo posterior
+- **F11** (2026-09-18) · Reapertura · Razón: CI de release: checkout shallow rompe receipt verify (faltan commits historicos); requiere fetch-depth 0 en el workflow generado y en el del repo
 ## Aprobaciones
 - **APPROVAL-001** · (2026-09-15) · Fase: M2 · Acción: Plan v3.0-core aprobado: SPEC.md congelado (fases F0-F8) · Aprobado por: Humano · Ref: sesion 2026-09-15 (usuario aprueba plan y ejecucion de F0)
 - **APPROVAL-002** · (2026-09-15) · Fase: F3 · Acción: Autorización humana del plan v3.0-core (fases F0-F7) · Aprobado por: Humano · Ref: sesion 2026-09-15 (usuario autoriza cada fase)

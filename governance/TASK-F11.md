@@ -94,7 +94,9 @@ python -m fia_harness.cli receipt verify F11 -d governance
 ### 1. Resumen de lo realizado
 Cierre v3.3: regla nº16 y recibo documentados en el protocolo y las plantillas,
 README EN/ES alineados (recibo + router + límites), CI estricto en kit y demo,
-CHANGELOG y versión 3.3.0.
+CHANGELOG y versión 3.3.0. **Hotfix v3.3.1:** el job de gobernanza necesitaba
+`fetch-depth: 0` (el checkout shallow no tiene los commits históricos de los
+recibos); corregido en el workflow generado y en el del repo.
 
 ### 2. Diagnóstico o decisiones de diseño tomadas
 - La duplicación de plantillas ya tenía guardián (`test_templates_match_repo_root`);
@@ -129,7 +131,7 @@ actualizan). CI multiplataforma sin cambios.
 ### 7. Visibilidad SEO/AEO/GEO — No aplica (kit sin superficie pública).
 
 ### 8. Tests
-`282/282 passed` (suite completa, Windows / Python 3.11; evidencia EV-010).
+`282/282 passed` (suite completa, Windows / Python 3.11; evidencia EV-011).
 
 ### 9. Typecheck
 N/A (stdlib-only; sin typecheck configurado).

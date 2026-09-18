@@ -5,6 +5,20 @@ con `DECISIONS.md` del propio sistema.
 
 ---
 
+## v3.3.1 — Hotfix de CI: historial completo para verificar recibos
+
+1. **`fetch-depth: 0`** en el job de gobernanza del workflow generado
+   (`generators/scaffold.py`) y del CI del propio repo
+   (`.github/workflows/tests.yml`): el checkout por defecto de GitHub Actions es
+   *shallow* (1 commit) y `fia receipt verify` necesita los commits históricos a
+   los que están atados los recibos (`git show <commit>:<archivo>`). Detectado en
+   la release v3.3.0: el job de gobernanza fallaba con
+   `F9: no verificable en 3628c0b…`.
+2. Demo (`fia-harness-demo`) actualizado con el mismo ajuste.
+3. Tests: 282 (sin cambios; fix de configuración de CI).
+
+---
+
 ## v3.3.0 — Recibo de fase y router de carril (regla nº16)
 
 1. **Recibo de fase** (`core/receipts.py`, regla de oro nº16): manifiesto canónico
