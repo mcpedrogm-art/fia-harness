@@ -2,63 +2,43 @@
   "version": "1.0",
   "task_ref": "TASK-F12.md",
   "mode": "FULL",
-  "commit_or_tree_ref": "69afa028124ede6118cb5f125345f089d1e71049",
+  "commit_or_tree_ref": "bfc321b59affc5177bdeb81ed99c2f8b951d6fdf",
   "dirty": false,
   "files": [
     {
       "path": "CHANGELOG_FIXES.md",
-      "content_sha256": "77f33073143339640714a6e7a05cb459570b6cda995bdcfb681fcf7b1144dde8"
-    },
-    {
-      "path": "docs/RECEIPT_DESIGN.md",
-      "content_sha256": "bb63d6ebad348d9edc9debf8eddbdb615476e6c4fdea60c1710f63fb84aa7835"
+      "content_sha256": "f78bfaecc02811fbe567b8d826d868a35e4b6fc7299dbc68c75e9477a97acb38"
     },
     {
       "path": "fia_harness/__init__.py",
-      "content_sha256": "01eb0ec7de8c4229f285e1af6abaf718605120dbef41c6fc75493b5b90339c70"
+      "content_sha256": "3b1c3670313ecb280c886f42eb41f037ac974c4a8921d1bfdcbc3561283c9b7e"
     },
     {
-      "path": "fia_harness/core/commands.py",
-      "content_sha256": "c08abdcb66cd45b64a74ebe817c2513ac6460f022cfbce5a0933ac427193da6e"
-    },
-    {
-      "path": "fia_harness/core/receipts.py",
-      "content_sha256": "d27ae9868d0ecc139a8608b151702025a59c3cbac9a6f62814ffc90ececcb681"
-    },
-    {
-      "path": "fia_harness/core/runner.py",
-      "content_sha256": "94d80247e2ec2807c57b46f4b0e13f92eb29be07015078e06e89bf342b41c253"
+      "path": "fia_harness/adapters/git.py",
+      "content_sha256": "9351606f18f623ad24bacc76a7ab225a9f7c0d5231c0b901206ec24a0766899f"
     },
     {
       "path": "pyproject.toml",
-      "content_sha256": "0c559b5794b6bd3b89e9a5cda24dc2922bb430f44568d8b6d29a3b698fb20388"
-    },
-    {
-      "path": "tests/e2e_manual.py",
-      "content_sha256": "0d2de76526b7d96bda8e54c0546db36df2bffbe5d44f0aedcb5504b85b661616"
+      "content_sha256": "6844a06e90c40bf9a84e6f5963de2a67a2afc9ea9f7a1b527c0d2b725aeaffe1"
     },
     {
       "path": "tests/test_core_receipts.py",
-      "content_sha256": "be5ed741a1753ee235217b34551245c6b9cfa515174f1cfec3f24bbc32c99710"
-    },
-    {
-      "path": "tests/test_core_runner.py",
-      "content_sha256": "23863abcec607a797cc6ad7c115820263ecc6046527b5a6139cca92fba0185f0"
+      "content_sha256": "f3777a4225e4dd4d3c5e050e1daea9f6a811135ff416a1e039a9650c27f16f7c"
     }
   ],
   "checks": {
     "golden_rules": "pass",
     "tests": {
-      "passed": 289,
-      "total": 289
+      "passed": 291,
+      "total": 291
     },
     "lint": "skip",
     "scope": "fail"
   },
   "evidence_refs": [
-    "EV-016",
-    "EV-017"
+    "EV-018",
+    "EV-019"
   ],
-  "generated_at": "2026-09-18T18:12:29",
-  "receipt_sha256": "56ef14cb0467eea51dd9f7bb3ef299ce4f38c9c66bf619a6537df1f83c7d8521"
+  "generated_at": "2026-09-18T18:16:51",
+  "receipt_sha256": "b33493fe4cdd09d9f0a4ee09ce7651cae6f43b6fb3379c08186f0e0ad7da332a"
 }
