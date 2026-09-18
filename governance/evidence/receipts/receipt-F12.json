@@ -2,50 +2,42 @@
   "version": "1.0",
   "task_ref": "TASK-F12.md",
   "mode": "FULL",
-  "commit_or_tree_ref": "83facabbc128519fd51fd6d9e40f33925c04820d",
+  "commit_or_tree_ref": "c75d35d80731d54ca5ca98aed6f19928dcd96aa7",
   "dirty": false,
   "files": [
     {
       "path": "CHANGELOG_FIXES.md",
-      "content_sha256": "85f48567300980d2202a7450e0e21d213831a7afe612e43158b00642c839dcb0"
-    },
-    {
-      "path": "README.es.md",
-      "content_sha256": "f67e8eab99f60ea60d2c578858fd8896c692fcd1dcd3147b284689b2886a25f0"
-    },
-    {
-      "path": "README.md",
-      "content_sha256": "73d416525c9dd81ee26e1be6ca5bcc7c3654a0ace35f91c81328f1cfb6cb7043"
+      "content_sha256": "f59c6ca85377b53f5f1115867bcad46103cd457769cd3fc2f5a6bd5ce409af12"
     },
     {
       "path": "fia_harness/__init__.py",
-      "content_sha256": "6da70701b90f2eb671d99650c3831ebadc6ed14b381cd9fc896a348e6373c89d"
+      "content_sha256": "4bc579140f2ec400eac8901b59cda39495284027881aa84b5ac367750a755313"
     },
     {
-      "path": "fia_harness/data/templates/INICIO_PROYECTO.md",
-      "content_sha256": "ae7e6d4a2a417eeb65f4ac415976a1eb5bf11df60f1d688465b3fd59dd38a694"
+      "path": "fia_harness/cli.py",
+      "content_sha256": "4ca238e0837c1201a006f2f5c60dd274c27a52dd2902ef4192837dfaa026009e"
     },
     {
       "path": "pyproject.toml",
-      "content_sha256": "e02ce54a54c0ca6a74f5be7c27e974e9c21f29525186ce97736406a553001e7d"
+      "content_sha256": "2275aa2af457e3b012e65fea11ed6f81cbe783047ea50483e8062d18d8085828"
     },
     {
-      "path": "templates/INICIO_PROYECTO.md",
-      "content_sha256": "ae7e6d4a2a417eeb65f4ac415976a1eb5bf11df60f1d688465b3fd59dd38a694"
+      "path": "tests/test_packaging.py",
+      "content_sha256": "c07b838e271ea51c3316c838e6b85e407c073e1c036453d55f21b83548ba9cf4"
     }
   ],
   "checks": {
     "golden_rules": "pass",
     "tests": {
-      "passed": 282,
-      "total": 282
+      "passed": 284,
+      "total": 284
     },
     "lint": "skip",
     "scope": "fail"
   },
   "evidence_refs": [
-    "EV-014"
+    "EV-015"
   ],
-  "generated_at": "2026-09-18T12:40:49",
-  "receipt_sha256": "da62cebae5aafba7f1586a723bc39a3478893d7f8547f0cddaa248f268a0ae14"
+  "generated_at": "2026-09-18T12:59:41",
+  "receipt_sha256": "eeab419587b8f2fdc5d5a1e889284c05461709b0b28a9aac4febd586364a2254"
 }

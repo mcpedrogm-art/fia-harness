@@ -167,7 +167,7 @@
         "F11"
       ],
       "depends_on_notes": "",
-      "status": "in_progress"
+      "status": "done"
     }
   ],
   "checkpoints": [
@@ -317,9 +317,9 @@
     },
     {
       "phase": "F12",
-      "summary": "cuatro direcciones divergentes con roles fijos (segura, composición opuesta, interacción/movimiento, arquetipo inesperado) + **esquema de receta de 12 campos** (§8.1) + **matriz de divergencia de 6 ejes** (§8.2: extremo en ≥3, ningún par >2, autochequeo antes de mostrar) para corregir la convergencia observada en pruebas; plantilla `UI_RECIPES.md` (raíz + paquete + `fia init`/`bootstrap` + `NON_PRD_FILES`); H3 y Lite actualizados; README EN/ES; **biblioteca privada local** `UI_LIBRARY.local.md` (gitignored, 12 recetas aportadas por el humano; el kit MIT solo lleva esquema y flujo, nunca prompts/assets de terceros). Release **v3.4.0** reflejada como propiedad del harness. **v3.4.1:** corrección de la numeración de reglas (README EN/ES: se añade la 9 del recibo y se elimina la referencia colgante a la 16; nota de enforcement de `INICIO_PROYECTO.md` ajustada a la realidad: verificadas 4/5/7/16, gates 9/13, sin gate 8/12). Diferido a v3.5: gate mecánico de UI (ADR-011). Tests: 282.",
+      "summary": "cuatro direcciones divergentes con roles fijos (segura, composición opuesta, interacción/movimiento, arquetipo inesperado) + **esquema de receta de 12 campos** (§8.1) + **matriz de divergencia de 6 ejes** (§8.2: extremo en ≥3, ningún par >2, autochequeo antes de mostrar) para corregir la convergencia observada en pruebas; plantilla `UI_RECIPES.md` (raíz + paquete + `fia init`/`bootstrap` + `NON_PRD_FILES`); H3 y Lite actualizados; README EN/ES; **biblioteca privada local** `UI_LIBRARY.local.md` (gitignored, 12 recetas aportadas por el humano; el kit MIT solo lleva esquema y flujo, nunca prompts/assets de terceros). Release **v3.4.0** reflejada como propiedad del harness. **v3.4.1:** corrección de la numeración de reglas (README EN/ES: se añade la 9 del recibo y se elimina la referencia colgante a la 16; nota de enforcement de `INICIO_PROYECTO.md` ajustada a la realidad: verificadas 4/5/7/16, gates 9/13, sin gate 8/12). **v3.4.2:** `init` robusto (caso real en un equipo con `Documents` redirigido/protegido: `os.mkdir('src')` → `[WinError 2]`): captura `OSError`, mensaje claro con pistas (ruta absoluta, OneDrive, Carpetas controladas), exit 1 y `cd` absoluto en los pasos. Diferido a v3.5: gate mecánico de UI (ADR-011). Tests: 284.",
       "evidence": "",
-      "evidence_file": "EV-014",
+      "evidence_file": "EV-015",
       "receipt_ref": "evidence/receipts/receipt-F12.json",
       "recorded_at": "2026-09-18T12:12:12",
       "id": "CP-F12"
@@ -361,6 +361,6 @@
       "id": "SNAP-004"
     }
   ],
-  "compiled_at": "2026-09-18T12:59:27",
-  "state_sha256": "195e0f06300c221770f5f49d67af55fbe45058d2b47e35b79f339f3d64acadff"
+  "compiled_at": "2026-09-18T12:59:52",
+  "state_sha256": "180d33812591151d428b78644c5eca2c7c7754e4ab7cdf8a24172e873857a2d0"
 }
