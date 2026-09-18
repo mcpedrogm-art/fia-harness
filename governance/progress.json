@@ -167,7 +167,7 @@
         "F11"
       ],
       "depends_on_notes": "",
-      "status": "in_progress"
+      "status": "done"
     }
   ],
   "checkpoints": [
@@ -314,6 +314,15 @@
       "receipt_ref": "evidence/receipts/receipt-F11.json",
       "recorded_at": "2026-09-18T11:32:06",
       "id": "CP-F11"
+    },
+    {
+      "phase": "F12",
+      "summary": "cuatro direcciones divergentes con roles fijos (segura, composición opuesta, interacción/movimiento, arquetipo inesperado) + **esquema de receta de 12 campos** (§8.1) + **matriz de divergencia de 6 ejes** (§8.2: extremo en ≥3, ningún par >2, autochequeo antes de mostrar) para corregir la convergencia observada en pruebas; plantilla `UI_RECIPES.md` (raíz + paquete + `fia init`/`bootstrap` + `NON_PRD_FILES`); H3 y Lite actualizados; README EN/ES; **biblioteca privada local** `UI_LIBRARY.local.md` (gitignored, 12 recetas aportadas por el humano; el kit MIT solo lleva esquema y flujo, nunca prompts/assets de terceros). Diferido a v3.5: gate mecánico de UI (ADR-011). Tests: 282.",
+      "evidence": "",
+      "evidence_file": "EV-012",
+      "receipt_ref": "evidence/receipts/receipt-F12.json",
+      "id": "CP-F12",
+      "recorded_at": "2026-09-18T12:12:12"
     }
   ],
   "updated": "2026-09-18",
@@ -352,6 +361,6 @@
       "id": "SNAP-004"
     }
   ],
-  "compiled_at": "2026-09-18T12:11:43",
-  "state_sha256": "292045e45cf8556ea77e92be67180072ab9fd32931f0e21a41fec97bae13c1e5"
+  "compiled_at": "2026-09-18T12:12:12",
+  "state_sha256": "3875da79e9375b2014af10f94aed3d79b9b305720d6696da96d2ef68e53da75d"
 }

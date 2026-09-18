@@ -1,0 +1,91 @@
+{
+  "version": "1.0",
+  "task_ref": "TASK-F12.md",
+  "mode": "FULL",
+  "commit_or_tree_ref": "9440485dfc1495a69b2a9ab765ff32ab83d21f27",
+  "dirty": false,
+  "files": [
+    {
+      "path": ".gitignore",
+      "content_sha256": "9a0673737d778af827558d2ecde595f040112344b2ed17ea874286681ebe3822"
+    },
+    {
+      "path": "README.es.md",
+      "content_sha256": "38ce648f13633788c206f6c92a31a01d2b31cd835d2293e5a61adde17b6f75d4"
+    },
+    {
+      "path": "README.md",
+      "content_sha256": "ebc28a28681485da12a0246cc9211d9e24c21507f1fe1b0a6242f95057fa2b64"
+    },
+    {
+      "path": "fia_harness/cli.py",
+      "content_sha256": "5ffae40e9f77b2549ef24d7073544ea589074abde272fdca70f6cf566d546761"
+    },
+    {
+      "path": "fia_harness/data/templates/QUICKSTART_LITE.md",
+      "content_sha256": "263464c8e302a4410a0ebc98f8b122288423750a8afaf92b93afbc82f9d532a9"
+    },
+    {
+      "path": "fia_harness/data/templates/TASK_TEMPLATE.md",
+      "content_sha256": "8a3e5f5e6763229c1739fd3eb5797d53f527e5a3b5fc12a03179bc50d8d2fa69"
+    },
+    {
+      "path": "fia_harness/data/templates/UI_RECIPES.md",
+      "content_sha256": "5982026122a6090022206178169aa0b337c8037dab39ebc210306d6e9fab0e5c"
+    },
+    {
+      "path": "fia_harness/data/templates/UI_UX_EXCLUSIVA.md",
+      "content_sha256": "2ee4891955c30686b00482fee617c35f5b399c978f75e5b6ab91179190301cbe"
+    },
+    {
+      "path": "fia_harness/generators/bootstrap.py",
+      "content_sha256": "f70ced9c92215d624ddf130f52d3a1fa31ebdf8bb605341f2dd74e9ff333b3bd"
+    },
+    {
+      "path": "fia_harness/parser/discovery.py",
+      "content_sha256": "eb55e0296a5ec077c953b2f6745b276c95cea8a2bb42601ddafcb46341962dbb"
+    },
+    {
+      "path": "templates/QUICKSTART_LITE.md",
+      "content_sha256": "263464c8e302a4410a0ebc98f8b122288423750a8afaf92b93afbc82f9d532a9"
+    },
+    {
+      "path": "templates/TASK_TEMPLATE.md",
+      "content_sha256": "8a3e5f5e6763229c1739fd3eb5797d53f527e5a3b5fc12a03179bc50d8d2fa69"
+    },
+    {
+      "path": "templates/UI_RECIPES.md",
+      "content_sha256": "5982026122a6090022206178169aa0b337c8037dab39ebc210306d6e9fab0e5c"
+    },
+    {
+      "path": "templates/UI_UX_EXCLUSIVA.md",
+      "content_sha256": "2ee4891955c30686b00482fee617c35f5b399c978f75e5b6ab91179190301cbe"
+    },
+    {
+      "path": "tests/test_harness.py",
+      "content_sha256": "df3b0689c17b4aec421ca3053db9423e8097a3eca2f699d632564303508c04da"
+    },
+    {
+      "path": "tests/test_packaging.py",
+      "content_sha256": "746955d67f9811e9f4bc7f079b934e92d3ce103c9da289f553fd82ad4306b73a"
+    },
+    {
+      "path": "tests/test_parser_prd.py",
+      "content_sha256": "a40c0f4b48643188e9fd7c03afabcbff2478b6e9b44d4bb855912a185b410631"
+    }
+  ],
+  "checks": {
+    "golden_rules": "pass",
+    "tests": {
+      "passed": 282,
+      "total": 282
+    },
+    "lint": "skip",
+    "scope": "pass"
+  },
+  "evidence_refs": [
+    "EV-012"
+  ],
+  "generated_at": "2026-09-18T12:12:01",
+  "receipt_sha256": "3ca7cf96bfdb82ae086c5e48ed01af180181bd328225424e12d0aebf77d8c929"
+}

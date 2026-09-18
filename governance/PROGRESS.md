@@ -1,6 +1,6 @@
 # PROGRESS.md — Hoja de Ruta e Historial de Fases (repo FIA Harness)
 
-**Fase activa:** F12 (UI/UX: 4 variantes divergentes + recetas) — F8 en pausa
+**Fase activa:** — (F12 cerrada; F8 en pausa hasta reanudar la validación externa)
 
 ## Fases del Proceso (Harness — dogfood del propio kit)
 
@@ -27,7 +27,7 @@
 | F9 | Receipt Engine reducido: manifiesto canónico + `fia receipt create/verify` + regla de oro #16 | `core/receipts.py`, `receipt_ref` en checkpoints, sección RECEIPTS en `fia verify`, tests de determinismo y tampering | F7 | [x] Listo |
 | F10 | Router fail-closed fino (`fia route`) | `core/router.py`, comando `fia route`, tests negativos (red flags → Full) | F9 | [x] Listo |
 | F11 | Cierre v3.3: docs, plantillas, CHANGELOG, dogfood y demo | README EN/ES, plantillas (dos copias sincronizadas), `docs/RECEIPT_ROUTER.md`, CHANGELOG, demo con recibo manipulado | F10 | [x] Listo |
-| F12 | UI/UX: cuatro direcciones divergentes + esquema de recetas + `UI_RECIPES.md` | `UI_UX_EXCLUSIVA.md` §8.1–8.2, H3 de `TASK_TEMPLATE.md`, `QUICKSTART_LITE.md`, plantilla `UI_RECIPES.md` (copias sincronizadas) y biblioteca privada local | F11 | [~] En curso |
+| F12 | UI/UX: cuatro direcciones divergentes + esquema de recetas + `UI_RECIPES.md` | `UI_UX_EXCLUSIVA.md` §8.1–8.2, H3 de `TASK_TEMPLATE.md`, `QUICKSTART_LITE.md`, plantilla `UI_RECIPES.md` (copias sincronizadas) y biblioteca privada local | F11 | [x] Listo |
 
 ## Checkpoints de Contexto Recientes
 
@@ -117,3 +117,6 @@
 - **F11 (Cierre v3.3):** regla nº16 documentada en `INICIO_PROYECTO.md`, `AGENTS.md` y `TASK_TEMPLATE.md` (plantillas raíz y paquete sincronizadas; anti-drift en verde), `QUICKSTART_LITE.md` con `fia route`; README EN/ES con recibo/router, sección «What v3.3 adds» y límites honestos; CI estricto (`fia verify --strict-receipts`) en el workflow generado y en el job de gobernanza; `docs/RECEIPT_ROUTER.md`; CHANGELOG y bump de versión; demo con CI estricto y nota de recibos (commit `4e4a8f5`). **Hotfix v3.3.1:** el job de gobernanza requiere `fetch-depth: 0` (el checkout shallow no tiene los commits históricos a los que atan los recibos); corregido en el workflow generado y en el del repo. Tests: 282.
   Evidencia: EV-011
   Recibo: evidence/receipts/receipt-F11.json
+- **F12 (UI/UX v3.4):** cuatro direcciones divergentes con roles fijos (segura, composición opuesta, interacción/movimiento, arquetipo inesperado) + **esquema de receta de 12 campos** (§8.1) + **matriz de divergencia de 6 ejes** (§8.2: extremo en ≥3, ningún par >2, autochequeo antes de mostrar) para corregir la convergencia observada en pruebas; plantilla `UI_RECIPES.md` (raíz + paquete + `fia init`/`bootstrap` + `NON_PRD_FILES`); H3 y Lite actualizados; README EN/ES; **biblioteca privada local** `UI_LIBRARY.local.md` (gitignored, 12 recetas aportadas por el humano; el kit MIT solo lleva esquema y flujo, nunca prompts/assets de terceros). Diferido a v3.5: gate mecánico de UI (ADR-011). Tests: 282.
+  Evidencia: EV-012
+  Recibo: evidence/receipts/receipt-F12.json
