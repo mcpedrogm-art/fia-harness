@@ -75,20 +75,22 @@ se hace en F11/D2 por la duplicación de plantillas (D2b).
 
 > Obligatoria: sin esto el kit queda incoherente (features nuevas con docs viejas).
 
-- [ ] **D1 — README.md + README.es.md**: secciones de recibo y router; límites honestos ("ancla de auditoría, no verdad"; "recomendación, no autoridad"); actualizar lista de comandos y menciones de reglas verificadas en CI.
-- [ ] **D2 — Plantillas (las DOS copias: `templates/` y `fia_harness/data/templates/`)**:
+- [x] **D1 — README.md + README.es.md**: secciones de recibo y router; límites honestos ("ancla de auditoría, no verdad"; "recomendación, no autoridad"); actualizar lista de comandos y menciones de reglas verificadas en CI.
+- [x] **D2 — Plantillas (las DOS copias: `templates/` y `fia_harness/data/templates/`)**:
   - `INICIO_PROYECTO.md` §8: regla #16 + nota de enforcement.
   - `QUICKSTART_LITE.md`: `fia route` y promoción.
   - `TASK_TEMPLATE.md` / `TASK_LITE_TEMPLATE.md`: línea `Recibo:` en el cierre.
   - `AGENTS.md`: cierre de fase con recibo.
-- [ ] **D2b — Resolver la duplicación de plantillas**: decidir fuente canónica y añadir test/CI de sincronía (o retirar la copia que no se use). Hoy son idénticas salvo `RAG_VECTOR_EXTENSION.md` (solo en raíz): divergirán en la primera edición.
-- [ ] **D3 — `docs/`**: nuevo `docs/RECEIPT_ROUTER.md` (concepto, límites, ejemplos reales) + actualizar `docs/ROADMAP_V3_1.md` con el estado v3.3.
-- [ ] **D4 — `CHANGELOG_FIXES.md`** + bump a `3.3.0` (`pyproject.toml`, `__init__.py`).
-- [ ] **D5 — Dogfood**: fases nuevas en `governance/PROGRESS.md` con `APPROVAL-003` + ADRs (`ADR-008` recorte, `ADR-009` diseño del recibo, `ADR-010` router) + recibo real de las propias fases R/X/D.
-- [ ] **D6 — Demo (`fia-harness-demo`)**: caso nuevo "editar archivo tras cierre → `fia receipt verify` FAIL" en README + workflow. *Repo externo: el push requiere autorización aparte.*
-- [ ] **D7 — `lanzamiento/*`**: revisar claims si mencionan el flujo de cierre (opcional, solo si queda desalineado).
+- [x] **D2b — Resolver la duplicación de plantillas**: decidir fuente canónica y añadir test/CI de sincronía (o retirar la copia que no se use). Hoy son idénticas salvo `RAG_VECTOR_EXTENSION.md` (solo en raíz): divergirán en la primera edición.
+- [x] **D3 — `docs/`**: nuevo `docs/RECEIPT_ROUTER.md` (concepto, límites, ejemplos reales) + actualizar `docs/ROADMAP_V3_1.md` con el estado v3.3.
+- [x] **D4 — `CHANGELOG_FIXES.md`** + bump a `3.3.0` (`pyproject.toml`, `__init__.py`).
+- [x] **D5 — Dogfood**: fases nuevas en `governance/PROGRESS.md` con `APPROVAL-003` + ADRs (`ADR-008` recorte, `ADR-009` diseño del recibo, `ADR-010` router) + recibo real de las propias fases R/X/D.
+- [x] **D6 — Demo (`fia-harness-demo`)**: caso nuevo "editar archivo tras cierre → `fia receipt verify` FAIL" en README + workflow. *Repo externo: el push requiere autorización aparte.*
+- [x] **D7 — `lanzamiento/*`**: revisar claims si mencionan el flujo de cierre (opcional, solo si queda desalineado).
 
 **DoD Fase D:** paridad EN/ES · docs alineadas con la realidad · CI del kit y del demo verdes · evidencia citada en cada checkpoint.
+
+**Resultado D1–D7 (2026-09-18):** README EN/ES (recibo, router, «What v3.3 adds», límites, 282 tests), plantillas sincronizadas con la regla nº16 (anti-drift en verde), CI estricto en el workflow generado y en el del repo, `docs/RECEIPT_ROUTER.md` + roadmap, CHANGELOG v3.3.0 y bump a `3.3.0`, demo commiteado (`4e4a8f5`). *Desviación:* `TASK_LITE_TEMPLATE.md` no se toca (las tareas Lite no tienen fase/recibo; el recibo llega con la promoción a Completo). *D7 revisado:* los posts de `lanzamiento/` son históricos de v3.0; sin cambios.
 
 ---
 
@@ -138,5 +140,6 @@ antes de la siguiente.
 - [x] Fase R · cierre dogfood de F9 (2026-09-18): `TASK-F9.md`, EV-007, `Recibo:` en checkpoint, fase done y reapertura auditada por dos hallazgos (re-emisión en `done` para evitar deadlock; `changed_files` en estado-subcarpeta). `fia verify -d governance` PASS · `receipt verify F9` PASS.
   - *Pendiente operativo:* los recibos de F9/F10 son `dirty` (locales). Tras el commit autorizado, re-emitirlos limpios (`fia receipt create F9 --base <ref>` / `F10`); el CI debe verlos `dirty: false` (`fia verify --strict-receipts`).
 - [x] Fase X (X1–X3) — `fia route` operativo + `--strict-receipts`; suite 281/281 verde (2026-09-18).
-- [ ] Fase D (D1–D7)
-- [ ] Release v3.3.0
+- [x] Fase D (D1–D7) — cierre v3.3 completo (2026-09-18).
+- [ ] Release v3.3.0 — **pendiente de decisión humana**: tag + publicación en PyPI + push (el push no está autorizado en esta sesión; los commits locales sí).
+- [x] Dogfood final: 3 recibos limpios (F9, F10, F11) verificados con `fia verify -d governance --strict-receipts`.
