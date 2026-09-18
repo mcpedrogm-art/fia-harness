@@ -167,7 +167,7 @@
         "F11"
       ],
       "depends_on_notes": "",
-      "status": "in_progress"
+      "status": "done"
     }
   ],
   "checkpoints": [
@@ -317,9 +317,9 @@
     },
     {
       "phase": "F12",
-      "summary": "cuatro direcciones divergentes con roles fijos (segura, composición opuesta, interacción/movimiento, arquetipo inesperado) + **esquema de receta de 12 campos** (§8.1) + **matriz de divergencia de 6 ejes** (§8.2: extremo en ≥3, ningún par >2, autochequeo antes de mostrar) para corregir la convergencia observada en pruebas; plantilla `UI_RECIPES.md` (raíz + paquete + `fia init`/`bootstrap` + `NON_PRD_FILES`); H3 y Lite actualizados; README EN/ES; **biblioteca privada local** `UI_LIBRARY.local.md` (gitignored, 12 recetas aportadas por el humano; el kit MIT solo lleva esquema y flujo, nunca prompts/assets de terceros). Diferido a v3.5: gate mecánico de UI (ADR-011). Tests: 282.",
+      "summary": "cuatro direcciones divergentes con roles fijos (segura, composición opuesta, interacción/movimiento, arquetipo inesperado) + **esquema de receta de 12 campos** (§8.1) + **matriz de divergencia de 6 ejes** (§8.2: extremo en ≥3, ningún par >2, autochequeo antes de mostrar) para corregir la convergencia observada en pruebas; plantilla `UI_RECIPES.md` (raíz + paquete + `fia init`/`bootstrap` + `NON_PRD_FILES`); H3 y Lite actualizados; README EN/ES; **biblioteca privada local** `UI_LIBRARY.local.md` (gitignored, 12 recetas aportadas por el humano; el kit MIT solo lleva esquema y flujo, nunca prompts/assets de terceros). Release **v3.4.0** reflejada como propiedad del harness (CHANGELOG + README EN/ES + bump). Diferido a v3.5: gate mecánico de UI (ADR-011). Tests: 282.",
       "evidence": "",
-      "evidence_file": "EV-012",
+      "evidence_file": "EV-013",
       "receipt_ref": "evidence/receipts/receipt-F12.json",
       "recorded_at": "2026-09-18T12:12:12",
       "id": "CP-F12"
@@ -361,6 +361,6 @@
       "id": "SNAP-004"
     }
   ],
-  "compiled_at": "2026-09-18T12:31:40",
-  "state_sha256": "b9be3d537e4d9d6ed50c569d670381bf00022b8f8c6b1fa30c0e96d742dd369a"
+  "compiled_at": "2026-09-18T12:32:07",
+  "state_sha256": "9712a5804bcc1c3d2b5e52cbbcb18a5b88bcd6227acd39c307f3b804e639bffd"
 }
