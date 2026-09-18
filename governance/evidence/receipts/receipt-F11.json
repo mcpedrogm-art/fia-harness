@@ -2,76 +2,28 @@
   "version": "1.0",
   "task_ref": "TASK-F11.md",
   "mode": "FULL",
-  "commit_or_tree_ref": "618ca617f4a7f8f81b2fcae3ae0533399a134d36",
+  "commit_or_tree_ref": "39e25a72636223a8f4ebe606b5b3a6c97ee11ccf",
   "dirty": false,
   "files": [
     {
       "path": ".github/workflows/tests.yml",
-      "content_sha256": "ed0146153eb9c66653b0bd0cf6abc9af5e26f153d98fb833a3912718bafabbc8"
+      "content_sha256": "f2da9e1b7e10e05a6b433ec1ff4d8494784178965c079094f814f2495d2c8c48"
     },
     {
       "path": "CHANGELOG_FIXES.md",
-      "content_sha256": "69e50dd585bc4744e3f8bf74327cca6dc6044f6fb9cf37769a96f2f5a83eae9d"
-    },
-    {
-      "path": "README.es.md",
-      "content_sha256": "23b85e3ec0b26d77f0d595f482907bf03ca25c06c4ca2aba1490a3831d1e7b52"
-    },
-    {
-      "path": "README.md",
-      "content_sha256": "ee61d2cf68a47b2dc9423d50ec1eb3bd86fb0c950876cd6f48f2108bcaf8c38f"
-    },
-    {
-      "path": "docs/RECEIPT_ROUTER.md",
-      "content_sha256": "61539699ef3e21d0151a7e2c904579aa725bbf68b2382dbe6a8507aa538e8565"
-    },
-    {
-      "path": "docs/ROADMAP_V3_1.md",
-      "content_sha256": "c8f1cd30e0121cd18177ab95483d2dfa5fb8352e29c0655bdca1d772d9e7bbee"
+      "content_sha256": "70e9dc2155f425eb37cc0d22e6cd5be7e145fa627a3d7747117111b1a6c3a6fb"
     },
     {
       "path": "fia_harness/__init__.py",
-      "content_sha256": "6b16aa0e8be5d74c77889bfd86e217a40ff200d6a046781c1663874b2c21d53c"
-    },
-    {
-      "path": "fia_harness/data/templates/AGENTS.md",
-      "content_sha256": "46577aa26198d64cf21fa5acbf95b0cba4c603fd75ffe3704fdf0289805f2b17"
-    },
-    {
-      "path": "fia_harness/data/templates/INICIO_PROYECTO.md",
-      "content_sha256": "708e9454f2e098ac2a93749689d6a61a81f84878c237450042ac7042e601ab17"
-    },
-    {
-      "path": "fia_harness/data/templates/QUICKSTART_LITE.md",
-      "content_sha256": "491960c79d010b2666f8582bc4726ad08ec7071fba8090e7c03e7a7c950e9529"
-    },
-    {
-      "path": "fia_harness/data/templates/TASK_TEMPLATE.md",
-      "content_sha256": "2c80b4a7e6b2f1d5772ead95755b222ed3d9a2973306e958cfcb3bfc5a7179f7"
+      "content_sha256": "ed64fb96647f675e138fa56b8eabe2cb19e75ffc3ef65198c12ba7b1f33f3112"
     },
     {
       "path": "fia_harness/generators/scaffold.py",
-      "content_sha256": "8e44cd15400884414bc7f450f7468bf140369e35cfccdac41762086211f9ba94"
+      "content_sha256": "b2cb850b432630b0f3eac3e7c665063846d876862fb3452098c32fa9073c010b"
     },
     {
       "path": "pyproject.toml",
-      "content_sha256": "c758808a574f84a5d11a73c43d00517042b8877a8f9c44683105f864922c32ab"
-    },
-    {
-      "path": "templates/AGENTS.md",
-      "content_sha256": "46577aa26198d64cf21fa5acbf95b0cba4c603fd75ffe3704fdf0289805f2b17"
-    },
-    {
-      "path": "templates/INICIO_PROYECTO.md",
-      "content_sha256": "708e9454f2e098ac2a93749689d6a61a81f84878c237450042ac7042e601ab17"
-    },
-    {
-      "path": "templates/QUICKSTART_LITE.md",
-      "content_sha256": "491960c79d010b2666f8582bc4726ad08ec7071fba8090e7c03e7a7c950e9529"
-    },
-    {
-      "path": "templates/TASK_TEMPLATE.md",
-      "content_sha256": "2c80b4a7e6b2f1d5772ead95755b222ed3d9a2973306e958cfcb3bfc5a7179f7"
+      "content_sha256": "aa5599a01ea54117979f66e18bc119e968c4d097cd7527eeec9b66ce8f8e0fe8"
     }
   ],
   "checks": {
@@ -84,8 +36,8 @@
     "scope": "pass"
   },
   "evidence_refs": [
-    "EV-010"
+    "EV-011"
   ],
-  "generated_at": "2026-09-18T11:31:58",
-  "receipt_sha256": "373423cf230f589d4f0357da225e81499d20ca9bfcafae2478a26521a183b9ee"
+  "generated_at": "2026-09-18T11:41:29",
+  "receipt_sha256": "682bb274ae494f23ce5374d48522c19478ee45829b449d0317cf02d910f512e5"
 }

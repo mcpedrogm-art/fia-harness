@@ -26,7 +26,7 @@
 | F8 | Puerta de validación externa (3–5 usuarios) | 3–5 usuarios reales + fricción reportada + `fia verify` en un CI ajeno | F7 | [!] En pausa |
 | F9 | Receipt Engine reducido: manifiesto canónico + `fia receipt create/verify` + regla de oro #16 | `core/receipts.py`, `receipt_ref` en checkpoints, sección RECEIPTS en `fia verify`, tests de determinismo y tampering | F7 | [x] Listo |
 | F10 | Router fail-closed fino (`fia route`) | `core/router.py`, comando `fia route`, tests negativos (red flags → Full) | F9 | [x] Listo |
-| F11 | Cierre v3.3: docs, plantillas, CHANGELOG, dogfood y demo | README EN/ES, plantillas (dos copias sincronizadas), `docs/RECEIPT_ROUTER.md`, CHANGELOG, demo con recibo manipulado | F10 | [~] Listo |
+| F11 | Cierre v3.3: docs, plantillas, CHANGELOG, dogfood y demo | README EN/ES, plantillas (dos copias sincronizadas), `docs/RECEIPT_ROUTER.md`, CHANGELOG, demo con recibo manipulado | F10 | [x] Listo |
 
 ## Checkpoints de Contexto Recientes
 
@@ -113,6 +113,6 @@
 - **F10 (Router de carril):** `fia route` determinista y fail-closed: señales de riesgo (`policy.RISK_KEYWORDS`, sin duplicar listas) → Full; allowlist cerrada de 5 categorías (bug acotado, refactor local, solo tests, lint/typos, docs) → propone Lite con razones; sin coincidencia → Full. Sin estado nuevo ni presupuesto autodeclarado (ADR-010); `fia run --` y el resto de la CLI intactos. 14 tests nuevos. Hallazgo de cierre: semántica local/estricta de recibos (`--strict-receipts`; el trabajo posterior no bloquea el verify local pero sí el CI). Tests: 266 → 281.
   Evidencia: EV-009
   Recibo: evidence/receipts/receipt-F10.json
-- **F11 (Cierre v3.3):** regla nº16 documentada en `INICIO_PROYECTO.md`, `AGENTS.md` y `TASK_TEMPLATE.md` (plantillas raíz y paquete sincronizadas; anti-drift en verde), `QUICKSTART_LITE.md` con `fia route`; README EN/ES con recibo/router, sección «What v3.3 adds» y límites honestos; CI estricto (`fia verify --strict-receipts`) en el workflow generado y en el job de gobernanza; `docs/RECEIPT_ROUTER.md`; CHANGELOG v3.3.0 y bump a 3.3.0; demo con CI estricto y nota de recibos (fases legacy grandfathered, commit `4e4a8f5`). Tests: 282.
-  Evidencia: EV-010
+- **F11 (Cierre v3.3):** regla nº16 documentada en `INICIO_PROYECTO.md`, `AGENTS.md` y `TASK_TEMPLATE.md` (plantillas raíz y paquete sincronizadas; anti-drift en verde), `QUICKSTART_LITE.md` con `fia route`; README EN/ES con recibo/router, sección «What v3.3 adds» y límites honestos; CI estricto (`fia verify --strict-receipts`) en el workflow generado y en el job de gobernanza; `docs/RECEIPT_ROUTER.md`; CHANGELOG y bump de versión; demo con CI estricto y nota de recibos (commit `4e4a8f5`). **Hotfix v3.3.1:** el job de gobernanza requiere `fetch-depth: 0` (el checkout shallow no tiene los commits históricos a los que atan los recibos); corregido en el workflow generado y en el del repo. Tests: 282.
+  Evidencia: EV-011
   Recibo: evidence/receipts/receipt-F11.json

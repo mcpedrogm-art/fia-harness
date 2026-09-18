@@ -157,7 +157,7 @@
         "F10"
       ],
       "depends_on_notes": "",
-      "status": "in_progress"
+      "status": "done"
     }
   ],
   "checkpoints": [
@@ -298,9 +298,9 @@
     },
     {
       "phase": "F11",
-      "summary": "regla nº16 documentada en `INICIO_PROYECTO.md`, `AGENTS.md` y `TASK_TEMPLATE.md` (plantillas raíz y paquete sincronizadas; anti-drift en verde), `QUICKSTART_LITE.md` con `fia route`; README EN/ES con recibo/router, sección «What v3.3 adds» y límites honestos; CI estricto (`fia verify --strict-receipts`) en el workflow generado y en el job de gobernanza; `docs/RECEIPT_ROUTER.md`; CHANGELOG v3.3.0 y bump a 3.3.0; demo con CI estricto y nota de recibos (fases legacy grandfathered, commit `4e4a8f5`). Tests: 282.",
+      "summary": "regla nº16 documentada en `INICIO_PROYECTO.md`, `AGENTS.md` y `TASK_TEMPLATE.md` (plantillas raíz y paquete sincronizadas; anti-drift en verde), `QUICKSTART_LITE.md` con `fia route`; README EN/ES con recibo/router, sección «What v3.3 adds» y límites honestos; CI estricto (`fia verify --strict-receipts`) en el workflow generado y en el job de gobernanza; `docs/RECEIPT_ROUTER.md`; CHANGELOG y bump de versión; demo con CI estricto y nota de recibos (commit `4e4a8f5`). **Hotfix v3.3.1:** el job de gobernanza requiere `fetch-depth: 0` (el checkout shallow no tiene los commits históricos a los que atan los recibos); corregido en el workflow generado y en el del repo. Tests: 282.",
       "evidence": "",
-      "evidence_file": "EV-010",
+      "evidence_file": "EV-011",
       "receipt_ref": "evidence/receipts/receipt-F11.json",
       "recorded_at": "2026-09-18T11:32:06",
       "id": "CP-F11"
@@ -335,6 +335,6 @@
       "id": "SNAP-003"
     }
   ],
-  "compiled_at": "2026-09-18T11:41:07",
-  "state_sha256": "3e7d2348157cab5f2d1ae69a184b268b598ddcd2d5af3420b910002f1a2d56a4"
+  "compiled_at": "2026-09-18T11:41:37",
+  "state_sha256": "e5dec612eb6a1c96374b0fbb40ea8ece820d2693aef9929b605beccde0ee986c"
 }
