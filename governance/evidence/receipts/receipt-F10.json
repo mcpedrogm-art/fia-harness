@@ -2,16 +2,16 @@
   "version": "1.0",
   "task_ref": "TASK-F10.md",
   "mode": "FULL",
-  "commit_or_tree_ref": "d066e5d64cbb858d2d50c7d6b53bffafb1ec090b",
-  "dirty": true,
+  "commit_or_tree_ref": "3628c0bcfda00b1725b8ae081dd11ab76b05aa28",
+  "dirty": false,
   "files": [
     {
       "path": "docs/PLAN_RECIBO_ROUTER.md",
-      "content_sha256": "36857b499165749cc23dd8d38e2a6b14668006e63c60499bff64e48a1281049d"
+      "content_sha256": "ae8d348630a36e80b681e89a653d5d2eb31fbd036c372665937c293c699d58b6"
     },
     {
       "path": "docs/RECEIPT_DESIGN.md",
-      "content_sha256": "d19fe836b20b9deedbf5534bed6c87d1f4f048983d8536e2fa9af6b0d9f5fb68"
+      "content_sha256": "d6bdaca44a9950534f1b82e0fd32a2b5e62d078da814fa770bf4ad9fa3650257"
     },
     {
       "path": "fia_harness/adapters/git.py",
@@ -23,7 +23,7 @@
     },
     {
       "path": "fia_harness/core/commands.py",
-      "content_sha256": "7b15fe94d5499585e7e83b788c21733d3beb3517a9c8ca23a924537c64d10b3b"
+      "content_sha256": "77739a4c65d0a55a211f71a50a32c71c43da35ce317757c9343ad8699de2a22f"
     },
     {
       "path": "fia_harness/core/fingerprints.py",
@@ -55,7 +55,7 @@
     },
     {
       "path": "tests/test_core_receipts.py",
-      "content_sha256": "69be7e7c40136435410b8478d5818fbbdb8f7193429c19e9c605801630e940ab"
+      "content_sha256": "0ea00f576dcab41704de3fdf25d713f700122a94054c41e0eb9d522eb2cd2a5e"
     },
     {
       "path": "tests/test_core_router.py",
@@ -77,11 +77,11 @@
       "total": 281
     },
     "lint": "skip",
-    "scope": "pass"
+    "scope": "skip"
   },
   "evidence_refs": [
     "EV-009"
   ],
-  "generated_at": "2026-09-18T11:20:53",
-  "receipt_sha256": "839bcb25c4c7abe0d2ff9ac3308fd6f026586a9a13c438130b29a88c3626699b"
+  "generated_at": "2026-09-18T11:28:34",
+  "receipt_sha256": "a20f4afd43bfcd61617a2881ea6307e2e51964394185a257ac16851eead3a739"
 }
