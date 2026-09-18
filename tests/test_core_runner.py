@@ -1,5 +1,8 @@
 """Tests del wrapper de ejecución `fia run` (`fia_harness.core.runner`)."""
 
+import contextlib
+import io
+import os
 import sys
 import tempfile
 import unittest
@@ -34,6 +37,26 @@ class CmdRunTests(unittest.TestCase):
     def test_sin_comando_falla(self):
         with self.assertRaises(SystemExit):
             runner.cmd_run(self.dir, [])
+
+    def test_comando_inexistente_da_error_claro(self):
+        stderr = io.StringIO()
+        with self.assertRaises(SystemExit):
+            with contextlib.redirect_stderr(stderr):
+                runner.cmd_run(self.dir, ["comando-que-no-existe-xyz"])
+        self.assertIn("No se encontró el comando", stderr.getvalue())
+
+    @unittest.skipUnless(os.name == "nt", "PATHEXT es de Windows")
+    def test_resuelve_cmd_de_windows(self):
+        tools = self.dir / "tools"
+        tools.mkdir()
+        (tools / "saluda.cmd").write_text("@echo hola-desde-cmd\r\n", encoding="ascii")
+        old_path = os.environ.get("PATH", "")
+        os.environ["PATH"] = f"{tools}{os.pathsep}{old_path}"
+        self.addCleanup(os.environ.__setitem__, "PATH", old_path)
+        code = runner.cmd_run(self.dir, ["saluda"])
+        self.assertEqual(code, 0)
+        stdout = (self.dir / "evidence" / "EV-001.stdout.txt").read_text(encoding="utf-8")
+        self.assertIn("hola-desde-cmd", stdout)
 
 
 if __name__ == "__main__":

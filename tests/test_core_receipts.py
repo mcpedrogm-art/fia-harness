@@ -181,6 +181,37 @@ class ReceiptTests(unittest.TestCase):
         self.assertTrue(any("contenido modificado" in e
                             for e in strict["sections"]["RECEIPTS"]["errors"]))
 
+    def test_borrado_se_representa_y_verifica(self):
+        _write(self.dir / "src" / "viejo.py", "print('old')\n")
+        _git(self.dir, "add", ".")
+        _git(self.dir, "commit", "-qm", "extra")
+        (self.dir / "src" / "viejo.py").unlink()
+        self._create(allow_dirty=True)
+        _, receipt = self._receipt()
+        deleted = [f for f in receipt["files"] if f.get("deleted")]
+        self.assertEqual([f["path"] for f in deleted], ["src/viejo.py"])
+        self.assertIsNone(deleted[0]["content_sha256"])
+        errors, _ = receipts.verify_phase(self.dir, "F1")
+        self.assertEqual(errors, [])
+        _write(self.dir / "src" / "viejo.py", "print('vuelve')\n")
+        errors, _ = receipts.verify_phase(self.dir, "F1")
+        self.assertTrue(any("debería estar borrado" in e for e in errors), errors)
+
+    def test_borrado_en_recibo_limpio_verifica_commit(self):
+        _write(self.dir / "src" / "viejo.py", "print('old')\n")
+        _git(self.dir, "add", ".")
+        _git(self.dir, "commit", "-qm", "extra")
+        (self.dir / "src" / "viejo.py").unlink()
+        _git(self.dir, "add", "-A")
+        _git(self.dir, "commit", "-qm", "fase con borrado")
+        self._create(base="HEAD~1")
+        _, receipt = self._receipt()
+        self.assertFalse(receipt["dirty"])
+        self.assertTrue(any(f.get("deleted") for f in receipt["files"]))
+        errors, note = receipts.verify_phase(self.dir, "F1")
+        self.assertEqual(errors, [])
+        self.assertIn("verificado contra", note)
+
     def test_cli_create_y_verify(self):
         out = io.StringIO()
         with contextlib.redirect_stdout(out):
@@ -229,6 +260,42 @@ class NoGitTests(unittest.TestCase):
         with self.assertRaises(SystemExit):
             with contextlib.redirect_stderr(io.StringIO()):
                 commands.cmd_receipt_create(project, "F1", allow_dirty=True)
+
+
+class SealedDocsReceiptTests(unittest.TestCase):
+    """Regresión v3.4.3: receipt create fallaba en proyectos con docs sellados
+    (el estado compilado no llevaba `sealed_docs`)."""
+
+    def setUp(self):
+        tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(tmp.cleanup)
+        self.dir = Path(tmp.name)
+        _git(self.dir, "init", "-q")
+        _git(self.dir, "config", "user.email", "t@t")
+        _git(self.dir, "config", "user.name", "t")
+        _write(self.dir / "PROGRESS.md", MD)
+        _write(self.dir / "TASK-F1.md", TASK)
+        _write(self.dir / "DECISIONS.md", "# DECISIONS.md\n\n## Aprobaciones\n")
+        _write(self.dir / "src" / "app.py", "print('v1')\n")
+        for name in ("INICIO_PROYECTO.md", "SECURITY.md", "TASK_TEMPLATE.md"):
+            _write(self.dir / name, f"# {name}\nv1\n")
+        _git(self.dir, "add", ".")
+        _git(self.dir, "commit", "-qm", "base")
+        with contextlib.redirect_stdout(io.StringIO()):
+            commands.cmd_seal(self.dir, [])
+            commands.cmd_sync(self.dir)
+        _write(self.dir / "src" / "app.py", "print('v2')\n")
+
+    def test_receipt_create_con_documentos_sellados(self):
+        out = io.StringIO()
+        with contextlib.redirect_stdout(out):
+            commands.cmd_receipt_create(self.dir, "F1", allow_dirty=True, tests_raw="10/10")
+        self.assertIn("Recibo emitido", out.getvalue())
+        path = receipts.receipt_path(self.dir, "F1")
+        receipt = json.loads(path.read_text(encoding="utf-8"))
+        self.assertEqual(receipt["checks"]["golden_rules"], "pass")
+        errors, _ = receipts.verify_phase(self.dir, "F1")
+        self.assertEqual(errors, [])
 
 
 class NormalizeTests(unittest.TestCase):

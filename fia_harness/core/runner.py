@@ -10,6 +10,7 @@ así que se capturan y hashean SIEMPRE ambos streams.
 
 import datetime
 import platform
+import shutil
 import subprocess
 import time
 from pathlib import Path
@@ -24,10 +25,20 @@ def cmd_run(project_dir: Path, command, record_type: str = "test") -> int:
     fix_windows_console_encoding()
     if not command:
         fail("Uso: fia run [-d DIR] [--type T] -- <comando...>")
+    command = list(command)
     root = project_dir.resolve()
+    # Resolver con shutil.which aplica PATHEXT en Windows: `npm` → `npm.cmd`
+    # (subprocess directo lanzaría [WinError 2] con npm/npx/pip).
+    executable = shutil.which(command[0])
+    if executable is None:
+        fail(f"No se encontró el comando '{command[0]}' en el PATH. En Windows, "
+             "npm/npx/pip necesitan su nombre real (p. ej. `fia run -- npm.cmd ...`).")
     started = datetime.datetime.now(datetime.timezone.utc)
     t0 = time.perf_counter()
-    proc = subprocess.run(list(command), cwd=root, capture_output=True)
+    try:
+        proc = subprocess.run([executable, *command[1:]], cwd=root, capture_output=True)
+    except OSError as error:
+        fail(f"No se pudo ejecutar '{command[0]}': {error}")
     t1 = time.perf_counter()
     finished = datetime.datetime.now(datetime.timezone.utc)
 

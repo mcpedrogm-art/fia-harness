@@ -245,6 +245,11 @@ def cmd_receipt_create(project_dir: Path, phase: str, base=None, evidence_ids=()
         fail(f"--lint debe ser uno de: {', '.join(receipts.CHECK_VALUES)}")
     md_text = load_file(project_dir / st.DEFAULT_FILES["progress"])
     state = st.compile_state_from_md(md_text)
+    stored = st.load_state_json(project_dir)
+    if stored is not None:
+        # v3.4.3: sin esto, sealed_docs/spec_hashes quedaban vacíos y
+        # validate_sealed_docs fallaba siempre en proyectos con documentos sellados.
+        state = st.carry_over_aux_fields(state, stored)
     phases = {p["id"]: p for p in state.get("execution_phases", [])}
     if phase not in phases:
         fail(f"La fase {phase} no aparece en {st.DEFAULT_FILES['progress']}.")
@@ -277,9 +282,12 @@ def cmd_receipt_create(project_dir: Path, phase: str, base=None, evidence_ids=()
         if receipts.is_governance_path(path, project_dir, repo_root):
             continue
         absolute = repo_root / path
-        if not absolute.exists():
-            fail(f"Archivo cambiado ausente en el disco: {path}")
-        files.append({"path": path, "content_sha256": receipts.content_sha256(absolute)})
+        if absolute.exists():
+            files.append({"path": path, "content_sha256": receipts.content_sha256(absolute)})
+        else:
+            # v3.4.3: los borrados se representan (antes se abortaba con
+            # "Archivo cambiado ausente", impidiendo recibos de fases con borrados).
+            files.append({"path": path, "content_sha256": None, "deleted": True})
     if not files:
         fail("Sin archivos de producto cambiados: usa --base REF o revisa el alcance de la fase.")
     scope_errors, scope_note = scope.validate_scope(project_dir, state, base)

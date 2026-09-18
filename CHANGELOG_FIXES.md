@@ -5,6 +5,24 @@ con `DECISIONS.md` del propio sistema.
 
 ---
 
+## v3.4.3 — Recibos con sellos, borrados y `fia run` en Windows
+
+1. **`receipt create` en proyectos con documentos sellados** (crítico, reportado y
+   reproducido): compilaba el estado desde `PROGRESS.md` sin `carry_over_aux_fields`,
+   así que `sealed_docs`/`spec_hashes` quedaban vacíos y `validate_sealed_docs`
+   fallaba siempre ("Documento normativo '…' no sellado"). El dogfood no lo cazó
+   porque `governance/` no tiene los 3 documentos sellados.
+2. **Borrados en el manifiesto:** un archivo borrado por la fase se representa como
+   `{"path": …, "content_sha256": null, "deleted": true}` y `receipt verify` exige
+   su ausencia (commit o árbol). Antes abortaba con "Archivo cambiado ausente", lo
+   que impedía recibos de fases con borrados o resets.
+3. **`fia run` en Windows:** resuelve el ejecutable con `shutil.which` (PATHEXT), así
+   `fia run -- npm …` encuentra `npm.cmd`; comando inexistente → error claro.
+4. Tests: 284 → 289 + **batería E2E** reproducible (`tests/e2e_manual.py`):
+   init/bootstrap/sellos/borrado/tampering/recibo limpio/CI estricto/demo legacy.
+
+---
+
 ## v3.4.2 — `init` robusto ante carpetas no escribibles
 
 1. **`fia init`** captura los `OSError` al preparar la carpeta destino y muestra un

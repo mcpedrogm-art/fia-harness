@@ -44,6 +44,10 @@ Reglas exactas:
 
 - `files` ordenado alfabéticamente por `path`; rutas **relativas a la raíz del
   repo** (funciona con el estado en subcarpeta, p. ej. `-d governance`).
+- Un archivo **borrado** por la fase se representa como
+  `{"path": ..., "content_sha256": null, "deleted": true}` y la verificación exige
+  su ausencia (en el commit o en el árbol, según `dirty`); los recibos antiguos sin
+  `deleted` se tratan como no borrados (compatible).
 - `content_sha256` = SHA-256 del contenido final **normalizado**: BOM UTF-8
   eliminado, CRLF → LF, UTF-8. Si el archivo no es texto válido (byte nulo en los
   primeros 8 KB), se hashea el byte crudo sin normalizar.

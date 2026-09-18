@@ -126,6 +126,10 @@ def _files_against_worktree(project_dir: Path, repo_root: Path, manifest: dict):
     errors = []
     for item in manifest.get("files", []):
         path = repo_root / item.get("path", "")
+        if item.get("deleted"):
+            if path.exists():
+                errors.append(f"debería estar borrado y existe: {item.get('path')}")
+            continue
         if not path.exists():
             errors.append(f"archivo ausente: {item.get('path')}")
         elif content_sha256(path) != item.get("content_sha256"):
@@ -138,6 +142,10 @@ def _files_against_commit(project_dir: Path, manifest: dict):
     ref = manifest.get("commit_or_tree_ref")
     for item in manifest.get("files", []):
         data = git.show_file(project_dir, ref, item.get("path", ""))
+        if item.get("deleted"):
+            if data is not None:
+                errors.append(f"debería estar borrado en {str(ref)[:12]}: {item.get('path')}")
+            continue
         if data is None:
             errors.append(f"no verificable en {str(ref)[:12]}: {item.get('path')}")
         elif sha256_hex(normalize_content(data)) != item.get("content_sha256"):
