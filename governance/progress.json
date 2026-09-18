@@ -157,7 +157,7 @@
         "F10"
       ],
       "depends_on_notes": "",
-      "status": "pending"
+      "status": "in_progress"
     }
   ],
   "checkpoints": [
@@ -326,6 +326,6 @@
       "id": "SNAP-003"
     }
   ],
-  "compiled_at": "2026-09-18T11:21:01",
-  "state_sha256": "db88ec84927c62a39c51f016bc8faaa139e07db412746ab460e1ea128eefbb27"
+  "compiled_at": "2026-09-18T11:31:38",
+  "state_sha256": "e917bfe3f8f867c7a67815a2425599abf94ab8f3c154e03efdc6d1bafbbbe714"
 }

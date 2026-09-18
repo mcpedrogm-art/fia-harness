@@ -154,7 +154,8 @@ so explicitly — never omitted in silence.
    fia sync                  → validates the state into progress.json (schema 3.0)
    fia task                  → generates the task for the pending phase
    fia run -- <your tests>   → records evidence (EV-NNN, hashed artifacts)
-   fia verify                → merge gate: state + evidence + provenance
+   fia receipt create F0 --tests N/N   → phase receipt (rule #16): canonical manifest + hash
+   fia verify                → merge gate: state + evidence + provenance + receipts
 ```
 
 > 📖 Full protocol: **[templates/INICIO_PROYECTO.md](templates/INICIO_PROYECTO.md)** (ES) · Spanish overview: **[README.es.md](README.es.md)**
@@ -170,10 +171,10 @@ so explicitly — never omitted in silence.
 | File | What it is |
 |---|---|
 | ⚙️ `bootstrap.py` · 🤖 `task_generator.py` | Thin facades at the project root: the implementation lives in the installed package (ADR-001) |
-| 📦 `fia_harness/` + `pyproject.toml` | PyPI package and **single source of truth**: `fia init/check/sync/task/status/approve/seal/reopen/run/evidence/verify` |
+| 📦 `fia_harness/` + `pyproject.toml` | PyPI package and **single source of truth**: `fia init/check/sync/task/status/approve/seal/reopen/run/evidence/receipt/route/verify` |
 | 🗂️ `templates/` | Master templates of the kit: protocol (`INICIO_PROYECTO.md`), `SECURITY.md`, `AEO_GEO_SEO.md`, `UI_UX_EXCLUSIVA.md`, `SKILLS_MCP.md`, `TASK_TEMPLATE.md`, `TASK_LITE_TEMPLATE.md`, `QUICKSTART_LITE.md`, `AGENTS.md`, `PRD_TEMPLATE.md`, `MODELOS.md` and the RAG module |
-| 🏛️ `governance/` | This repo's own dogfood project (operated with `-d governance`): `PROGRESS.md`, `SPEC.md`, `DECISIONS.md`, `progress.json`, `TASK-F0…F7.md`, `evidence/` |
-| 📖 `docs/` | v3 baseline (`V3_BASELINE.md`) and the evidence-capture decision (ADR-005) |
+| 🏛️ `governance/` | This repo's own dogfood project (operated with `-d governance`): `PROGRESS.md`, `SPEC.md`, `DECISIONS.md`, `progress.json`, `TASK-F0…F11.md`, `evidence/` (incl. phase receipts) |
+| 📖 `docs/` | v3 baseline (`V3_BASELINE.md`), the evidence-capture decision (ADR-005) and the v3.3 plan/design (`PLAN_RECIBO_ROUTER.md`, `RECEIPT_DESIGN.md`, `RECEIPT_ROUTER.md`) |
 | 🧪 `tests/` | Automated tests of the parsers, the state machine, evidence, verification, packaging and the full cycle |
 | 📜 `CHANGELOG_FIXES.md` | History of fixes applied and how they were verified |
 
@@ -237,10 +238,14 @@ And `fia sync` is *fail-closed*: if the state violates a rule, **it writes nothi
 
 ```bash
 fia sync        # compile & validate PROGRESS.md -> progress.json
-fia verify      # merge gate: state + dependencies + evidence + provenance + seals + spec
+fia verify      # merge gate: state + dependencies + evidence + provenance + receipts + seals + spec
 fia run -- pytest -q                 # execute + record evidence (EV-NNN, hashed artifacts)
 fia evidence --ingest manifest.json  # anchor CI artifact digests (trusted provenance)
 fia seal / fia approve / fia reopen  # seals, human approvals, audited reopen
+fia receipt create F3 --tests 42/42  # phase receipt (rule #16): canonical manifest + hash
+fia receipt verify F3                # recompute and check the receipt (always strict)
+fia route "fix typo in docs"         # deterministic Lite/Full proposal (fail-closed, v3.3)
+fia verify --strict-receipts         # CI: dirty (uncommitted) receipts block the merge
 fia verify --reproduce EV-001        # re-runs allowlisted evidence and compares output (opt-in)
 fia verify --scope-base origin/main  # post-hoc scope: diff vs the TASK's declared scope
 ```
@@ -265,6 +270,21 @@ fia verify --scope-base origin/main  # post-hoc scope: diff vs the TASK's declar
 
 ---
 
+## 🧾 What v3.3 adds
+
+| | v3.2 | **v3.3** |
+|---|---|---|
+| Phase closure | evidence + Definition of Done | **receipt**: canonical manifest (file hashes + checks) bound to a commit; tampering after closure is detectable |
+| Receipts in CI | — | `fia verify --strict-receipts`: dirty (uncommitted) receipts block the merge |
+| Lane choice | manual Lite/Full | **`fia route`**: deterministic proposal with reasons, fail-closed (risk or ambiguity → Full) |
+
+> Honest limit: a receipt binds **content**, not truth. It proves which files and
+> checks existed at closure and anchors them to a commit; it cannot prove that the
+> claimed test results are true. Locally you can re-emit a `dirty` receipt against
+> your working tree; CI only accepts clean ones.
+
+---
+
 ## 🛡️ The rules that never break
 
 1. 🚫 **Never code without an approved spec** — not a line before M3.
@@ -276,7 +296,7 @@ fia verify --scope-base origin/main  # post-hoc scope: diff vs the TASK's declar
 7. 🧪 **Never invent results** — tests that didn't run don't exist.
 8. 🛑 **Never commit/push/deploy without explicit authorization.**
 
-> 🚨 Since v3, rules 4, 5, 7 and 8 are also **verified automatically in CI** on
+> 🚨 Since v3, rules 4, 5, 7, 8 and 16 are also **verified automatically in CI** on
 > every project that starts with `bootstrap.py` (previous section).
 
 ---
@@ -307,6 +327,10 @@ traceable*, but it is **not** a tamper-proof boundary. Be aware of its edges:
   hashed artifacts, so *editing* evidence is detectable; plain pasted blocks are
   still "existence only". Locally you own the machine, so a fabricated record can
   pass — `trusted` provenance requires the CI platform's artifact digest (ADR-005).
+- **Receipts bind content, not truth.** The phase receipt (v3.3) hashes the final
+  files and checks against a commit, so post-closure tampering is detectable; it
+  does not prove the checks ran as claimed. `dirty` receipts are local anchors until
+  you commit and re-emit them (`fia verify --strict-receipts` enforces clean ones).
 - **Local-first trust model.** There is no cloud, no telemetry and no remote
   authority — the trade-off of never sending your code anywhere.
 
@@ -319,10 +343,11 @@ These limits are the honest boundary of a kit that runs on *your* machine with
 
 This repository is governed by the kit it ships:
 
-- The badge above is this repo's own CI: **248 tests**, a **self-application job**
+- The badge above is this repo's own CI: **282 tests**, a **self-application job**
   (`fia-harness init` → `bootstrap.py` → `--check` on a fresh temp project) and a
-  **governance job** that runs `fia verify` on this repo itself — its own evidence
-  records (`EV-001…EV-003`) are revalidated on every push.
+  **governance job** that runs `fia verify --strict-receipts` on this repo itself —
+  its own evidence records (`EV-001…EV-009`) and phase receipts (`F9`, `F10`) are
+  revalidated on every push.
 - The [`fia-harness-demo`](https://github.com/mcpedrogm-art/fia-harness-demo)
   repo is generated with the kit and its golden-rules CI catches the cheater
   agent live.
@@ -340,8 +365,10 @@ The tests cover the `PROGRESS.md` parser, the **PRD parser with confidence level
 the **state machine 3.0** (fingerprints, integrity, migration with backup,
 dependencies, checkpoints, evidence, approvals, seals, spec snapshot, fail-closed,
 reopen), the **evidence engine** (hashed artifacts, tamper detection, CI digests),
-the **verification engine** (PASS/FAIL report, risk gate, scope, reproduction) and
-the **packaging** (facades, `init` e2e, cp1252 consoles) plus a **complete e2e
+the **verification engine** (PASS/FAIL report, risk gate, scope, reproduction,
+receipts), the **phase receipt** (canonical hash, determinism, tampering, CRLF/BOM,
+grandfathering) and the **lane router** (risk → Full, allowlist → Lite, fail-closed)
+plus the **packaging** (facades, `init` e2e, cp1252 consoles) and a **complete e2e
 cycle** in a temp folder.
 
 In a bootstrapped project, check its state at any time:

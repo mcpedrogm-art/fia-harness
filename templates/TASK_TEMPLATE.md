@@ -334,6 +334,13 @@ No inventes resultados de pruebas que no puedas ejecutar realmente.
 >     ```
 > ```
 
+> 🧾 **Recibo de fase obligatorio (v3.3, regla nº16):** antes de cerrar la fase,
+> emite el recibo con `fia receipt create F<N> --tests P/T [--evidence EV-NNN]`
+> (manifiesto canónico de los archivos de la fase + checks; detecta manipulación
+> posterior) y añade `Recibo: evidence/receipts/receipt-F<N>.json` al checkpoint.
+> `task_generator.py --check` y el CI rechazan una fase F cerrada sin recibo.
+> Tras commitear, re-emítelo con `--base <ref>` para que quede limpio (`dirty: false`).
+
 ---
 
 # REGLA FINAL

@@ -8,4 +8,4 @@ scripts de los proyectos son fachadas finas que importan `fia_harness` (ADR-001)
 Cero dependencias, Python 3.8+.
 """
 
-__version__ = "3.2.0"
+__version__ = "3.3.0"

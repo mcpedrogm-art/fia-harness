@@ -105,6 +105,24 @@ métricas de código como gates duros · cualquier forma de autonomía.
 
 ---
 
+## Addendum v3.3 (2026-09-18) — Recibo de fase + router de carril
+
+> **COMPLETADO y dogfoodeado** en el propio repo (fases F9–F11, APPROVAL-003).
+> Detalle: `docs/PLAN_RECIBO_ROUTER.md`, `docs/RECEIPT_DESIGN.md`, `docs/RECEIPT_ROUTER.md`
+> y `CHANGELOG_FIXES.md` (v3.3.0).
+
+- **Regla de oro nº16:** ninguna fase F se cierra sin **recibo verificable**
+  (`fia receipt create/verify`): manifiesto canónico de archivos + checks atado a un
+  commit, con verificación local/estricta (`fia verify --strict-receipts` en CI).
+- **Sección `RECEIPTS`** en `fia verify`; grandfathering para cierres anteriores al
+  2026-09-18 (ADR-009).
+- **`fia route`**: propuesta de carril determinista y fail-closed (riesgo o
+  ambigüedad → Full), sin estado ni presupuesto autodeclarado (ADR-010).
+- **Congelado explícito:** Outcomes/Risks/trace/migración del plan ODD/RDD hasta que
+  F8 produzca fricción real (ADR-008).
+
+---
+
 ## Verificación (estándar de cada etapa)
 Suite completa + tests nuevos · `--check` y `fia verify -d governance` verdes · CI
 verde · evidencia registrada con `fia run` (EV) y citada en el checkpoint ·

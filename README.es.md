@@ -157,7 +157,8 @@ explícitamente — nunca se omite en silencio.
    fia sync                  → valida el estado en progress.json (schema 3.0)
    fia task                  → genera la tarea de la fase pendiente
    fia run -- <tus tests>    → registra evidencia (EV-NNN, artifacts hasheados)
-   fia verify                → merge gate: estado + evidencia + procedencia
+   fia receipt create F0 --tests N/N   → recibo de fase (nº16): manifiesto canónico + hash
+   fia verify                → merge gate: estado + evidencia + procedencia + recibos
 ```
 
 > 📖 Protocolo completo: **[templates/INICIO_PROYECTO.md](templates/INICIO_PROYECTO.md)** · Visión general en inglés: **[README.md](README.md)**
@@ -173,10 +174,10 @@ explícitamente — nunca se omite en silencio.
 | Archivo | Qué es |
 |---|---|
 | ⚙️ `bootstrap.py` · 🤖 `task_generator.py` | Fachadas finas en la raíz del proyecto: la implementación vive en el paquete instalado (ADR-001) |
-| 📦 `fia_harness/` + `pyproject.toml` | Paquete PyPI y **única fuente de verdad**: `fia init/check/sync/task/status/approve/seal/reopen/run/evidence/verify` |
+| 📦 `fia_harness/` + `pyproject.toml` | Paquete PyPI y **única fuente de verdad**: `fia init/check/sync/task/status/approve/seal/reopen/run/evidence/receipt/route/verify` |
 | 🗂️ `templates/` | Plantillas maestras del kit: protocolo (`INICIO_PROYECTO.md`), `SECURITY.md`, `AEO_GEO_SEO.md`, `UI_UX_EXCLUSIVA.md`, `SKILLS_MCP.md`, `TASK_TEMPLATE.md`, `TASK_LITE_TEMPLATE.md`, `QUICKSTART_LITE.md`, `AGENTS.md`, `PRD_TEMPLATE.md`, `MODELOS.md` y el módulo RAG |
-| 🏛️ `governance/` | Proyecto dogfood del propio repo (se opera con `-d governance`): `PROGRESS.md`, `SPEC.md`, `DECISIONS.md`, `progress.json`, `TASK-F0…F7.md`, `evidence/` |
-| 📖 `docs/` | Baseline v3 (`V3_BASELINE.md`) y la decisión de captura de evidencia (ADR-005) |
+| 🏛️ `governance/` | Proyecto dogfood del propio repo (se opera con `-d governance`): `PROGRESS.md`, `SPEC.md`, `DECISIONS.md`, `progress.json`, `TASK-F0…F11.md`, `evidence/` (incl. recibos de fase) |
+| 📖 `docs/` | Baseline v3 (`V3_BASELINE.md`), la decisión de captura de evidencia (ADR-005) y el plan/diseño v3.3 (`PLAN_RECIBO_ROUTER.md`, `RECEIPT_DESIGN.md`, `RECEIPT_ROUTER.md`) |
 | 🧪 `tests/` | Tests automatizados de los parsers, la máquina de estado, evidencia, verificación, empaquetado y el ciclo completo |
 | 📜 `CHANGELOG_FIXES.md` | Historial de correcciones aplicadas y cómo se verificaron |
 
@@ -240,10 +241,14 @@ no compilas, el CI se pone rojo hasta que hagas `fia sync`. Y `fia sync` es
 
 ```bash
 fia sync        # compila y valida PROGRESS.md -> progress.json
-fia verify      # merge gate: estado + dependencias + evidencia + procedencia + sellos + spec
+fia verify      # merge gate: estado + dependencias + evidencia + procedencia + recibos + sellos + spec
 fia run -- pytest -q                 # ejecuta y registra evidencia (EV-NNN, artifacts hasheados)
 fia evidence --ingest manifest.json  # ancla los digests de CI (procedencia trusted)
 fia seal / fia approve / fia reopen  # sellos, aprobaciones humanas, reapertura auditada
+fia receipt create F3 --tests 42/42  # recibo de fase (nº16): manifiesto canónico + hash
+fia receipt verify F3                # recalcula y comprueba el recibo (siempre estricto)
+fia route "fix typo en docs"         # propuesta determinista Lite/Full (fail-closed, v3.3)
+fia verify --strict-receipts         # CI: los recibos dirty (sin commitear) bloquean el merge
 fia verify --reproduce EV-001        # re-ejecuta evidencia allowlisted y compara la salida (opt-in)
 fia verify --scope-base origin/main  # alcance post-hoc: diff vs el alcance declarado en la TASK
 ```
@@ -268,6 +273,21 @@ fia verify --scope-base origin/main  # alcance post-hoc: diff vs el alcance decl
 
 ---
 
+## 🧾 Qué añade la v3.3
+
+| | v3.2 | **v3.3** |
+|---|---|---|
+| Cierre de fase | evidencia + Definition of Done | **recibo**: manifiesto canónico (hashes de archivos + checks) atado a un commit; la manipulación posterior es detectable |
+| Recibos en CI | — | `fia verify --strict-receipts`: los recibos `dirty` (sin commitear) bloquean el merge |
+| Elección de carril | Lite/Full manual | **`fia route`**: propuesta determinista con razones, fail-closed (riesgo o ambigüedad → Full) |
+
+> Límite honesto: un recibo ata **contenido**, no verdad. Prueba qué archivos y
+> checks existían al cerrar y los ancla a un commit; no puede probar que los
+> resultados declarados sean ciertos. En local puedes re-emitir un recibo `dirty`
+> contra tu árbol de trabajo; el CI solo acepta limpios.
+
+---
+
 ## 🛡️ Las reglas que nunca se rompen
 
 1. 🚫 **Nunca codificar sin spec aprobada** — ni una línea antes del M3.
@@ -279,7 +299,7 @@ fia verify --scope-base origin/main  # alcance post-hoc: diff vs el alcance decl
 7. 🧪 **Nunca inventar resultados** — los tests que no se ejecutaron no existen.
 8. 🛑 **Nunca hacer commit/push/deploy sin autorización explícita.**
 
-> 🚨 Desde la v3, las reglas 4, 5, 7 y 8 además se **verifican automáticamente en CI** en cada proyecto que arranca con `bootstrap.py` (sección anterior).
+> 🚨 Desde la v3, las reglas 4, 5, 7, 8 y 16 además se **verifican automáticamente en CI** en cada proyecto que arranca con `bootstrap.py` (sección anterior).
 
 ---
 
@@ -311,6 +331,11 @@ pero **no** es una frontera a prueba de manipulación. Conoce sus bordes:
   bloques pegados a mano siguen siendo "solo existencia". En local la máquina es
   tuya, así que un registro fabricado puede pasar — la procedencia `trusted`
   requiere el digest de artifact de la plataforma CI (ADR-005).
+- **Los recibos atan contenido, no verdad.** El recibo de fase (v3.3) hashea los
+  archivos finales y los checks contra un commit, así que la manipulación posterior
+  es detectable; no prueba que los checks se ejecutaran como se declara. Los recibos
+  `dirty` son anclas locales hasta que commiteas y los re-emites
+  (`fia verify --strict-receipts` exige los limpios).
 - **Modelo de confianza local.** No hay nube, ni telemetría, ni autoridad remota —
   es el precio de no enviar tu código a ningún sitio.
 
@@ -324,11 +349,11 @@ correcto.
 
 Este repositorio se gobierna con el kit que distribuye:
 
-- El badge de arriba es el CI de este propio repo: **248 tests**, un job de
+- El badge de arriba es el CI de este propio repo: **282 tests**, un job de
   **auto-aplicación** (`fia-harness init` → `bootstrap.py` → `--check` sobre un
-  proyecto temporal nuevo) y un job de **gobernanza** que ejecuta `fia verify`
-  sobre este mismo repo — sus registros de evidencia (`EV-001…EV-003`) se
-  revalidan en cada push.
+  proyecto temporal nuevo) y un job de **gobernanza** que ejecuta
+  `fia verify --strict-receipts` sobre este mismo repo — sus registros de evidencia
+  (`EV-001…EV-009`) y recibos de fase (`F9`, `F10`) se revalidan en cada push.
 - El repo [`fia-harness-demo`](https://github.com/mcpedrogm-art/fia-harness-demo)
   se genera con el kit y su CI de reglas de oro atrapa al agente tramposo en vivo.
 
@@ -346,9 +371,11 @@ marcadores, la heurística de palabras clave, la **máquina de estado 3.0**
 (huellas, integridad, migración con backup, dependencias, checkpoints, evidencia,
 aprobaciones, sellos, snapshot de spec, fail-closed, reapertura), el **motor de
 evidencia** (artifacts hasheados, detección de manipulación, digests de CI), el
-**motor de verificación** (reporte PASS/FAIL, gate de riesgo, alcance, reproducción)
-y el **empaquetado** (fachadas, `init` e2e, consolas cp1252) más un **ciclo completo
-e2e** en carpeta temporal.
+**motor de verificación** (reporte PASS/FAIL, gate de riesgo, alcance, reproducción,
+recibos), el **recibo de fase** (hash canónico, determinismo, manipulación,
+CRLF/BOM, grandfathering) y el **router de carril** (riesgo → Full, allowlist →
+Lite, fail-closed) más el **empaquetado** (fachadas, `init` e2e, consolas cp1252) y
+un **ciclo completo e2e** en carpeta temporal.
 
 En un proyecto ya arrancado, puedes comprobar su estado en cualquier momento:
 

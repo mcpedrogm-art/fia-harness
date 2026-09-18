@@ -5,6 +5,30 @@ con `DECISIONS.md` del propio sistema.
 
 ---
 
+## v3.3.0 — Recibo de fase y router de carril (regla nº16)
+
+1. **Recibo de fase** (`core/receipts.py`, regla de oro nº16): manifiesto canónico
+   JSON (`version`, `task_ref`, `mode`, commit, `dirty`, `files` con SHA-256 del
+   contenido normalizado —BOM/CRLF—, `checks` y evidencia referenciada) y hash
+   determinista (`generated_at`/`receipt_sha256` fuera del hash). `fia receipt
+   create/verify`; `receipt_ref` compilado desde la línea `Recibo:` del checkpoint;
+   `--check`/CI rechazan una fase F cerrada sin recibo. Verificación contra el commit
+   (limpio) o contra el árbol (dirty); `fia verify --strict-receipts` exige recibos
+   limpios en CI. Grandfathering: cierres anteriores al 2026-09-18 = legacy (ADR-009).
+2. **Sección `RECEIPTS` en `fia verify`** y regla nº16 en `INICIO_PROYECTO.md`,
+   `AGENTS.md` y `TASK_TEMPLATE.md` (las dos copias de plantillas sincronizadas).
+3. **Router de carril** (`core/router.py`, ADR-010): `fia route "<descripción>"`
+   propone Lite/Full con razones; señales de riesgo (`policy.RISK_KEYWORDS`) o
+   ausencia de allowlist → Full (fail-closed). Sin estado ni presupuesto
+   autodeclarado; `fia run --` y el resto de la CLI intactos.
+4. **Hallazgos del dogfood**: `is_repo`/`changed_files` operan sobre la raíz del repo
+   (estado en subcarpeta), re-emisión de recibos en fases `done` (evita el deadlock
+   de reparación) y la gobernanza implícita no marca `dirty`.
+5. Tests: 248 → 282. Docs: README EN/ES, `docs/RECEIPT_DESIGN.md`,
+   `docs/PLAN_RECIBO_ROUTER.md`, `docs/RECEIPT_ROUTER.md` y roadmap actualizado.
+
+---
+
 ## v3.2.0 — "Más difícil de engañar": scope post-hoc y evidencia reproducible
 
 1. **Scope post-hoc** (`core/scope.py` + `adapters/git.py`): la TASK puede declarar

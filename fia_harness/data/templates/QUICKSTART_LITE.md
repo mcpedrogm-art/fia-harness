@@ -79,6 +79,8 @@ Crear `QUICK_CONTEXT.md` con:
 
 Clasificar el trabajo como `Lite válido`, `Lite con revisión` o `Modo Completo`. Si existe una duda razonable, usar Modo Completo.
 
+Apoyo determinista (v3.3): `fia route "<descripción de la tarea>"` propone carril con razones y es **fail-closed** — una señal de riesgo (auth, pagos, PII, migraciones, secretos, infra…) o la ausencia de coincidencia con la allowlist fuerza `Full`. El router **no decide**: la decisión humana se sigue registrando.
+
 ### Gate 3 — Capacidades y diseño
 
 - Si se necesita buscar, instalar, crear, maquetar, seleccionar, activar o conectar una capacidad, seguir `SKILLS_MCP.md`.

@@ -160,7 +160,7 @@ esta tabla; no toca la tabla de fases M0-M3 de arriba.
 GITHUB_WORKFLOW = """\
 # Generado por bootstrap.py (kit FIA Harness v3). bootstrap.py nunca lo sobrescribe:
 # personalízalo libremente para tu stack. Los scripts de la raíz son fachadas finas
-# que importan el paquete instalado; el gate de merge es `fia verify`.
+# que importan el paquete instalado; el gate de merge es `fia verify --strict-receipts`.
 
 name: Harness — reglas de oro
 
@@ -181,7 +181,7 @@ jobs:
       - name: Instalar FIA Harness (los scripts son fachadas; requieren el paquete)
         run: python -m pip install fia-harness
       - name: Verificación (merge gate)
-        run: fia verify
+        run: fia verify --strict-receipts
       # Procedencia "trusted" (ADR-005): ejecuta tu suite con `fia run`, sube los
       # artifacts de evidence/ y adjunta el digest que publica la plataforma:
       #   - run: fia run -- <tu comando de tests>

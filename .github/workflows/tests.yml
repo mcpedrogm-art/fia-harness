@@ -49,4 +49,4 @@ jobs:
         with:
           python-version: "3.11"
       - name: Validar estado, evidencia y procedencia del propio repo
-        run: python -m fia_harness.cli verify -d governance
+        run: python -m fia_harness.cli verify -d governance --strict-receipts

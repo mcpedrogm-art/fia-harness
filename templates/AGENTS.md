@@ -52,6 +52,10 @@ Las respuestas alimentan `SECURITY.md`, `AEO_GEO_SEO.md` y las decisiones de
 
 - Ejecuta la validación **de verdad** y pega la **salida cruda** (bloque de código
   cercado) en el checkpoint de `PROGRESS.md`, o referencia `Evidencia: <archivo>`.
+- Emite el **recibo de fase** antes de cerrar: `fia receipt create F<n> --tests P/T
+  [--evidence EV-NNN]`, y añade `Recibo: evidence/receipts/receipt-F<n>.json` al
+  checkpoint (regla nº16; `--check` y el CI lo exigen). Tras commitear, re-emítelo
+  con `--base <ref>` para que quede limpio (`dirty: false`) y verificable en CI.
 - `python task_generator.py --check` debe quedar en verde antes de dar una fase por
   cerrada. Si falta `progress.json`, `--check` falla salvo `--state-optional`.
 - Para reabrir una fase cerrada: `python task_generator.py --reopen F<n> --reason "..."`
@@ -64,6 +68,7 @@ Las respuestas alimentan `SECURITY.md`, `AEO_GEO_SEO.md` y las decisiones de
 - 🗣️ No asumir en silencio.
 - 📦 No reenviar contexto innecesario.
 - ✅ No cerrar una fase sin Definition of Done ni sin su evidencia.
+- 🧾 No cerrar una fase F sin su recibo verificable (regla nº16).
 - 🔐 Seguridad siempre (nunca se pospone).
 - 🙋 Aprobación humana explícita para capacidades externas.
 - 🧪 No inventar resultados de validación.
