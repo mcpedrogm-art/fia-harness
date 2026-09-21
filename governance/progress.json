@@ -187,7 +187,7 @@
         "F13"
       ],
       "depends_on_notes": "",
-      "status": "in_progress"
+      "status": "done"
     }
   ],
   "checkpoints": [
@@ -355,9 +355,9 @@
     },
     {
       "phase": "F14",
-      "summary": "`core/ui.py`: `fia ui setup [--recetas] [--url]` (URL oficial por defecto `https://supabase.pgmia.es/…/UI_ASSETS.json`, override `--url` > env `FIA_UI_PACK_URL`; guarda el manifiesto usado en el `UI_ASSETS.json` del proyecto; reutiliza la descarga verificada SHA-256) y `fia ui status` (sin red: completo/parcial/ausente). Protocolo: **Paso 0** en `UI_UX_EXCLUSIVA.md` §8 (el agente pregunta antes; nada se descarga sin confirmación), ítem en H3 de `TASK_TEMPLATE.md`, mención en `QUICKSTART_LITE.md` y `AGENTS.md`; README EN/ES («What v3.6 adds») y `docs/UI_ASSETS.md`. Sin registro de la decisión (presencia de `media/`/`library/` = estado). Tests: 299 → 307; E2E paso 9 (`ui setup` completo, `--recetas`, `status`).",
+      "summary": "`core/ui.py`: `fia ui setup [--recetas] [--url]` (URL oficial por defecto `https://supabase.pgmia.es/…/UI_ASSETS.json`, override `--url` > env `FIA_UI_PACK_URL`; guarda el manifiesto usado en el `UI_ASSETS.json` del proyecto; reutiliza la descarga verificada SHA-256) y `fia ui status` (sin red: completo/parcial/ausente). Protocolo: **Paso 0** en `UI_UX_EXCLUSIVA.md` §8 (el agente pregunta antes; nada se descarga sin confirmación), ítem en H3 de `TASK_TEMPLATE.md`, mención en `QUICKSTART_LITE.md` y `AGENTS.md`; README EN/ES («What v3.6 adds») y `docs/UI_ASSETS.md`. Sin registro de la decisión (presencia de `media/`/`library/` = estado). Tests: 299 → 307; E2E paso 9 (`ui setup` completo, `--recetas`, `status`). **v3.6.1 (reportado por el humano en uso real):** `UI_ASSETS.json` quedaba fuera del wheel (glob `*.md`) y `fia init` fallaba en instalaciones de PyPI; corregido a `data/templates/*` + guardarraíles (test de cobertura de `package-data`, job `wheel` con `init` de humo en CI, paso de humo en el release antes de publicar) + handler de `init` afinado (recurso del paquete vs carpeta). Tests: 309.",
       "evidence": "",
-      "evidence_file": "EV-023",
+      "evidence_file": "EV-025",
       "receipt_ref": "evidence/receipts/receipt-F14.json",
       "recorded_at": "2026-09-21T11:59:58",
       "id": "CP-F14"
@@ -413,6 +413,6 @@
       "id": "SNAP-006"
     }
   ],
-  "compiled_at": "2026-09-21T13:08:13",
-  "state_sha256": "5730fc6b3a3a085180138fdba10ff141f68a08f8bdb6fa08df589c7845746a51"
+  "compiled_at": "2026-09-21T13:08:42",
+  "state_sha256": "ede7a13fb60458baf320e836d7bdac238531c5a83a2ddf6fbd72180ca68bb714"
 }

@@ -2,99 +2,50 @@
   "version": "1.0",
   "task_ref": "TASK-F14.md",
   "mode": "FULL",
-  "commit_or_tree_ref": "1a0795bfdd0f17fbf5316e9de9f5fadbd803ce87",
+  "commit_or_tree_ref": "cbc3c85258c8c91cad9a09a3e4705b187dd8bd02",
   "dirty": false,
   "files": [
     {
+      "path": ".github/workflows/release.yml",
+      "content_sha256": "08e80a6807e037ac0aaf63d0276755db02ff6e49b8bb48010ec8cf886fba8b75"
+    },
+    {
+      "path": ".github/workflows/tests.yml",
+      "content_sha256": "b65278a4a0985e143c03be89f5d51126ec5a4660773fce8171962bf3646da3bb"
+    },
+    {
       "path": "CHANGELOG_FIXES.md",
-      "content_sha256": "8875fc2401b50b0f78cda50059c9017366df904a3c994350106fde67d6e9ac2f"
-    },
-    {
-      "path": "README.es.md",
-      "content_sha256": "401cb1cda654a818d359298bfa2639971c57852fe4303355e9370f7210ff7d8f"
-    },
-    {
-      "path": "README.md",
-      "content_sha256": "c37f67368dce197b71dd89b0d516409c582095a1eb2f20a4e21ac1b7edf509c2"
-    },
-    {
-      "path": "docs/UI_ASSETS.md",
-      "content_sha256": "336c83b3c7b67ea49f0758078ad51bbfde1e74f01ea1c22b8319c0338fffbb3f"
+      "content_sha256": "9f75354a429e622d021607fb252cc04b3e0cf68e20253dc689199b367a324960"
     },
     {
       "path": "fia_harness/__init__.py",
-      "content_sha256": "0b5be1f4cc2c2a848afa19135186214c06bfd2ca342a8a20576bac4773eea261"
+      "content_sha256": "058a025e343f7c9b66591176f906423b77a9984a4191eef5ab2ba83f07ffdbe2"
     },
     {
       "path": "fia_harness/cli.py",
-      "content_sha256": "9af48d0269393738a75783855c85a8f6bbd985b1e4802b10a99820d80b01d62a"
-    },
-    {
-      "path": "fia_harness/core/assets.py",
-      "content_sha256": "fdc4ce013b0526e17a38ef05ec6d170ccf217a879198e826c5a3cee08a64d311"
-    },
-    {
-      "path": "fia_harness/core/ui.py",
-      "content_sha256": "ad64ad2c51233ce2c3e3792372da1bcafdfcd234ead491aae946ecb002a55a06"
-    },
-    {
-      "path": "fia_harness/data/templates/AGENTS.md",
-      "content_sha256": "834a0a34db997b58623164a32a6bb98a90d00ec8bf544de929fb2c5aff347e69"
-    },
-    {
-      "path": "fia_harness/data/templates/QUICKSTART_LITE.md",
-      "content_sha256": "05b4d7d5ff9b7baac272ee6f611b47934fe039fc514f6305cc63610bad2607ce"
-    },
-    {
-      "path": "fia_harness/data/templates/TASK_TEMPLATE.md",
-      "content_sha256": "67f162a0e2e89d3b0c494e84a4adf84af8cd571ca79eb02561b1268fe74513bf"
-    },
-    {
-      "path": "fia_harness/data/templates/UI_UX_EXCLUSIVA.md",
-      "content_sha256": "1a02de030ed8cdb366cabe542243fdf00006598d91dc92e776bd5091648e362d"
+      "content_sha256": "d52102519a2062e41aabb87a9f6f4402e805a89a29b7badd63deb0eaf702a953"
     },
     {
       "path": "pyproject.toml",
-      "content_sha256": "4d7d639ae66f66ebc91fb5c8a2f755bfe24268b4fd9464287513519e93cc45de"
+      "content_sha256": "efe2ff952afef5797f8fc989f2a323597fc3f853649a876019911d14ed055d2a"
     },
     {
-      "path": "templates/AGENTS.md",
-      "content_sha256": "834a0a34db997b58623164a32a6bb98a90d00ec8bf544de929fb2c5aff347e69"
-    },
-    {
-      "path": "templates/QUICKSTART_LITE.md",
-      "content_sha256": "05b4d7d5ff9b7baac272ee6f611b47934fe039fc514f6305cc63610bad2607ce"
-    },
-    {
-      "path": "templates/TASK_TEMPLATE.md",
-      "content_sha256": "67f162a0e2e89d3b0c494e84a4adf84af8cd571ca79eb02561b1268fe74513bf"
-    },
-    {
-      "path": "templates/UI_UX_EXCLUSIVA.md",
-      "content_sha256": "1a02de030ed8cdb366cabe542243fdf00006598d91dc92e776bd5091648e362d"
-    },
-    {
-      "path": "tests/e2e_manual.py",
-      "content_sha256": "d5f28d95f20ae96566e681e7c7eb669ec12e899e4b835544fd6f2d2b52220127"
-    },
-    {
-      "path": "tests/test_core_ui.py",
-      "content_sha256": "5380f3ed9dbec1280d45c041de19b13dd55e9d03db41db0659b7c746682de3c2"
+      "path": "tests/test_packaging.py",
+      "content_sha256": "ebcb628d32bd5f047f0cb784753a9d7f0a327d2305656d95400046d9b289d75b"
     }
   ],
   "checks": {
     "golden_rules": "pass",
     "tests": {
-      "passed": 307,
-      "total": 307
+      "passed": 309,
+      "total": 309
     },
     "lint": "skip",
-    "scope": "pass"
+    "scope": "fail"
   },
   "evidence_refs": [
-    "EV-023",
-    "EV-024"
+    "EV-025"
   ],
-  "generated_at": "2026-09-21T11:59:47",
-  "receipt_sha256": "f65d491e8bf532339e21febbf342b333b2e67675c57254eb7e8798bf5846ec58"
+  "generated_at": "2026-09-21T13:08:32",
+  "receipt_sha256": "1f153fea877aff445401ce5b42c1c56a12ca67946d8de11181505c8dc3a786bc"
 }
