@@ -5,6 +5,28 @@ con `DECISIONS.md` del propio sistema.
 
 ---
 
+## v3.6.1 — Fix de empaquetado: `UI_ASSETS.json` fuera del wheel
+
+1. **Bug real (release-blocking desde v3.5.0):** `[tool.setuptools.package-data]`
+   declaraba `data/templates/*.md`, así que `UI_ASSETS.json` **no entraba en el
+   wheel/sdist** y `fia init` fallaba en instalaciones de PyPI con
+   `FileNotFoundError` (el handler lo mostraba con pistas equivocadas de
+   OneDrive/antivirus). Glob corregido a `data/templates/*`.
+2. **Guardarraíles para que no vuelva a pasar:**
+   - Test nuevo: cada plantilla de `cli.TEMPLATE_NAMES` (y el módulo RAG) debe estar
+     cubierta por algún glob de `package-data` (habría cazado el bug).
+   - Job nuevo de CI `wheel`: construye el wheel, lo instala en un venv limpio y
+     hace `fia init` de humo comprobando las plantillas clave.
+   - Paso de humo en `release.yml` **antes de publicar**: si el wheel no monta un
+     proyecto, el release no sale.
+3. **Handler de `init` afinado:** si el error es un recurso del paquete, la pista
+   dice "reinstala/actualiza `fia-harness`"; si es la carpeta destino, mantiene las
+   pistas de ruta/OneDrive/permisos.
+4. Verificación manual: `uv build` → wheel con `UI_ASSETS.json` → venv limpio →
+   `fia init` con todas las plantillas. Tests: 307 → 309.
+
+---
+
 ## v3.6.0 — Entorno UI/UX asistido (`fia ui setup`)
 
 1. **`fia ui setup [--recetas] [--url]`** (`core/ui.py`): instala el pack UI/UX

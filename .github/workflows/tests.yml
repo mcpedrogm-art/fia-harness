@@ -40,6 +40,30 @@ jobs:
           python bootstrap.py
           python task_generator.py --check
 
+  wheel:
+    name: Wheel instalable (init de humo)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Construir el wheel
+        run: |
+          python -m pip install --upgrade build
+          python -m build --wheel
+      - name: Instalar el wheel en un venv limpio
+        run: |
+          python -m venv /tmp/venv-wheel
+          /tmp/venv-wheel/bin/pip install dist/*.whl
+      - name: init de humo (paquete instalado, no el repo)
+        run: |
+          /tmp/venv-wheel/bin/fia init -d /tmp/proyecto-wheel
+          test -f /tmp/proyecto-wheel/docs/UI_ASSETS.json
+          test -f /tmp/proyecto-wheel/docs/UI_RECIPES.md
+          test -f /tmp/proyecto-wheel/docs/UI_UX_EXCLUSIVA.md
+          test -f /tmp/proyecto-wheel/docs/TASK_TEMPLATE.md
+
   estado-harness:
     name: Estado del repo válido (dogfood fia verify)
     runs-on: ubuntu-latest

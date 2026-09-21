@@ -1,0 +1,419 @@
+======================================================================
+     🚀 FIA HARNESS v3.6.1 — INSTALADOR DE PROYECTOS (init)
+======================================================================
+   [+] Creada carpeta: /src
+   [+] Creada carpeta: /tests
+   [+] Creada carpeta: /docs
+   [+] Creada carpeta: /infra
+
+-> Copiando plantillas del kit a /docs ...
+   [+] docs/INICIO_PROYECTO.md
+   [+] docs/SECURITY.md
+   [+] docs/AEO_GEO_SEO.md
+   [+] docs/UI_UX_EXCLUSIVA.md
+   [+] docs/SKILLS_MCP.md
+   [+] docs/TASK_TEMPLATE.md
+   [+] docs/TASK_LITE_TEMPLATE.md
+   [+] docs/UI_RECIPES.md
+   [+] docs/UI_ASSETS.json
+   [+] docs/QUICKSTART_LITE.md
+   [+] docs/AGENTS.md
+   [+] docs/PRD_TEMPLATE.md
+   [+] docs/MODELOS.md
+   [+] docs/RAG_VECTOR_EXTENSION.md (módulo RAG/vectorial opcional)
+
+-> Escribiendo las fachadas de los scripts en la raíz ...
+   [+] bootstrap.py (fachada; requiere `pip install fia-harness`)
+   [+] task_generator.py (fachada; requiere `pip install fia-harness`)
+
+-> Preparando PRD.md de partida ...
+   [+] PRD.md generado (complétalo antes de la Fase 1).
+
+✅ Proyecto montado. Siguientes pasos:
+   1. Completa C:\Users\Usuario\AppData\Local\Temp\tmpuljg_v62\PRD.md
+   2. cd C:\Users\Usuario\AppData\Local\Temp\tmpuljg_v62 && python bootstrap.py   (Fase M0)
+   3. Abre tu agente con la carpeta: leerá CONTEXT.md y empezará la entrevista (M1).
+======================================================================
+     🚀 FIA HARNESS v3.6.1 — INSTALADOR DE PROYECTOS (init)
+======================================================================
+   [+] Creada carpeta: /src
+   [+] Creada carpeta: /tests
+   [+] Creada carpeta: /docs
+   [+] Creada carpeta: /infra
+
+-> Copiando plantillas del kit a /docs ...
+   [+] docs/INICIO_PROYECTO.md
+   [+] docs/SECURITY.md
+   [+] docs/AEO_GEO_SEO.md
+   [+] docs/UI_UX_EXCLUSIVA.md
+   [+] docs/SKILLS_MCP.md
+   [+] docs/TASK_TEMPLATE.md
+   [+] docs/TASK_LITE_TEMPLATE.md
+   [+] docs/UI_RECIPES.md
+   [+] docs/UI_ASSETS.json
+   [+] docs/QUICKSTART_LITE.md
+   [+] docs/AGENTS.md
+   [+] docs/PRD_TEMPLATE.md
+   [+] docs/MODELOS.md
+   [+] docs/RAG_VECTOR_EXTENSION.md (módulo RAG/vectorial opcional)
+
+-> Escribiendo las fachadas de los scripts en la raíz ...
+   [.] Ya existe (no sobrescrito): bootstrap.py
+   [+] task_generator.py (fachada; requiere `pip install fia-harness`)
+
+-> Preparando PRD.md de partida ...
+   [+] PRD.md generado (complétalo antes de la Fase 1).
+
+✅ Proyecto montado. Siguientes pasos:
+   1. Completa C:\Users\Usuario\AppData\Local\Temp\tmppvti893x\PRD.md
+   2. cd C:\Users\Usuario\AppData\Local\Temp\tmppvti893x && python bootstrap.py   (Fase M0)
+   3. Abre tu agente con la carpeta: leerá CONTEXT.md y empezará la entrevista (M1).
+✅ Documentos sellados: INICIO_PROYECTO.md, SECURITY.md, TASK_TEMPLATE.md
+✅ Aprobación registrada en DECISIONS.md: APPROVAL-001 (2026-09-21)
+   Cita este ID en el informe de la TASK (Fase L, punto 18); --check verifica que exista.
+✅ Estado compilado y validado: C:\Users\Usuario\AppData\Local\Temp\tmpyrun2tpw\progress.json
+   1 fases de proceso · 1 de ejecución · 1 checkpoints
+✅ Estado compilado y validado: C:\Users\Usuario\AppData\Local\Temp\tmpt4aontpt\progress.json
+   1 fases de proceso · 1 de ejecución · 1 checkpoints
+✅ Aprobación registrada en DECISIONS.md: APPROVAL-001 (2026-09-21)
+   Cita este ID en el informe de la TASK (Fase L, punto 18); --check verifica que exista.
+   🔒 Snapshot de SPEC.md congelado en progress.json (9481dfbb3ca3…)
+✅ Estado compilado y validado: C:\Users\Usuario\AppData\Local\Temp\tmp3boyxv3s\progress.json
+   1 fases de proceso · 1 de ejecución · 1 checkpoints
+✅ Documentos sellados: INICIO_PROYECTO.md, SECURITY.md, TASK_TEMPLATE.md
+✅ Estado compilado y validado: C:\Users\Usuario\AppData\Local\Temp\tmp369tp6ho\progress.json
+   1 fases de proceso · 1 de ejecución · 1 checkpoints
+✅ Estado compilado y validado: C:\Users\Usuario\AppData\Local\Temp\tmp9ludvpue\progress.json
+   1 fases de proceso · 1 de ejecución · 1 checkpoints
+✅ Digests de CI adjuntados a EV-001: 1 artifact(s)
+✅ Aprobación registrada en DECISIONS.md: APPROVAL-001 (2026-09-21)
+   Cita este ID en el informe de la TASK (Fase L, punto 18); --check verifica que exista.
+✅ Aprobación registrada en DECISIONS.md: APPROVAL-001 (2026-09-21)
+   Cita este ID en el informe de la TASK (Fase L, punto 18); --check verifica que exista.
+✅ Estado compilado y validado: C:\Users\Usuario\AppData\Local\Temp\tmpukxzbgnu\progress.json
+   1 fases de proceso · 1 de ejecución · 1 checkpoints
+✅ Estado compilado y validado: C:\Users\Usuario\AppData\Local\Temp\tmprq42hkz2\progress.json
+   1 fases de proceso · 1 de ejecución · 1 checkpoints
+✅ Estado compilado y validado: C:\Users\Usuario\AppData\Local\Temp\tmpa0skzyox\progress.json
+   1 fases de proceso · 1 de ejecución · 1 checkpoints
+✅ Estado compilado y validado: C:\Users\Usuario\AppData\Local\Temp\tmps47g3las\progress.json
+   1 fases de proceso · 1 de ejecución · 1 checkpoints
+✅ Estado compilado y validado: C:\Users\Usuario\AppData\Local\Temp\tmpg1az2app\progress.json
+   1 fases de proceso · 1 de ejecución · 1 checkpoints
+✅ Estado compilado y validado: C:\Users\Usuario\AppData\Local\Temp\tmp0hwuzp4r\progress.json
+   1 fases de proceso · 1 de ejecución · 1 checkpoints
+✅ Estado compilado y validado: C:\Users\Usuario\AppData\Local\Temp\tmp88e7itu2\progress.json
+   1 fases de proceso · 1 de ejecución · 1 checkpoints
+✅ Estado compilado y validado: C:\Users\Usuario\AppData\Local\Temp\tmp88e7itu2\progress.json
+   1 fases de proceso · 1 de ejecución · 2 checkpoints
+✅ Estado compilado y validado: C:\Users\Usuario\AppData\Local\Temp\tmpjtntijws\progress.json
+   1 fases de proceso · 1 de ejecución · 1 checkpoints
+✅ Estado compilado y validado: C:\Users\Usuario\AppData\Local\Temp\tmpjtntijws\progress.json
+   1 fases de proceso · 1 de ejecución · 2 checkpoints
+✅ Estado compilado y validado: C:\Users\Usuario\AppData\Local\Temp\tmpc3rzn2ei\progress.json
+   1 fases de proceso · 1 de ejecución · 1 checkpoints
+✅ Estado compilado y validado: C:\Users\Usuario\AppData\Local\Temp\tmpnqr7zx9d\progress.json
+   1 fases de proceso · 1 de ejecución · 1 checkpoints
+✅ Estado compilado y validado: C:\Users\Usuario\AppData\Local\Temp\tmpnqr7zx9d\progress.json
+   1 fases de proceso · 1 de ejecución · 2 checkpoints
+✅ Estado compilado y validado: C:\Users\Usuario\AppData\Local\Temp\tmpgoze1fap\progress.json
+   1 fases de proceso · 1 de ejecución · 1 checkpoints
+✅ Estado compilado y validado: C:\Users\Usuario\AppData\Local\Temp\tmp1turayy2\progress.json
+   1 fases de proceso · 1 de ejecución · 1 checkpoints
+✅ Estado compilado y validado: C:\Users\Usuario\AppData\Local\Temp\tmpwcbc47gl\progress.json
+   1 fases de proceso · 1 de ejecución · 1 checkpoints
+✅ Estado compilado y validado: C:\Users\Usuario\AppData\Local\Temp\tmp74y7768d\progress.json
+   1 fases de proceso · 1 de ejecución · 1 checkpoints
+✅ Estado compilado y validado: C:\Users\Usuario\AppData\Local\Temp\tmp5lyjsf8j\progress.json
+   1 fases de proceso · 1 de ejecución · 1 checkpoints
+✅ Estado compilado y validado: C:\Users\Usuario\AppData\Local\Temp\tmp5lyjsf8j\progress.json
+   1 fases de proceso · 1 de ejecución · 2 checkpoints
+✅ Estado compilado y validado: C:\Users\Usuario\AppData\Local\Temp\tmpbq61b4ha\progress.json
+   1 fases de proceso · 1 de ejecución · 1 checkpoints
+✅ Estado compilado y validado: C:\Users\Usuario\AppData\Local\Temp\tmpjrly3uvt\progress.json
+   1 fases de proceso · 1 de ejecución · 1 checkpoints
+✅ Estado compilado y validado: C:\Users\Usuario\AppData\Local\Temp\tmpjrly3uvt\progress.json
+   1 fases de proceso · 1 de ejecución · 2 checkpoints
+✅ Estado compilado y validado: C:\Users\Usuario\AppData\Local\Temp\tmpfaaslpgy\progress.json
+   1 fases de proceso · 1 de ejecución · 1 checkpoints
+✅ Estado compilado y validado: C:\Users\Usuario\AppData\Local\Temp\tmpfaaslpgy\progress.json
+   1 fases de proceso · 1 de ejecución · 2 checkpoints
+✅ Evidencia registrada: EV-001 (exit 3, 0.045s, 2 artifacts)
+   Cítala en el checkpoint: Evidencia: EV-001
+✅ Evidencia registrada: EV-001 (exit 0, 0.043s, 2 artifacts)
+   Cítala en el checkpoint: Evidencia: EV-001
+✅ Evidencia registrada: EV-001 (exit 0, 0.109s, 2 artifacts)
+   Cítala en el checkpoint: Evidencia: EV-001
+✅ Documentos sellados: INICIO_PROYECTO.md, SECURITY.md, TASK_TEMPLATE.md
+✅ Estado compilado y validado: C:\Users\Usuario\AppData\Local\Temp\tmp4mewg7cv\progress.json
+   1 fases de proceso · 1 de ejecución · 2 checkpoints
+✅ Documentos sellados: INICIO_PROYECTO.md, SECURITY.md, TASK_TEMPLATE.md
+✅ Estado compilado y validado: C:\Users\Usuario\AppData\Local\Temp\tmp3qsnvdmo\progress.json
+   1 fases de proceso · 1 de ejecución · 2 checkpoints
+✅ Documentos sellados: INICIO_PROYECTO.md, SECURITY.md, TASK_TEMPLATE.md
+✅ Estado compilado y validado: C:\Users\Usuario\AppData\Local\Temp\tmp5ergr6e3\progress.json
+   1 fases de proceso · 1 de ejecución · 2 checkpoints
+✅ Estado compilado y validado: C:\Users\Usuario\AppData\Local\Temp\tmp5ergr6e3\progress.json
+   1 fases de proceso · 1 de ejecución · 2 checkpoints
+✅ Digests de CI adjuntados a EV-001: 2 artifact(s)
+✅ Documentos sellados: INICIO_PROYECTO.md, SECURITY.md, TASK_TEMPLATE.md
+✅ Estado compilado y validado: C:\Users\Usuario\AppData\Local\Temp\tmpibkg1tig\progress.json
+   1 fases de proceso · 1 de ejecución · 2 checkpoints
+✅ Estado compilado y validado: C:\Users\Usuario\AppData\Local\Temp\tmpibkg1tig\progress.json
+   1 fases de proceso · 1 de ejecución · 2 checkpoints
+✅ Digests de CI adjuntados a EV-001: 1 artifact(s)
+✅ Documentos sellados: INICIO_PROYECTO.md, SECURITY.md, TASK_TEMPLATE.md
+✅ Estado compilado y validado: C:\Users\Usuario\AppData\Local\Temp\tmpjgcf5wxz\progress.json
+   1 fases de proceso · 1 de ejecución · 2 checkpoints
+✅ Documentos sellados: INICIO_PROYECTO.md, SECURITY.md, TASK_TEMPLATE.md
+✅ Estado compilado y validado: C:\Users\Usuario\AppData\Local\Temp\tmp113u5wz9\progress.json
+   1 fases de proceso · 1 de ejecución · 2 checkpoints
+✅ Estado compilado y validado: C:\Users\Usuario\AppData\Local\Temp\tmp113u5wz9\progress.json
+   1 fases de proceso · 1 de ejecución · 2 checkpoints
+✅ Documentos sellados: INICIO_PROYECTO.md, SECURITY.md, TASK_TEMPLATE.md
+✅ Estado compilado y validado: C:\Users\Usuario\AppData\Local\Temp\tmpmngnce8z\progress.json
+   1 fases de proceso · 1 de ejecución · 2 checkpoints
+✅ Estado compilado y validado: C:\Users\Usuario\AppData\Local\Temp\tmpmngnce8z\progress.json
+   1 fases de proceso · 1 de ejecución · 2 checkpoints
+✅ Documentos sellados: INICIO_PROYECTO.md, SECURITY.md, TASK_TEMPLATE.md
+✅ Estado compilado y validado: C:\Users\Usuario\AppData\Local\Temp\tmp07ux_p3v\progress.json
+   1 fases de proceso · 1 de ejecución · 2 checkpoints
+✅ Documentos sellados: INICIO_PROYECTO.md, SECURITY.md, TASK_TEMPLATE.md
+✅ Estado compilado y validado: C:\Users\Usuario\AppData\Local\Temp\tmpi21uwo6x\progress.json
+   1 fases de proceso · 1 de ejecución · 2 checkpoints
+✅ Documentos sellados: INICIO_PROYECTO.md, SECURITY.md, TASK_TEMPLATE.md
+✅ Estado compilado y validado: C:\Users\Usuario\AppData\Local\Temp\tmpqtr6t831\progress.json
+   1 fases de proceso · 1 de ejecución · 2 checkpoints
+✅ Documentos sellados: INICIO_PROYECTO.md, SECURITY.md, TASK_TEMPLATE.md
+✅ Estado compilado y validado: C:\Users\Usuario\AppData\Local\Temp\tmpr5x_5c2p\progress.json
+   1 fases de proceso · 1 de ejecución · 2 checkpoints
+✅ Documentos sellados: INICIO_PROYECTO.md, SECURITY.md, TASK_TEMPLATE.md
+✅ Estado compilado y validado: C:\Users\Usuario\AppData\Local\Temp\tmpr6irp5o6\progress.json
+   1 fases de proceso · 1 de ejecución · 2 checkpoints
+✅ Documentos sellados: INICIO_PROYECTO.md, SECURITY.md, TASK_TEMPLATE.md
+✅ Estado compilado y validado: C:\Users\Usuario\AppData\Local\Temp\tmp6fijzaxt\progress.json
+   1 fases de proceso · 1 de ejecución · 2 checkpoints
+✅ Documentos sellados: INICIO_PROYECTO.md, SECURITY.md, TASK_TEMPLATE.md
+✅ Estado compilado y validado: C:\Users\Usuario\AppData\Local\Temp\tmpt2xbjrfr\progress.json
+   1 fases de proceso · 1 de ejecución · 2 checkpoints
+✅ Documentos sellados: INICIO_PROYECTO.md, SECURITY.md, TASK_TEMPLATE.md
+✅ Estado compilado y validado: C:\Users\Usuario\AppData\Local\Temp\tmprih1g25v\progress.json
+   1 fases de proceso · 1 de ejecución · 2 checkpoints
+✅ Aprobación registrada en DECISIONS.md: APPROVAL-001 (2026-09-21)
+   Cita este ID en el informe de la TASK (Fase L, punto 18); --check verifica que exista.
+   🔒 Snapshot de SPEC.md congelado en progress.json (9481dfbb3ca3…)
+-> Generando archivo de control PROGRESS.md...
+   [+] Archivo PROGRESS.md generado con éxito.
+   [+] Estado compilado y validable generado: progress.json
+   [.] progress.json ya existe en la raíz. Saltando generación.
+
+-> Generando archivo de control CONTEXT.md...
+   [+] Archivo CONTEXT.md generado con éxito.
+   [+] CI de reglas de oro generado: .github/workflows/harness.yml
+       (gitleaks + auditoría de dependencias + validación del estado en cada push/PR)
+   [.] .github/workflows/harness.yml ya existe. No sobrescrito.
+-> Generando archivo de control PROGRESS.md...
+   [+] Archivo PROGRESS.md generado con éxito.
+-> Generando archivo de control PROGRESS.md...
+   [.] PROGRESS.md ya existe en la raíz. Saltando generación.
+✅ Fase F0 reabierta (done → in_progress). Razón: detectado un bug
+✅ Documentos sellados: INICIO_PROYECTO.md, SECURITY.md, TASK_TEMPLATE.md
+✅ Documentos sellados: INICIO_PROYECTO.md, SECURITY.md, TASK_TEMPLATE.md
+✅ Documentos sellados: INICIO_PROYECTO.md, SECURITY.md, TASK_TEMPLATE.md
+✅ Aprobación registrada en DECISIONS.md: APPROVAL-001 (2026-09-21)
+   Cita este ID en el informe de la TASK (Fase L, punto 18); --check verifica que exista.
+   🔒 Snapshot de SPEC.md congelado en progress.json (93a4889b33ca…)
+✅ Aprobación registrada en DECISIONS.md: APPROVAL-001 (2026-09-21)
+   Cita este ID en el informe de la TASK (Fase L, punto 18); --check verifica que exista.
+   🔒 Snapshot de SPEC.md congelado en progress.json (93a4889b33ca…)
+✅ Aprobación registrada en DECISIONS.md: APPROVAL-001 (2026-09-21)
+   Cita este ID en el informe de la TASK (Fase L, punto 18); --check verifica que exista.
+   🔒 Snapshot de SPEC.md congelado en progress.json (93a4889b33ca…)
+✅ Aprobación registrada en DECISIONS.md: APPROVAL-002 (2026-09-21)
+   Cita este ID en el informe de la TASK (Fase L, punto 18); --check verifica que exista.
+   🔒 Snapshot de SPEC.md congelado en progress.json (3da319e2e113…)
+✅ Estado compilado y validado: C:\Users\Usuario\AppData\Local\Temp\tmptnfb7j0s\progress.json
+   2 fases de proceso · 3 de ejecución · 1 checkpoints
+✅ Aprobación registrada en DECISIONS.md: APPROVAL-001 (2026-09-21)
+   Cita este ID en el informe de la TASK (Fase L, punto 18); --check verifica que exista.
+✅ Aprobación registrada en DECISIONS.md: APPROVAL-002 (2026-09-21)
+   Cita este ID en el informe de la TASK (Fase L, punto 18); --check verifica que exista.
+✅ Estado compilado y validado: C:\Users\Usuario\AppData\Local\Temp\tmpqavzg832\progress.json
+   2 fases de proceso · 3 de ejecución · 1 checkpoints
+✅ Estado compilado y validado: C:\Users\Usuario\AppData\Local\Temp\tmpsbj8kstz\progress.json
+   2 fases de proceso · 3 de ejecución · 1 checkpoints
+======================================================================
+     🚀 FIA HARNESS v3.6.1 — INSTALADOR DE PROYECTOS (init)
+======================================================================
+   [+] Creada carpeta: /src
+   [+] Creada carpeta: /tests
+   [+] Creada carpeta: /docs
+   [+] Creada carpeta: /infra
+
+-> Copiando plantillas del kit a /docs ...
+   [+] docs/INICIO_PROYECTO.md
+   [+] docs/SECURITY.md
+   [+] docs/AEO_GEO_SEO.md
+   [+] docs/UI_UX_EXCLUSIVA.md
+   [+] docs/SKILLS_MCP.md
+   [+] docs/TASK_TEMPLATE.md
+   [+] docs/TASK_LITE_TEMPLATE.md
+   [+] docs/UI_RECIPES.md
+   [+] docs/UI_ASSETS.json
+   [+] docs/QUICKSTART_LITE.md
+   [+] docs/AGENTS.md
+   [+] docs/PRD_TEMPLATE.md
+   [+] docs/MODELOS.md
+   [+] docs/RAG_VECTOR_EXTENSION.md (módulo RAG/vectorial opcional)
+
+-> Escribiendo las fachadas de los scripts en la raíz ...
+   [+] bootstrap.py (fachada; requiere `pip install fia-harness`)
+   [+] task_generator.py (fachada; requiere `pip install fia-harness`)
+
+-> Preparando PRD.md de partida ...
+   [+] PRD.md generado (complétalo antes de la Fase 1).
+
+✅ Proyecto montado. Siguientes pasos:
+   1. Completa C:\Users\Usuario\AppData\Local\Temp\tmphdouav9z\PRD.md
+   2. cd C:\Users\Usuario\AppData\Local\Temp\tmphdouav9z && python bootstrap.py   (Fase M0)
+   3. Abre tu agente con la carpeta: leerá CONTEXT.md y empezará la entrevista (M1).
+======================================================================
+     🚀 FIA HARNESS v3.6.1 — INSTALADOR DE PROYECTOS (init)
+======================================================================
+   [.] Ya existe carpeta: /src
+   [.] Ya existe carpeta: /tests
+   [.] Ya existe carpeta: /docs
+   [.] Ya existe carpeta: /infra
+
+-> Copiando plantillas del kit a /docs ...
+   [.] Ya existe (no sobrescrito): docs/INICIO_PROYECTO.md
+   [.] Ya existe (no sobrescrito): docs/SECURITY.md
+   [.] Ya existe (no sobrescrito): docs/AEO_GEO_SEO.md
+   [.] Ya existe (no sobrescrito): docs/UI_UX_EXCLUSIVA.md
+   [.] Ya existe (no sobrescrito): docs/SKILLS_MCP.md
+   [.] Ya existe (no sobrescrito): docs/TASK_TEMPLATE.md
+   [.] Ya existe (no sobrescrito): docs/TASK_LITE_TEMPLATE.md
+   [.] Ya existe (no sobrescrito): docs/UI_RECIPES.md
+   [.] Ya existe (no sobrescrito): docs/UI_ASSETS.json
+   [.] Ya existe (no sobrescrito): docs/QUICKSTART_LITE.md
+   [.] Ya existe (no sobrescrito): docs/AGENTS.md
+   [.] Ya existe (no sobrescrito): docs/PRD_TEMPLATE.md
+   [.] Ya existe (no sobrescrito): docs/MODELOS.md
+   [.] Ya existe (no sobrescrito): docs/RAG_VECTOR_EXTENSION.md (módulo RAG/vectorial opcional)
+
+-> Escribiendo las fachadas de los scripts en la raíz ...
+   [.] Ya existe (no sobrescrito): bootstrap.py
+   [.] Ya existe (no sobrescrito): task_generator.py
+
+-> Preparando PRD.md de partida ...
+   [.] PRD.md ya existe (no sobrescrito).
+
+✅ Proyecto montado. Siguientes pasos:
+   1. Completa C:\Users\Usuario\AppData\Local\Temp\tmphdouav9z\PRD.md
+   2. cd C:\Users\Usuario\AppData\Local\Temp\tmphdouav9z && python bootstrap.py   (Fase M0)
+   3. Abre tu agente con la carpeta: leerá CONTEXT.md y empezará la entrevista (M1).
+======================================================================
+     🚀 FIA HARNESS v3.6.1 — INSTALADOR DE PROYECTOS (init)
+======================================================================
+   [+] Creada carpeta: /src
+   [+] Creada carpeta: /tests
+   [+] Creada carpeta: /docs
+   [+] Creada carpeta: /infra
+
+-> Copiando plantillas del kit a /docs ...
+   [+] docs/INICIO_PROYECTO.md
+   [+] docs/SECURITY.md
+   [+] docs/AEO_GEO_SEO.md
+   [+] docs/UI_UX_EXCLUSIVA.md
+   [+] docs/SKILLS_MCP.md
+   [+] docs/TASK_TEMPLATE.md
+   [+] docs/TASK_LITE_TEMPLATE.md
+   [+] docs/UI_RECIPES.md
+   [+] docs/UI_ASSETS.json
+   [+] docs/QUICKSTART_LITE.md
+   [+] docs/AGENTS.md
+   [+] docs/PRD_TEMPLATE.md
+   [+] docs/MODELOS.md
+   [+] docs/RAG_VECTOR_EXTENSION.md (módulo RAG/vectorial opcional)
+
+-> Escribiendo las fachadas de los scripts en la raíz ...
+   [+] bootstrap.py (fachada; requiere `pip install fia-harness`)
+   [+] task_generator.py (fachada; requiere `pip install fia-harness`)
+
+-> Preparando PRD.md de partida ...
+   [+] PRD.md generado (complétalo antes de la Fase 1).
+
+✅ Proyecto montado. Siguientes pasos:
+   1. Completa C:\Users\Usuario\AppData\Local\Temp\tmpiushcrad\PRD.md
+   2. cd C:\Users\Usuario\AppData\Local\Temp\tmpiushcrad && python bootstrap.py   (Fase M0)
+   3. Abre tu agente con la carpeta: leerá CONTEXT.md y empezará la entrevista (M1).
+======================================================================
+     🚀 FIA HARNESS v3.6.1 — INSTALADOR DE PROYECTOS (init)
+======================================================================
+   [+] Creada carpeta: /src
+   [+] Creada carpeta: /tests
+   [+] Creada carpeta: /docs
+   [+] Creada carpeta: /infra
+
+-> Copiando plantillas del kit a /docs ...
+   [+] docs/INICIO_PROYECTO.md
+   [+] docs/SECURITY.md
+   [+] docs/AEO_GEO_SEO.md
+   [+] docs/UI_UX_EXCLUSIVA.md
+   [+] docs/SKILLS_MCP.md
+   [+] docs/TASK_TEMPLATE.md
+   [+] docs/TASK_LITE_TEMPLATE.md
+   [+] docs/UI_RECIPES.md
+   [+] docs/UI_ASSETS.json
+   [+] docs/QUICKSTART_LITE.md
+   [+] docs/AGENTS.md
+   [+] docs/PRD_TEMPLATE.md
+   [+] docs/MODELOS.md
+   [+] docs/RAG_VECTOR_EXTENSION.md (módulo RAG/vectorial opcional)
+
+-> Escribiendo las fachadas de los scripts en la raíz ...
+   [+] bootstrap.py (fachada; requiere `pip install fia-harness`)
+   [+] task_generator.py (fachada; requiere `pip install fia-harness`)
+
+-> Preparando PRD.md de partida ...
+   [+] PRD.md generado (complétalo antes de la Fase 1).
+
+✅ Proyecto montado. Siguientes pasos:
+   1. Completa C:\Users\Usuario\AppData\Local\Temp\tmpb24if49d\PRD.md
+   2. cd C:\Users\Usuario\AppData\Local\Temp\tmpb24if49d && python bootstrap.py   (Fase M0)
+   3. Abre tu agente con la carpeta: leerá CONTEXT.md y empezará la entrevista (M1).
+======================================================================
+     🚀 FIA HARNESS v3.6.1 — INSTALADOR DE PROYECTOS (init)
+======================================================================
+   [+] Creada carpeta: /src
+   [+] Creada carpeta: /tests
+   [+] Creada carpeta: /docs
+   [+] Creada carpeta: /infra
+
+-> Copiando plantillas del kit a /docs ...
+   [+] docs/INICIO_PROYECTO.md
+   [+] docs/SECURITY.md
+   [+] docs/AEO_GEO_SEO.md
+   [+] docs/UI_UX_EXCLUSIVA.md
+   [+] docs/SKILLS_MCP.md
+   [+] docs/TASK_TEMPLATE.md
+   [+] docs/TASK_LITE_TEMPLATE.md
+   [+] docs/UI_RECIPES.md
+   [+] docs/UI_ASSETS.json
+   [+] docs/QUICKSTART_LITE.md
+   [+] docs/AGENTS.md
+   [+] docs/PRD_TEMPLATE.md
+   [+] docs/MODELOS.md
+   [+] docs/RAG_VECTOR_EXTENSION.md (módulo RAG/vectorial opcional)
+
+-> Escribiendo las fachadas de los scripts en la raíz ...
+   [+] bootstrap.py (fachada; requiere `pip install fia-harness`)
+   [+] task_generator.py (fachada; requiere `pip install fia-harness`)
+
+-> Preparando PRD.md de partida ...
+   [+] PRD.md generado (complétalo antes de la Fase 1).
+
+✅ Proyecto montado. Siguientes pasos:
+   1. Completa C:\Users\Usuario\AppData\Local\Temp\tmprkpmhv9n\PRD.md
+   2. cd C:\Users\Usuario\AppData\Local\Temp\tmprkpmhv9n && python bootstrap.py   (Fase M0)
+   3. Abre tu agente con la carpeta: leerá CONTEXT.md y empezará la entrevista (M1).

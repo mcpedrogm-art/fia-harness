@@ -93,15 +93,21 @@ def _absolute(path: Path) -> Path:
 
 
 def _init_failure_hint(target_dir: Path, error: OSError) -> int:
-    """Mensaje claro cuando la carpeta destino no se puede preparar (v3.4.2)."""
+    """Mensaje claro cuando la carpeta destino no se puede preparar (v3.4.2/v3.6.1)."""
     print()
     print(f"❌ No se pudo preparar el proyecto en: {_absolute(target_dir)}")
     print(f"   Error del sistema: {error}")
+    filename = str(getattr(error, "filename", "") or "").replace("\\", "/")
     print("   Pistas:")
-    print('   - Usa una ruta absoluta y local, fuera de OneDrive: '
-          'fia-harness init -d "C:\\dev\\mi-proyecto"')
-    print("   - Revisa la Protección contra ransomware (Carpetas controladas) y los")
-    print("     permisos de escritura de la carpeta.")
+    if "fia_harness" in filename:
+        print("   - Falta un recurso del paquete instalado (instalación corrupta o versión")
+        print("     antigua): reinstala o actualiza con `pip install -U fia-harness`")
+        print("     (o `uvx fia-harness@latest init`).")
+    else:
+        print('   - Usa una ruta absoluta y local, fuera de OneDrive: '
+              'fia-harness init -d "C:\\dev\\mi-proyecto"')
+        print("   - Revisa la Protección contra ransomware (Carpetas controladas) y los")
+        print("     permisos de escritura de la carpeta.")
     return 1
 
 

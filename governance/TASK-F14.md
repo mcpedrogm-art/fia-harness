@@ -90,7 +90,10 @@ python -m fia_harness.cli verify -d governance --strict-receipts
 ### 1. Resumen de lo realizado
 El momento UI/UX ya ofrece instalar el entorno avanzado: el agente pregunta, el
 humano decide y `fia ui setup` descarga y verifica (completo o solo recetas);
-`fia ui status` informa sin red.
+`fia ui status` informa sin red. **v3.6.1:** fix de empaquetado detectado por el
+humano en uso real (`UI_ASSETS.json` quedaba fuera del wheel por el glob `*.md` y
+`fia init` fallaba en instalaciones de PyPI) + guardarraíles (test de cobertura de
+`package-data`, job `wheel` en CI y humo en el release) y mensaje de error afinado.
 
 ### 2. Diagnóstico o decisiones de diseño tomadas
 - La decisión es humana (protocolo) y la ejecución mecánica (CLI): encaja con el
@@ -122,8 +125,9 @@ siguen igual; plantillas nuevas con anti-drift en verde.
 ### 7. Visibilidad SEO/AEO/GEO — No aplica (kit sin superficie pública).
 
 ### 8. Tests
-`307/307 passed` (suite completa, Windows / Python 3.11; evidencia EV-023) + E2E
-con `ui setup` completo, `--recetas` y `status` (EV-024).
+`309/309 passed` (suite completa, Windows / Python 3.11; evidencia EV-025) + E2E
+con `ui setup` completo, `--recetas` y `status` (EV-024) + verificación manual del
+wheel (uv build → contenido con `UI_ASSETS.json` → venv limpio → `fia init` OK).
 
 ### 9. Typecheck
 N/A (stdlib-only; sin typecheck configurado).

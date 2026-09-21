@@ -71,6 +71,29 @@ class ScriptFacadesTest(unittest.TestCase):
             self.assertEqual(packaged, original,
                              f"{name}: la copia del paquete difiere de la raíz; sincronízalas")
 
+    def test_package_data_cubre_todas_las_plantillas(self):
+        """Bug real v3.5.0: `data/templates/*.md` dejó fuera UI_ASSETS.json del wheel
+        y `fia init` fallaba en instalaciones de PyPI. Guardarraíl: cada plantilla
+        debe estar cubierta por algún glob de `[tool.setuptools.package-data]`."""
+        import fnmatch
+        import re
+
+        from fia_harness import cli
+
+        text = (ROOT / "pyproject.toml").read_text(encoding="utf-8")
+        block = re.search(r"\[tool\.setuptools\.package-data\](.*?)(?=\n\[|\Z)",
+                          text, re.DOTALL)
+        self.assertIsNotNone(block, "falta [tool.setuptools.package-data] en pyproject.toml")
+        globs = re.findall(r'"([^"]+)"', block.group(1))
+        self.assertTrue(globs, "package-data sin globs")
+        for name in cli.TEMPLATE_NAMES:
+            rel = f"data/templates/{name}"
+            self.assertTrue(any(fnmatch.fnmatch(rel, pattern) for pattern in globs),
+                            f"{name}: ningún glob de package-data lo incluye ({globs})")
+        self.assertTrue(any(fnmatch.fnmatch(f"data/rag/{cli.RAG_NAME}", pattern)
+                            for pattern in globs),
+                        f"{cli.RAG_NAME}: ningún glob de package-data lo incluye")
+
     def test_rag_module_matches_repo_root(self):
         packaged = (PKG / "data" / "rag" / "RAG_VECTOR_EXTENSION.md").read_text(encoding="utf-8")
         original = (ROOT / "templates" / "RAG_VECTOR_EXTENSION.md").read_text(encoding="utf-8")
@@ -136,6 +159,16 @@ class InitEndToEndTest(unittest.TestCase):
                 code = cli.main(["init", "-d", str(target)])
             self.assertEqual(code, 0)
             self.assertIn(f"cd {target.resolve()}", out.getvalue())
+
+    def test_error_de_recurso_del_paquete_da_pista_correcta(self):
+        from fia_harness import cli
+        error = FileNotFoundError(2, "no such file",
+                                  r"C:\cache\fia_harness\data\templates\UI_ASSETS.json")
+        out = io.StringIO()
+        with contextlib.redirect_stdout(out):
+            code = cli._init_failure_hint(Path("x"), error)
+        self.assertEqual(code, 1)
+        self.assertIn("recurso del paquete", out.getvalue())
 
     def test_proyecto_generado_arranca_en_verde(self):
         from fia_harness import cli

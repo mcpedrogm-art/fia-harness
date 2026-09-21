@@ -132,6 +132,7 @@
 - **F12** (2026-09-18) · Reapertura · Razón: v3.4.3: fixes del reporte externo (carry_over en receipt create, borrados en el manifiesto, shutil.which en fia run) + bateria de pruebas
 - **F12** (2026-09-18) · Reapertura · Razón: v3.4.4: rutas git con -z/quotepath y --no-renames (nombres no-ASCII y renombrados quedaban mal en el manifiesto) + bateria adversaria
 - **F13** (2026-09-21) · Reapertura · Razón: v3.5.1: recetas en el pack + URL oficial documentada (README EN/ES, docs/UI_ASSETS.md y plantilla UI/UX)
+- **F14** (2026-09-21) · Reapertura · Razón: v3.6.1: fix de empaquetado (UI_ASSETS.json fuera del wheel por glob *.md) + guardarrailes (test package-data, job wheel en CI, humo en release) y mensaje de error afinado
 ## Aprobaciones
 - **APPROVAL-001** · (2026-09-15) · Fase: M2 · Acción: Plan v3.0-core aprobado: SPEC.md congelado (fases F0-F8) · Aprobado por: Humano · Ref: sesion 2026-09-15 (usuario aprueba plan y ejecucion de F0)
 - **APPROVAL-002** · (2026-09-15) · Fase: F3 · Acción: Autorización humana del plan v3.0-core (fases F0-F7) · Aprobado por: Humano · Ref: sesion 2026-09-15 (usuario autoriza cada fase)
