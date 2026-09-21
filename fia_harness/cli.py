@@ -4,10 +4,10 @@
 (`templates/INICIO_PROYECTO.md`): plantillas del kit en /docs, fachadas de los
 scripts en la raíz (que importan el paquete instalado, ADR-001) y un `PRD.md` de
 partida. El resto de subcomandos (`check`, `sync`, `task`, `status`, `approve`,
-`seal`, `reopen`, `run`, `evidence`, `receipt`, `route`, `assets`, `verify`) delegan
-en el núcleo: `fia` y `fia-harness` son el mismo comando. Igual que el resto del
-kit: solo librería estándar, idempotente (nunca sobrescribe lo que ya existe) y sin
-telemetría.
+`seal`, `reopen`, `run`, `evidence`, `receipt`, `route`, `assets`, `ui`, `verify`)
+delegan en el núcleo: `fia` y `fia-harness` son el mismo comando. Igual que el
+resto del kit: solo librería estándar, idempotente (nunca sobrescribe lo que ya
+existe) y sin telemetría.
 """
 
 import argparse
@@ -268,6 +268,20 @@ def main(argv=None) -> int:
     assets_manifest.add_argument("-d", "--dir", default=".",
                                  help="No usado al generar; se acepta por consistencia.")
 
+    ui_parser = subparsers.add_parser(
+        "ui", help="Entorno UI/UX avanzado: instalación asistida del pack (v3.6).")
+    ui_sub = ui_parser.add_subparsers(dest="ui_command", required=True)
+    ui_setup = ui_sub.add_parser(
+        "setup", help="Descarga el pack UI/UX (o solo las recetas) con verificación SHA-256.")
+    ui_setup.add_argument("--recetas", action="store_true",
+                          help="Instala solo las recetas (library/UI_LIBRARY.md).")
+    ui_setup.add_argument("--url", default=None, metavar="URL",
+                          help="Manifiesto alternativo (por defecto: pack oficial; "
+                               "también env FIA_UI_PACK_URL).")
+    ui_setup.add_argument("-d", "--dir", default=".")
+    ui_status = ui_sub.add_parser("status", help="Estado local del entorno UI/UX (sin red).")
+    ui_status.add_argument("-d", "--dir", default=".")
+
     args = parser.parse_args(argv)
     target = Path(args.dir)
 
@@ -334,6 +348,11 @@ def main(argv=None) -> int:
             ref = args.manifest or str(Path(args.dir) / "UI_ASSETS.json")
             return cmd_assets_fetch(Path(args.dir), ref)
         return cmd_assets_manifest(Path(args.dir_source), args.base_url, Path(args.out))
+    if args.command == "ui":
+        from fia_harness.core.ui import cmd_ui_setup, cmd_ui_status
+        if args.ui_command == "setup":
+            return cmd_ui_setup(Path(args.dir), recipes_only=args.recetas, url=args.url)
+        return cmd_ui_status(Path(args.dir))
 
     parser.print_help()
     return 2

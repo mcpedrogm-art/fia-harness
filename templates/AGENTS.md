@@ -38,6 +38,9 @@ Las respuestas alimentan `SECURITY.md`, `AEO_GEO_SEO.md` y las decisiones de
   hash (`progress.json["spec_hashes"]`).
 - Al aprobar `M2` o ampliar alcance, vuelve a ejecutar `--approval`: así `--check`
   detecta cualquier modificación posterior de `SPEC.md` sin nuevo visto bueno.
+- **Nada se descarga sin aprobación humana**, incluido el pack UI/UX: pregunta y,
+  si acepta, ejecuta `fia ui setup` (o `--recetas`); `fia ui status` informa del
+  estado local sin red (v3.6).
 
 ## 4. Protocolo de enmienda del PRD
 

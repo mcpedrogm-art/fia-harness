@@ -178,6 +178,13 @@ Reglas:
 
 ## 8. Prompt maestro para generar la dirección UI/UX
 
+> 🧰 **Paso 0 — Entorno avanzado (opcional, v3.6).** Si el proyecto no tiene el pack
+> UI/UX (`media/` y `library/UI_LIBRARY.md`), **pregunta al humano** antes de nada:
+> *"¿instalo el entorno UI/UX avanzado (media + recetas, ~51 MB) o solo las recetas
+> (~36 KB)?"*. Si acepta, ejecuta `fia ui setup` (o `fia ui setup --recetas`); si no,
+> continúa sin pack. `fia ui status` indica si ya está instalado. **Nada se descarga
+> sin esa confirmación** (opt-in estricto).
+
 Usar este prompt después de completar el Gate de entrada. Debe adaptarse al LLM utilizado; no presupone un proveedor concreto.
 
 ```text

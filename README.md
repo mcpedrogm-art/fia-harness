@@ -246,6 +246,8 @@ fia receipt create F3 --tests 42/42  # phase receipt (rule #16): canonical manif
 fia receipt verify F3                # recompute and check the receipt (always strict)
 fia route "fix typo in docs"         # deterministic Lite/Full proposal (fail-closed, v3.3)
 fia assets fetch UI_ASSETS.json      # download + verify the UI asset pack (v3.5)
+fia ui setup [--recetas]             # install the official UI/UX environment (v3.6)
+fia ui status                        # local state of the UI/UX environment (offline)
 fia verify --strict-receipts         # CI: dirty (uncommitted) receipts block the merge
 fia verify --reproduce EV-001        # re-runs allowlisted evidence and compares output (opt-in)
 fia verify --scope-base origin/main  # post-hoc scope: diff vs the TASK's declared scope
@@ -315,6 +317,20 @@ fia verify --scope-base origin/main  # post-hoc scope: diff vs the TASK's declar
 >
 > **Official pack (maintained by PGMIA):** media + recipes in one command —
 > `fia init --assets https://supabase.pgmia.es/storage/v1/object/public/fia-assets/UI_ASSETS.json`
+
+---
+
+## 🧰 What v3.6 adds
+
+| | v3.5 | **v3.6** |
+|---|---|---|
+| UI/UX environment | manual: `fia assets fetch <url>` | **`fia ui setup`**: official pack by default, `--recetas` for recipes only, SHA-256 verified and idempotent |
+| Local status | — | **`fia ui status`**: complete / partial / missing, offline (no network) |
+| Protocol | — | the agent **asks first** (UI_UX_EXCLUSIVA §8 Step 0, H3 checklist, Lite and AGENTS) — nothing downloads without your OK |
+
+> The pack is strictly opt-in: the agent asks at the UI/UX moment and only then runs
+> `fia ui setup`. The manifest used is saved in the project's `UI_ASSETS.json` so
+> `status` works offline and re-downloads are incremental.
 
 ---
 

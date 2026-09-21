@@ -109,6 +109,17 @@
     **nunca** descarga por defecto (opt-in). Sobre la licencia de los assets de
     Dínamo, el mantenedor confirma que son de descarga y uso libres (2026-09-18);
     si cambiara, el pack se retira sin tocar el kit. Ref: SPEC §9, APPROVAL-005.
+*   **ADR-013 (2026-09-21):** Entorno UI/UX asistido (v3.6, F14). Decisión: el
+    **protocolo pregunta** (Paso 0 en `UI_UX_EXCLUSIVA.md` §8, ítem H3, Lite y
+    AGENTS) y la **máquina descarga** con `fia ui setup` (SHA-256, idempotente;
+    `--recetas` para solo `library/UI_LIBRARY.md`; `fia ui status` sin red). **URL
+    oficial por defecto** en `core/ui.py` con override `--url` > env
+    `FIA_UI_PACK_URL` (funciona sin configurar y no ata: mover el pack es cambiar
+    una constante). **Sin registro** de la decisión sí/no en `UI_RECIPES.md` (el
+    humano lo descartó; la presencia de `media/`/`library/` es el estado). El
+    manifiesto usado se guarda en el `UI_ASSETS.json` del proyecto para permitir
+    `status` offline y re-descargas. Nada se descarga sin confirmación humana
+    (opt-in estricto). Ref: SPEC §10, APPROVAL-006.
 
 ## Reaperturas
 
@@ -127,3 +138,4 @@
 - **APPROVAL-003** · (2026-09-18) · Fase: M2 · Acción: Recorte v3.3 aprobado: Recibo de fase + router fino (F9-F11); Outcomes/Risks congelados hasta friccion real de F8 · Aprobado por: Humano · Ref: sesion 2026-09-18 (usuario aprueba docs/PLAN_RECIBO_ROUTER.md)
 - **APPROVAL-004** · (2026-09-18) · Fase: M2 · Acción: UI/UX v3.4: cuatro direcciones divergentes + esquema de recetas y plantilla UI_RECIPES.md · Aprobado por: Humano · Ref: sesion 2026-09-18 (usuario aprueba el flujo de 4 variantes y la integracion de recetas)
 - **APPROVAL-005** · (2026-09-21) · Fase: M2 · Acción: Pack de assets UI v3.5: manifiesto UI_ASSETS.json + fia assets fetch/manifest + fia init --assets (el kit no empaqueta media de terceros) · Aprobado por: Humano · Ref: sesion 2026-09-18 (usuario aprueba el pack de assets y su hosting en Supabase self-hosted)
+- **APPROVAL-006** · (2026-09-21) · Fase: M2 · Acción: Entorno UI/UX asistido v3.6: fia ui setup/status con confirmacion en el protocolo (Full y Lite), URL oficial por defecto y override · Aprobado por: Humano · Ref: sesion 2026-09-21 (usuario aprueba el flujo y el nombre fia ui setup)

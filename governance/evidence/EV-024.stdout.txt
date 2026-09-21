@@ -1,0 +1,35 @@
+=== 1. init + bootstrap + check ===
+[PASS] fia init (exit 0)
+[PASS] bootstrap.py (M0) (exit 0)
+[PASS] check tras bootstrap (exit 0)
+=== 2. estado de fase + sellos ===
+[PASS] fia seal (exit 0)
+[PASS] fia sync (exit 0)
+=== 3. evidencia con fia run (resolución .cmd) ===
+[PASS] fia run -- saluda (.cmd) (exit 0)
+=== 4. cambios + borrado + recibo dirty ===
+[PASS] receipt create (sellos + borrado) (exit 0)
+[PASS] receipt verify (dirty) (exit 0)
+=== 5. tampering del árbol ===
+[PASS] tampering detectado (exit 1) (exit 1)
+[PASS] restaurado (exit 0)
+=== 6. cierre de fase y recibo limpio ===
+[PASS] sync de cierre (exit 0)
+[PASS] check de cierre (exit 0)
+[PASS] verify (dirty aceptado en local) (exit 0)
+[PASS] re-emisión limpia (exit 0)
+[PASS] receipt verify (limpio) (exit 0)
+[PASS] verify --strict-receipts (exit 0)
+=== 7. demo legacy (sin recibos) ===
+[PASS] demo: verify legacy PASS (exit 0)
+=== 8. pack de assets (manifiesto + descarga verificada) ===
+[PASS] assets manifest (exit 0)
+[PASS] assets fetch (exit 0)
+[PASS] hash incorrecto bloquea la descarga (exit 1)
+=== 9. entorno UI/UX asistido (fia ui setup/status) ===
+[PASS] ui pack manifest (exit 0)
+[PASS] fia ui setup (completo) (exit 0)
+[PASS] fia ui status (exit 0)
+[PASS] fia ui setup --recetas (exit 0)
+
+RESULTADO: TODO OK

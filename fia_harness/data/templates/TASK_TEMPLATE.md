@@ -196,6 +196,7 @@ Aplica el checklist correspondiente de `AEO_GEO_SEO.md` a la pieza tocada: metad
 <!-- INJECT:UIUX_CHECKLIST -->
 Aplica `UI_UX_EXCLUSIVA.md` y verifica:
 
+- [ ] Si falta el pack UI/UX (`media/`/`library/`), se ha preguntado al humano antes de instalarlo (`fia ui setup`, opcionalmente `--recetas`).
 - [ ] El problema UX, usuario, acción principal y contenido real están definidos.
 - [ ] Se han contrastado cuatro direcciones divergentes (matriz §8.2 de `UI_UX_EXCLUSIVA.md`), no variaciones cosméticas.
 - [ ] Las recetas usadas (esquema §8.1) están registradas en `UI_RECIPES.md`.

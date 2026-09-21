@@ -5,6 +5,24 @@ con `DECISIONS.md` del propio sistema.
 
 ---
 
+## v3.6.0 — Entorno UI/UX asistido (`fia ui setup`)
+
+1. **`fia ui setup [--recetas] [--url]`** (`core/ui.py`): instala el pack UI/UX
+   reutilizando la descarga verificada de v3.5 (SHA-256, idempotente, atómica).
+   **URL oficial por defecto** (`https://supabase.pgmia.es/…/UI_ASSETS.json`),
+   override `--url` > env `FIA_UI_PACK_URL`; `--recetas` instala solo
+   `library/UI_LIBRARY.md`. Guarda el manifiesto usado en el `UI_ASSETS.json` del
+   proyecto (status offline y re-descargas incrementales).
+2. **`fia ui status`**: estado local sin red (completo / parcial / ausente).
+3. **Protocolo (pregunta primero):** **Paso 0** en `UI_UX_EXCLUSIVA.md` §8, ítem en
+   H3 de `TASK_TEMPLATE.md`, mención en `QUICKSTART_LITE.md` (Modo Lite) y
+   `AGENTS.md`. Nada se descarga sin confirmación humana; la decisión no se registra
+   como artefacto (la presencia de `media/`/`library/` es el estado).
+4. README EN/ES (sección «What v3.6 adds») y `docs/UI_ASSETS.md` actualizados.
+   Tests: 299 → 307 + E2E paso 9 (`ui setup` completo, `--recetas` y `status`).
+
+---
+
 ## v3.5.1 — Pack oficial: recetas incluidas y URL documentada
 
 1. **Recetas en el pack:** se añade `library/UI_LIBRARY.md` (las 12 recetas) al

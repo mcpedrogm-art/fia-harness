@@ -178,6 +178,16 @@
       ],
       "depends_on_notes": "",
       "status": "done"
+    },
+    {
+      "id": "F14",
+      "title": "",
+      "objective": "Entorno UI/UX asistido: fia ui setup/status + pregunta en el protocolo (Full y Lite) / core/ui.py (URL oficial por defecto, --recetas, override --url/env), ui setup/status en CLI, Paso 0 en UIUXEXCLUSIVA.md, H3, QUICKSTARTLITE.md, AGENTS.md, README EN/ES",
+      "depends_on": [
+        "F13"
+      ],
+      "depends_on_notes": "",
+      "status": "in_progress"
     }
   ],
   "checkpoints": [
@@ -385,8 +395,15 @@
       "date": "2026-09-21",
       "phase": "M2",
       "id": "SNAP-005"
+    },
+    {
+      "sha256": "0e1523d9e27080c699137e9209da1a7828971402c911bc82dea97b6c8f596eac",
+      "ref": "sesion 2026-09-21 (usuario aprueba el flujo y el nombre fia ui setup)",
+      "date": "2026-09-21",
+      "phase": "M2",
+      "id": "SNAP-006"
     }
   ],
-  "compiled_at": "2026-09-21T10:45:33",
-  "state_sha256": "9dd0df07fc7fa286455baf96822edb42fd529bbf3ffc13041496c40b81850dd6"
+  "compiled_at": "2026-09-21T11:59:15",
+  "state_sha256": "b6f1e22e8f68a5b82d5c50d59f4abc20032b1e310ff2801eaf6f48999966c0c4"
 }

@@ -132,3 +132,19 @@ lo aloja quien tenga derechos (p. ej. Supabase self-hosted del mantenedor).
 **Fuera de alcance:** hosting del pack (lo publica el mantenedor en su infraestructura;
 el kit solo consume el manifiesto) · firma GPG del manifiesto (futuro) · empaquetar
 media dentro de la distribución PyPI (descartado por tamaño y licencia).
+
+---
+
+## 10. Enmienda v3.6 — Entorno UI/UX asistido (APPROVAL-006, 2026-09-21)
+
+**Objetivo:** que el momento UI/UX del protocolo ofrezca instalar el entorno
+avanzado (media + recetas) con **una confirmación humana** y una descarga mecánica
+verificada; nada se descarga sin aprobación y la decisión no se registra como
+artefacto (la presencia de `media/` y `library/` es el estado).
+
+| Fase | Entrega |
+| --- | --- |
+| F14 | `core/ui.py`: `fia ui setup [--recetas] [--url]` (URL oficial por defecto, override `--url` > env `FIA_UI_PACK_URL`; guarda el manifiesto en el proyecto) y `fia ui status` (sin red: completo/parcial/ausente). Protocolo: **Paso 0** en `UI_UX_EXCLUSIVA.md` §8, ítem en H3 de `TASK_TEMPLATE.md`, mención en `QUICKSTART_LITE.md` y `AGENTS.md`. README EN/ES y `docs/UI_ASSETS.md`. |
+
+**Fuera de alcance:** descarga automática sin confirmación · registro de la decisión
+en `UI_RECIPES.md` (descartado por el humano) · firma del manifiesto (futuro).

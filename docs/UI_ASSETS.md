@@ -53,6 +53,19 @@ fia assets fetch https://cdn.ejemplo.com/fia-assets/v1/UI_ASSETS.json
 fia init --assets https://cdn.ejemplo.com/fia-assets/v1/UI_ASSETS.json   # init + pack
 ```
 
+**Entorno UI/UX asistido (v3.6):**
+
+```bash
+fia ui setup            # pack oficial completo (media + recetas)
+fia ui setup --recetas  # solo las recetas (library/UI_LIBRARY.md, ~36 KB)
+fia ui status           # estado local sin red: completo / parcial / ausente
+```
+
+`fia ui setup` usa el pack oficial por defecto (override con `--url` o env
+`FIA_UI_PACK_URL`) y guarda el manifiesto usado en el `UI_ASSETS.json` del proyecto.
+El protocolo pide **confirmación humana** antes de instalarlo (Paso 0 de
+`UI_UX_EXCLUSIVA.md` §8): nada se descarga sin tu OK.
+
 - **Opt-in**: nada se descarga si no ejecutas el comando (sin llamadas por defecto).
 - **Idempotente**: si el archivo ya existe y su hash coincide, no se toca.
 - **Atómico**: se descarga a `.part`, se verifica y luego se mueve a su sitio.

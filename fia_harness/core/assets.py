@@ -67,11 +67,20 @@ def load_manifest(ref: str) -> dict:
     return manifest
 
 
-def fetch_manifest(project_dir: Path, ref: str) -> int:
-    """Descarga y verifica todos los assets del manifiesto (idempotente)."""
+def fetch_manifest(project_dir: Path, ref: str, only_prefix: str = None) -> int:
+    """Descarga y verifica los assets del manifiesto (idempotente).
+
+    `only_prefix` limita la descarga a las entradas cuyo `path` empieza por ese
+    prefijo (p. ej. `library/` para instalar solo las recetas)."""
     manifest = load_manifest(ref)
+    entries = manifest["assets"]
+    if only_prefix:
+        entries = [entry for entry in entries
+                   if str(entry.get("path", "")).startswith(only_prefix)]
+        if not entries:
+            fail(f"El manifiesto no contiene entradas con prefijo {only_prefix!r}: {ref}")
     downloaded = skipped = 0
-    for entry in manifest["assets"]:
+    for entry in entries:
         path = entry.get("path")
         url = entry.get("url")
         expected = str(entry.get("sha256") or "").lower()
@@ -105,8 +114,23 @@ def fetch_manifest(project_dir: Path, ref: str) -> int:
         os.replace(temp, target)
         downloaded += 1
     print(f"✅ Assets: {downloaded} descargado(s) · {skipped} ya en su sitio · "
-          f"{len(manifest['assets'])} en el manifiesto")
+          f"{len(entries)} en el manifiesto")
     return 0
+
+
+def check_manifest(project_dir: Path, manifest: dict) -> dict:
+    """Estado local de un manifiesto sin red: {'total', 'ok', 'missing', 'modified'}."""
+    missing, modified, ok = [], [], 0
+    for entry in manifest.get("assets", []):
+        target = _safe_target(project_dir, str(entry.get("path", "")))
+        if not target.exists():
+            missing.append(entry.get("path"))
+        elif sha256_file(target) == str(entry.get("sha256") or "").lower():
+            ok += 1
+        else:
+            modified.append(entry.get("path"))
+    return {"total": len(manifest.get("assets", [])), "ok": ok,
+            "missing": missing, "modified": modified}
 
 
 def cmd_assets_fetch(project_dir: Path, ref: str) -> int:

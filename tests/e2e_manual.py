@@ -167,6 +167,28 @@ def main():
     cli(project, "assets", "fetch", str(manifest_path), expect=1,
         label="hash incorrecto bloquea la descarga")
 
+    print("=== 9. entorno UI/UX asistido (fia ui setup/status) ===")
+    pack_ui = Path(tmp.name) / "pack-ui"
+    write(pack_ui / "media" / "hero-ui.bin", "hero-ui")
+    write(pack_ui / "library" / "UI_LIBRARY.md", "# recetas e2e\n")
+    manifest_ui = Path(tmp.name) / "manifest-ui.json"
+    run([sys.executable, "-m", "fia_harness.cli", "assets", "manifest",
+         "--dir-source", str(pack_ui), "--base-url", pack_ui.as_uri(),
+         "-o", str(manifest_ui)], REPO, label="ui pack manifest")
+    ui_project = Path(tmp.name) / "proyecto-ui"
+    ui_project.mkdir()
+    cli(ui_project, "ui", "setup", "--url", str(manifest_ui), label="fia ui setup (completo)")
+    assert (ui_project / "media" / "hero-ui.bin").exists()
+    assert (ui_project / "library" / "UI_LIBRARY.md").exists()
+    status = cli(ui_project, "ui", "status", label="fia ui status")
+    assert "completo" in status.stdout, status.stdout
+    recipes_project = Path(tmp.name) / "proyecto-recetas"
+    recipes_project.mkdir()
+    cli(recipes_project, "ui", "setup", "--recetas", "--url", str(manifest_ui),
+        label="fia ui setup --recetas")
+    assert (recipes_project / "library" / "UI_LIBRARY.md").exists()
+    assert not (recipes_project / "media" / "hero-ui.bin").exists()
+
     print()
     if failures:
         print(f"RESULTADO: {len(failures)} FALLOS -> {failures}")
