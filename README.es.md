@@ -315,6 +315,9 @@ fia verify --scope-base origin/main  # alcance post-hoc: diff vs el alcance decl
 > El kit nunca empaqueta media de terceros: el mecanismo es público (MIT) y el
 > contenido vive donde tengas derechos de distribución (p. ej. un bucket propio).
 > Ver `docs/UI_ASSETS.md`.
+>
+> **Pack oficial (mantenido por PGMIA):** media + recetas en un comando —
+> `fia init --assets https://supabase.pgmia.es/storage/v1/object/public/fia-assets/UI_ASSETS.json`
 
 ---
 

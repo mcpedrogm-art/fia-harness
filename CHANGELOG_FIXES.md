@@ -5,6 +5,20 @@ con `DECISIONS.md` del propio sistema.
 
 ---
 
+## v3.5.1 — Pack oficial: recetas incluidas y URL documentada
+
+1. **Recetas en el pack:** se añade `library/UI_LIBRARY.md` (las 12 recetas) al
+   manifiesto; `fia assets fetch` las descarga junto a los media y es incremental
+   (solo baja lo nuevo).
+2. **Pack oficial (PGMIA) documentado** en `docs/UI_ASSETS.md`, README EN/ES y la
+   plantilla `UI_UX_EXCLUSIVA.md` §8.1:
+   `fia init --assets https://supabase.pgmia.es/storage/v1/object/public/fia-assets/UI_ASSETS.json`
+3. Operativa: bucket público `fia-assets` en el Supabase self-hosted (16 objetos,
+   ~51 MB + recetas); subida con la service key leída en el propio servidor.
+4. Tests: 299 (sin cambios; cambio de contenido/documentación).
+
+---
+
 ## v3.5.0 — Pack de assets UI: manifiesto + descarga verificada
 
 1. **`fia assets fetch [URL|manifiesto]`** (`core/assets.py`, stdlib): descarga un

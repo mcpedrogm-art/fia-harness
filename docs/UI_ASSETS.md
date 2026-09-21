@@ -6,6 +6,26 @@
 
 ---
 
+## 0. Pack oficial (mantenido por PGMIA)
+
+Manifiesto:
+`https://supabase.pgmia.es/storage/v1/object/public/fia-assets/UI_ASSETS.json`
+
+Incluye los **media** de las recetas (`media/…`) y las **recetas** completas
+(`library/UI_LIBRARY.md`). En un paso:
+
+```bash
+fia init --assets https://supabase.pgmia.es/storage/v1/object/public/fia-assets/UI_ASSETS.json
+```
+
+O sobre un proyecto existente:
+
+```bash
+fia assets fetch https://supabase.pgmia.es/storage/v1/object/public/fia-assets/UI_ASSETS.json
+```
+
+---
+
 ## 1. Manifiesto `UI_ASSETS.json`
 
 ```json

@@ -259,6 +259,8 @@ matriz en `UI_RECIPES.md` (plantilla del kit).
 > 💾 **Pack de assets (v3.5):** si el proyecto usa un pack publicado (manifiesto
 > `UI_ASSETS.json`), autohospédalo con `fia assets fetch <url|manifiesto>` y
 > verifica SHA-256; ver `docs/UI_ASSETS.md`. El kit no descarga nada por defecto.
+> **Pack oficial (PGMIA):** media + recetas con
+> `fia init --assets https://supabase.pgmia.es/storage/v1/object/public/fia-assets/UI_ASSETS.json`
 
 ### 8.2 Matriz de divergencia (6 ejes)
 

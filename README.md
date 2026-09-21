@@ -312,6 +312,9 @@ fia verify --scope-base origin/main  # post-hoc scope: diff vs the TASK's declar
 > The kit never bundles third-party media: the mechanism is public (MIT), the
 > content lives where you have distribution rights (e.g. a self-hosted bucket).
 > See `docs/UI_ASSETS.md`.
+>
+> **Official pack (maintained by PGMIA):** media + recipes in one command —
+> `fia init --assets https://supabase.pgmia.es/storage/v1/object/public/fia-assets/UI_ASSETS.json`
 
 ---
 
