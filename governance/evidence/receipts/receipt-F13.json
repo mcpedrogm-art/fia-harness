@@ -1,0 +1,92 @@
+{
+  "version": "1.0",
+  "task_ref": "TASK-F13.md",
+  "mode": "FULL",
+  "commit_or_tree_ref": "c2729a8b5bc09d7981e1fcd050ec2128ceab2e58",
+  "dirty": false,
+  "files": [
+    {
+      "path": "CHANGELOG_FIXES.md",
+      "content_sha256": "6078f8dcc893364b59e8b4dac4775a44aa75d39ce3428456981afde390970144"
+    },
+    {
+      "path": "README.es.md",
+      "content_sha256": "49df2a9fad9dc2bad2e952e336af0ac20329a63a5df5d93e2835f926264a8c1d"
+    },
+    {
+      "path": "README.md",
+      "content_sha256": "a763a8772f8721e49d4441c6a8a8f2738f841c3f1f91df7536d1498338165a19"
+    },
+    {
+      "path": "docs/UI_ASSETS.md",
+      "content_sha256": "eefb996f8d88df8c0262cb14b51a7d24a426f721ab32882106860c39b6762f54"
+    },
+    {
+      "path": "fia_harness/__init__.py",
+      "content_sha256": "8dec9dd020eaf70dbab85bd2903aaae95b7f55976141af253f6f4b70e5c16dd9"
+    },
+    {
+      "path": "fia_harness/cli.py",
+      "content_sha256": "6dba38f4d489edb92e58c8ca0db9c03a4770f0dbc2756149ef23de2d4df61a27"
+    },
+    {
+      "path": "fia_harness/core/assets.py",
+      "content_sha256": "af8fa1c5ab968e9bcbfbe130bc417d1dbceb08a05c197a7d59c9c4d1dd9f1d86"
+    },
+    {
+      "path": "fia_harness/data/templates/UI_ASSETS.json",
+      "content_sha256": "a8174f5941573d1acd5d5df5dee4bca235701e21c29685694d143512d3247acf"
+    },
+    {
+      "path": "fia_harness/data/templates/UI_UX_EXCLUSIVA.md",
+      "content_sha256": "7a1e203df3050cda0e471218552c73c261930d104c5a55b3cac6274251e7daa8"
+    },
+    {
+      "path": "fia_harness/generators/bootstrap.py",
+      "content_sha256": "cd90d4dd753975ccacfb56bb473125604c02c3b256159ddfce202929b77115c7"
+    },
+    {
+      "path": "pyproject.toml",
+      "content_sha256": "8f53840f7b96078936b39b7a56c48c2e5fc60ec0db880640a218de881b8b620c"
+    },
+    {
+      "path": "templates/UI_ASSETS.json",
+      "content_sha256": "a8174f5941573d1acd5d5df5dee4bca235701e21c29685694d143512d3247acf"
+    },
+    {
+      "path": "templates/UI_UX_EXCLUSIVA.md",
+      "content_sha256": "7a1e203df3050cda0e471218552c73c261930d104c5a55b3cac6274251e7daa8"
+    },
+    {
+      "path": "tests/e2e_manual.py",
+      "content_sha256": "42898f5e6caeda92df0caadb990db315ef0418e8bc7a306b02f1112bddfc6d3a"
+    },
+    {
+      "path": "tests/test_core_assets.py",
+      "content_sha256": "792396783897cb4a6024ed583b8aecf48fd1d6fad80d983a54e732b0fe9fca99"
+    },
+    {
+      "path": "tests/test_harness.py",
+      "content_sha256": "1fbb5c33947b66cfada9f7782aeb5d75362309444d03ad7618717c85416441fc"
+    },
+    {
+      "path": "tests/test_packaging.py",
+      "content_sha256": "146a6795e4370b822526022ba3c2f25028b4ce79ee1aa8d478e99e2676514c85"
+    }
+  ],
+  "checks": {
+    "golden_rules": "pass",
+    "tests": {
+      "passed": 299,
+      "total": 299
+    },
+    "lint": "skip",
+    "scope": "skip"
+  },
+  "evidence_refs": [
+    "EV-020",
+    "EV-021"
+  ],
+  "generated_at": "2026-09-21T10:29:07",
+  "receipt_sha256": "c17c4d2abe1d1b628172388d0f3df4cd83e0f7873baa4a85229e42bf5af124a1"
+}

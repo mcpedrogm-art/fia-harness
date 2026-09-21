@@ -177,7 +177,7 @@
         "F12"
       ],
       "depends_on_notes": "",
-      "status": "in_progress"
+      "status": "done"
     }
   ],
   "checkpoints": [
@@ -333,6 +333,15 @@
       "receipt_ref": "evidence/receipts/receipt-F12.json",
       "recorded_at": "2026-09-18T12:12:12",
       "id": "CP-F12"
+    },
+    {
+      "phase": "F13",
+      "summary": "`core/assets.py` (stdlib): manifiesto `UI_ASSETS.json` (`version`, `assets[]` con `path`/`url`/`sha256`), `fia assets fetch [URL|ruta]` (verificación SHA-256 fail-closed, idempotente, escritura atómica `.part`→replace, rutas relativas sin traversal, opt-in), `fia assets manifest --dir-source --base-url` y `fia init --assets <url>`. Plantilla `UI_ASSETS.json` (raíz + paquete + `bootstrap`), `docs/UI_ASSETS.md`, nota en `UI_UX_EXCLUSIVA.md` §8.1 y README EN/ES. El kit no empaqueta media de terceros (mecanismo MIT; contenido en la infraestructura del mantenedor: Supabase self-hosted). Tests: 291 → 299; E2E con manifiesto, fetch y hash incorrecto bloqueando. Pendiente operativo: subir el pack al VPS y probar con la URL real.",
+      "evidence": "",
+      "evidence_file": "EV-020",
+      "receipt_ref": "evidence/receipts/receipt-F13.json",
+      "id": "CP-F13",
+      "recorded_at": "2026-09-21T10:29:33"
     }
   ],
   "updated": "2026-09-21",
@@ -378,6 +387,6 @@
       "id": "SNAP-005"
     }
   ],
-  "compiled_at": "2026-09-21T10:28:45",
-  "state_sha256": "275434edb8c466df1433eeb60536d10fa5759932f155571421308f16cf6684cc"
+  "compiled_at": "2026-09-21T10:29:33",
+  "state_sha256": "a8259a5e6feee270d5ee438f19de4abb98ca9162a172c13915654f8c61f21717"
 }
