@@ -127,5 +127,40 @@ class ExtractFieldConfidenceTests(unittest.TestCase):
         self.assertEqual(sorted(meta["unresolved"]), ["features", "out_of_scope", "users"])
 
 
+class RealBriefTests(unittest.TestCase):
+    """Regresión del test como usuario externo (v3.6.2): los briefs reales usan
+    "Propósito" y contenido anidado (`## 3. Alcance Funcional` → `### 3.1 Módulo`)."""
+
+    BRIEF = (
+        "# Generador de Dossieres\n\n"
+        "## 1. Visión del Producto y Objetivos\n\n"
+        "### 1.1 Propósito\n"
+        "Transformar documentación técnica en dossiers de inversión.\n\n"
+        "## 3. Alcance Funcional Ampliado\n\n"
+        "### 3.1 Módulo A: Ingesta\n"
+        "* Parser catastral automático\n"
+        "* Parser de tasaciones\n\n"
+        "### 3.2 Módulo B: Cartografía\n"
+        "* Geocodificación por referencia catastral\n"
+    )
+
+    def _meta(self):
+        with tempfile.TemporaryDirectory() as d:
+            p = Path(d) / "PRD.md"
+            p.write_text(self.BRIEF, encoding="utf-8")
+            return prd.extract_prd_metadata(p)
+
+    def test_proposito_resuelve_el_problema(self):
+        meta = self._meta()
+        self.assertNotEqual(meta["problem"], prd.DEFAULT_TEXT)
+        self.assertIn("dossiers", meta["problem"])
+
+    def test_alcance_anidado_resuelve_features(self):
+        meta = self._meta()
+        self.assertTrue(meta["features"])
+        self.assertTrue(any("Parser catastral" in feature for feature in meta["features"]),
+                        meta["features"])
+
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)

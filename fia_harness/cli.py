@@ -50,6 +50,8 @@ PRD_STUB = """# <Nombre del Proyecto>
 > ✏️ **PRD de partida generado por `fia-harness init`.** Completa cada sección
 > antes de aprobar la Fase 1 (entrevista técnica). Si dejas esta plantilla tal
 > cual, el bootstrap te avisará de los campos sin confirmar.
+> 📄 Si tu brief ya existe con otro nombre (p. ej. `PDR_x.md.txt`), cópialo o
+> renómbralo a **`PRD.md`** en la raíz: el harness lee este archivo en M0.
 
 ## Problema
 

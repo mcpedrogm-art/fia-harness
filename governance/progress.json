@@ -187,7 +187,7 @@
         "F13"
       ],
       "depends_on_notes": "",
-      "status": "done"
+      "status": "in_progress"
     }
   ],
   "checkpoints": [
@@ -413,6 +413,6 @@
       "id": "SNAP-006"
     }
   ],
-  "compiled_at": "2026-09-21T13:08:42",
-  "state_sha256": "ede7a13fb60458baf320e836d7bdac238531c5a83a2ddf6fbd72180ca68bb714"
+  "compiled_at": "2026-09-21T13:20:58",
+  "state_sha256": "7eba8d07c237cbc867ae6b84815d075e2caa8ca42e3e8ffa8bf65e54836fe8fd"
 }

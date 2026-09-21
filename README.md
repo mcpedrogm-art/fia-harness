@@ -54,6 +54,10 @@ Sets up a new project instantly: kit templates in `/docs`, thin root facades
 `python bootstrap.py` and you're on rails. Prefer cloning? This repo is a
 **GitHub template** — click *Use this template*.
 
+> 🧰 **Troubleshooting:** if `uvx fia-harness@X.Y.Z` says the version does not
+> exist right after a release, uv is serving a stale index cache — refresh it with
+> `uv cache clean fia-harness` and retry.
+
 ---
 
 ## 🎬 See the interlock catch the agent (60 seconds)
@@ -134,6 +138,9 @@ so explicitly — never omitted in silence.
 > ⚡ **Or in one command (PyPI):** `uvx fia-harness init` mounts the new project
 > automatically — templates in `/docs`, scripts at the root, starter `PRD.md`.
 > Skip to step 2.
+>
+> 📄 Your brief must live at the root as **`PRD.md`** (rename or copy it if it has
+> another name): the harness reads it in M0 with confidence levels.
 
 ```text
 1. Prepare the new project

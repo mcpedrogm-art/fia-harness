@@ -5,6 +5,24 @@ con `DECISIONS.md` del propio sistema.
 
 ---
 
+## v3.6.2 — Parser PRD para briefs reales + notas de uso
+
+1. **Cuerpo jerárquico de sección** (`parser/prd.py`): el cuerpo de una sección
+   incluye sus subsecciones (p. ej. `## 3. Alcance Funcional` → `### 3.1 Módulo A…`).
+   Causa real: en un brief externo el contenido vivía en los H3 hijos y la
+   extracción lo marcaba como no resuelto aunque el encabezado coincidiera.
+2. **Sinónimos ampliados** (`data/parser/synonyms.json`): "Propósito", "Visión",
+   "Objetivos" (problema), "Perfiles" (usuarios), "Alcance Funcional", "Módulos",
+   "Características", "Capacidades" (funcionalidades), "No objetivos", "Exclusiones"
+   (fuera de alcance) + palabras clave de densidad equivalentes.
+3. **Notas de uso** (README EN/ES): si `uvx` dice que la versión no existe tras un
+   release → `uv cache clean fia-harness`; y el brief debe llamarse `PRD.md` (el
+   stub de `init` también lo recuerda).
+4. Tests: 309 → 311 (regresión con un brief real de "Propósito" + secciones
+   anidadas; el corpus mantiene su umbral).
+
+---
+
 ## v3.6.1 — Fix de empaquetado: `UI_ASSETS.json` fuera del wheel
 
 1. **Bug real (release-blocking desde v3.5.0):** `[tool.setuptools.package-data]`

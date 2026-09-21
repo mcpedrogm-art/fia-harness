@@ -56,6 +56,10 @@ finas en la raíz (`bootstrap.py`, `task_generator.py`) y un `PRD.md` de partida
 Luego `python bootstrap.py` y estás sobre raíles. ¿Prefieres clonar? Este repo es
 una **plantilla de GitHub** — pulsa *Use this template*.
 
+> 🧰 **Troubleshooting:** si `uvx fia-harness@X.Y.Z` dice que la versión no existe
+> justo después de un release, uv está sirviendo un índice en caché: refréscalo con
+> `uv cache clean fia-harness` y reintenta.
+
 ---
 
 ## 🎬 Mira cómo el interlock atrapa al agente (60 segundos)
@@ -137,6 +141,9 @@ explícitamente — nunca se omite en silencio.
 > ⚡ **O en un solo comando (PyPI):** `uvx fia-harness init` monta el proyecto
 > nuevo automáticamente — plantillas en `/docs`, scripts en la raíz y `PRD.md` de
 > partida. Salta al paso 2.
+>
+> 📄 Tu brief debe estar en la raíz como **`PRD.md`** (renómbralo o cópialo si tiene
+> otro nombre): el harness lo lee en M0 con niveles de confianza.
 
 ```text
 1. Prepara el proyecto nuevo

@@ -67,21 +67,34 @@ def _fold(text: str) -> str:
 
 
 def _sections(content: str):
-    """Secciones (nivel, título, cuerpo) en orden de aparición, con índice estable."""
-    sections, current = [], None
+    """Secciones (nivel, título, cuerpo) en orden de aparición, con índice estable.
+
+    El cuerpo de una sección **incluye sus subsecciones** (hasta un encabezado de
+    nivel igual o superior): en briefs reales el contenido suele vivir en los H3
+    hijos (p. ej. `## 3. Alcance Funcional` → `### 3.1 Módulo A…`, v3.6.2)."""
+    raw, current = [], None
     for line in content.split("\n"):
         header = re.match(r"^(#{1,6})\s+(.*)", line)
         if header:
             if current is not None:
-                current["body"] = "\n".join(current.pop("lines")).strip()
-                sections.append(current)
-            current = {"index": len(sections), "level": len(header.group(1)),
+                raw.append(current)
+            current = {"index": len(raw), "level": len(header.group(1)),
                        "title": header.group(2).strip(), "lines": []}
         elif current is not None:
             current["lines"].append(line)
     if current is not None:
-        current["body"] = "\n".join(current.pop("lines")).strip()
-        sections.append(current)
+        raw.append(current)
+
+    sections = []
+    for position, section in enumerate(raw):
+        body = list(section["lines"])
+        for child in raw[position + 1:]:
+            if child["level"] <= section["level"]:
+                break
+            body.append(f"{'#' * child['level']} {child['title']}")
+            body.extend(child["lines"])
+        sections.append({"index": section["index"], "level": section["level"],
+                         "title": section["title"], "body": "\n".join(body).strip()})
     return sections
 
 

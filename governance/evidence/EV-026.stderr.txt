@@ -1,0 +1,29 @@
+..usage: fia reopen [-h] --reason REASON [-d DIR] fase
+fia reopen: error: the following arguments are required: --reason
+................❌ progress.json no coincide con su huella (state_sha256): el artefacto fue editado a mano o está corrupto. Ejecuta --sync.
+❌ progress.json no es íntegro: fue editado a mano o está corrupto. Ejecuta --sync para regenerarlo.
+.❌ progress.json no existe. Ejecuta: python task_generator.py --sync (o usa --state-optional para validar solo sobre PROGRESS.md).
+   [!] progress.json no existe; validando solo sobre PROGRESS.md (--state-optional).
+.❌ --reopen exige un motivo (--reason).
+.........❌ No existe el manifiesto: C:\Users\Usuario\AppData\Local\Temp\tmpvmjs013f\no_existe.json
+..❌ No existe la evidencia 'EV-999' en evidence/.
+..............................................................................................❌ Uso: fia run [-d DIR] [--type T] -- <comando...>
+.....................................................................   [!] La plantilla t no contiene ningún encabezado '# TASK-': se copia íntegra, incluida su cabecera meta. Revísala a mano.
+.............................❌ progress.json no existe. Ejecuta: python task_generator.py --sync (o usa --state-optional para validar solo sobre PROGRESS.md).
+.   [!] progress.json no existe; validando solo sobre PROGRESS.md (--state-optional).
+..........❌ No se puede reabrir F0: F1 ya está(n) cerrada(s) y depende(n) de ella. Reabre antes esas dependencias.
+..❌ La fase F0 no está cerrada (estado: pending). Solo se puede reabrir una fase done.
+.❌ --reopen exige un motivo (--reason).
+.❌ 'SECURITY.md' cambió desde el sellado: revisa el cambio y vuelve a sellarlo (--seal)
+❌ Estado del harness inválido: 1 problema(s).
+.❌ progress.json no coincide con su huella (state_sha256): el artefacto fue editado a mano o está corrupto. Ejecuta --sync.
+❌ progress.json no es íntegro: fue editado a mano o está corrupto. Ejecuta --sync para regenerarlo.
+...❌ SPEC.md cambió sin nueva aprobación: el último snapshot aprobado no coincide. Re-aprueba con --approval (o revisa el cambio).
+❌ Estado del harness inválido: 1 problema(s).
+.................   [!] La plantilla x.md no contiene ningún encabezado '# TASK-': se copia íntegra, incluida su cabecera meta. Revísala a mano.
+......................❌ No se encontró el archivo obligatorio: nope.md
+..............................
+----------------------------------------------------------------------
+Ran 311 tests in 13.647s
+
+OK
