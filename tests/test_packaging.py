@@ -29,6 +29,7 @@ TEMPLATE_NAMES = [
     "TASK_TEMPLATE.md",
     "TASK_LITE_TEMPLATE.md",
     "UI_RECIPES.md",
+    "UI_ASSETS.json",
     "QUICKSTART_LITE.md",
     "AGENTS.md",
     "PRD_TEMPLATE.md",

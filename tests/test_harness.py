@@ -28,7 +28,8 @@ ROOT = Path(__file__).resolve().parent.parent
 TEMPLATE_FILES = [
     "INICIO_PROYECTO.md", "SECURITY.md", "AEO_GEO_SEO.md", "UI_UX_EXCLUSIVA.md",
     "SKILLS_MCP.md", "TASK_TEMPLATE.md", "TASK_LITE_TEMPLATE.md", "UI_RECIPES.md",
-    "QUICKSTART_LITE.md", "AGENTS.md", "PRD_TEMPLATE.md", "MODELOS.md",
+    "UI_ASSETS.json", "QUICKSTART_LITE.md", "AGENTS.md", "PRD_TEMPLATE.md",
+    "MODELOS.md",
 ]
 
 

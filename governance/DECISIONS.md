@@ -95,9 +95,20 @@
     **Biblioteca privada local** (`UI_LIBRARY.local.md`, gitignored) para material
     de referencia con licencia propia (Dínamo Sites): el kit público (MIT) solo
     lleva el esquema y el flujo, nunca los prompts/assets de terceros; los assets
-    se autohospedan. **Diferido a v3.5:** gate mecánico de UI (decisión humana
-    registrada para fases de UI, mismo patrón que el gate de riesgo v3.1).
-    Ref: SPEC §8, APPROVAL-004.
+    se autohospedan. **Diferido:** gate mecánico de UI (decisión humana registrada
+    para fases de UI) → v3.6. Ref: SPEC §8, APPROVAL-004.
+*   **ADR-012 (2026-09-18):** Pack de assets UI (v3.5, F13). El kit no empaqueta
+    media de terceros (tamaño + licencia): publica el **mecanismo** y el contenido
+    vive donde el mantenedor tenga derechos. Diseño: manifiesto `UI_ASSETS.json`
+    (`version`, `assets[]` con `path`/`url`/`sha256`) + `fia assets fetch` (stdlib,
+    `urllib`+`hashlib`, timeout, verificación SHA-256 fail-closed, idempotente,
+    escritura atómica `.part` → `os.replace`, rutas relativas sin traversal),
+    `fia assets manifest` para generar el manifiesto al publicar y `fia init
+    --assets <url>` para "FIA completo" en un paso. Hosting previsto: Supabase
+    self-hosted del mantenedor (bucket con lectura pública/URLs firmadas); el kit
+    **nunca** descarga por defecto (opt-in). Sobre la licencia de los assets de
+    Dínamo, el mantenedor confirma que son de descarga y uso libres (2026-09-18);
+    si cambiara, el pack se retira sin tocar el kit. Ref: SPEC §9, APPROVAL-005.
 
 ## Reaperturas
 
@@ -114,3 +125,4 @@
 - **APPROVAL-002** · (2026-09-15) · Fase: F3 · Acción: Autorización humana del plan v3.0-core (fases F0-F7) · Aprobado por: Humano · Ref: sesion 2026-09-15 (usuario autoriza cada fase)
 - **APPROVAL-003** · (2026-09-18) · Fase: M2 · Acción: Recorte v3.3 aprobado: Recibo de fase + router fino (F9-F11); Outcomes/Risks congelados hasta friccion real de F8 · Aprobado por: Humano · Ref: sesion 2026-09-18 (usuario aprueba docs/PLAN_RECIBO_ROUTER.md)
 - **APPROVAL-004** · (2026-09-18) · Fase: M2 · Acción: UI/UX v3.4: cuatro direcciones divergentes + esquema de recetas y plantilla UI_RECIPES.md · Aprobado por: Humano · Ref: sesion 2026-09-18 (usuario aprueba el flujo de 4 variantes y la integracion de recetas)
+- **APPROVAL-005** · (2026-09-21) · Fase: M2 · Acción: Pack de assets UI v3.5: manifiesto UI_ASSETS.json + fia assets fetch/manifest + fia init --assets (el kit no empaqueta media de terceros) · Aprobado por: Humano · Ref: sesion 2026-09-18 (usuario aprueba el pack de assets y su hosting en Supabase self-hosted)

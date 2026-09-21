@@ -5,6 +5,24 @@ con `DECISIONS.md` del propio sistema.
 
 ---
 
+## v3.5.0 — Pack de assets UI: manifiesto + descarga verificada
+
+1. **`fia assets fetch [URL|manifiesto]`** (`core/assets.py`, stdlib): descarga un
+   pack descrito en `UI_ASSETS.json` (`version`, `assets[]` con `path`/`url`/`sha256`),
+   verifica SHA-256 (fail-closed), es idempotente (si existe y coincide, no toca),
+   escribe atómico (`.part` → `os.replace`) y rechaza rutas absolutas o con
+   traversal. **Opt-in**: nada se descarga por defecto.
+2. **`fia assets manifest --dir-source --base-url`**: genera el manifiesto desde un
+   directorio (path/url/sha256) para publicar el pack.
+3. **`fia init --assets <url>`**: proyecto + pack de assets en un paso.
+4. Plantilla `UI_ASSETS.json` (raíz + paquete + `bootstrap`), `docs/UI_ASSETS.md`,
+   nota en `UI_UX_EXCLUSIVA.md` §8.1 y README EN/ES.
+5. El kit **no empaqueta media de terceros** (tamaño + licencia): mecanismo público
+   (MIT); el contenido vive donde el mantenedor tenga derechos (p. ej. Supabase
+   self-hosted). Tests: 291 → 299 + E2E (manifiesto, fetch, hash incorrecto bloquea).
+
+---
+
 ## v3.4.4 — Rutas git robustas: nombres no-ASCII y renombrados
 
 1. **Nombres con `ñ`/acentos/espacios (bug real detectado en pruebas adversarias):**

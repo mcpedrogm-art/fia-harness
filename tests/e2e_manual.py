@@ -152,6 +152,21 @@ def main():
     else:
         print("[SKIP] demo no encontrado en", DEMO)
 
+    print("=== 8. pack de assets (manifiesto + descarga verificada) ===")
+    pack = Path(tmp.name) / "pack"
+    write(pack / "media" / "hero.bin", "hero-e2e")
+    manifest_path = Path(tmp.name) / "UI_ASSETS.json"
+    run([sys.executable, "-m", "fia_harness.cli", "assets", "manifest",
+         "--dir-source", str(pack), "--base-url", pack.as_uri(),
+         "-o", str(manifest_path)], REPO, label="assets manifest")
+    cli(project, "assets", "fetch", str(manifest_path), label="assets fetch")
+    assert (project / "media" / "hero.bin").read_text(encoding="utf-8") == "hero-e2e"
+    tampered = json.loads(manifest_path.read_text(encoding="utf-8"))
+    tampered["assets"][0]["sha256"] = "0" * 64
+    manifest_path.write_text(json.dumps(tampered), encoding="utf-8")
+    cli(project, "assets", "fetch", str(manifest_path), expect=1,
+        label="hash incorrecto bloquea la descarga")
+
     print()
     if failures:
         print(f"RESULTADO: {len(failures)} FALLOS -> {failures}")

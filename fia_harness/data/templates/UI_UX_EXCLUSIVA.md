@@ -256,6 +256,10 @@ Reglas: la receta se **adapta** con el Design DNA (no se clona); los assets se
 descargan y se alojan en el proyecto; el proyecto registra las recetas usadas y la
 matriz en `UI_RECIPES.md` (plantilla del kit).
 
+> 💾 **Pack de assets (v3.5):** si el proyecto usa un pack publicado (manifiesto
+> `UI_ASSETS.json`), autohospédalo con `fia assets fetch <url|manifiesto>` y
+> verifica SHA-256; ver `docs/UI_ASSETS.md`. El kit no descarga nada por defecto.
+
 ### 8.2 Matriz de divergencia (6 ejes)
 
 Antes de presentar las direcciones, rellena esta tabla (una columna por dirección):

@@ -4,9 +4,9 @@
 (`templates/INICIO_PROYECTO.md`): plantillas del kit en /docs, fachadas de los
 scripts en la raíz (que importan el paquete instalado, ADR-001) y un `PRD.md` de
 partida. El resto de subcomandos (`check`, `sync`, `task`, `status`, `approve`,
-`seal`, `reopen`, `run`, `evidence`, `receipt`, `route`, `verify`) delegan en el
-núcleo: `fia` y `fia-harness` son el mismo comando. Igual que el resto del kit:
-solo librería estándar, idempotente (nunca sobrescribe lo que ya existe) y sin
+`seal`, `reopen`, `run`, `evidence`, `receipt`, `route`, `assets`, `verify`) delegan
+en el núcleo: `fia` y `fia-harness` son el mismo comando. Igual que el resto del
+kit: solo librería estándar, idempotente (nunca sobrescribe lo que ya existe) y sin
 telemetría.
 """
 
@@ -34,6 +34,7 @@ TEMPLATE_NAMES = [
     "TASK_TEMPLATE.md",
     "TASK_LITE_TEMPLATE.md",
     "UI_RECIPES.md",
+    "UI_ASSETS.json",
     "QUICKSTART_LITE.md",
     "AGENTS.md",
     "PRD_TEMPLATE.md",
@@ -168,6 +169,9 @@ def main(argv=None) -> int:
     )
     init_parser.add_argument("-d", "--dir", default=".",
                              help="Directorio de destino del proyecto (por defecto: el actual).")
+    init_parser.add_argument("--assets", default=None, metavar="URL|MANIFIESTO",
+                             help="Descarga el pack de assets tras montar el proyecto "
+                                  "(`fia assets fetch`); p. ej. una URL de UI_ASSETS.json.")
 
     sync_parser = subparsers.add_parser("sync", help="Compila y valida PROGRESS.md → progress.json.")
     sync_parser.add_argument("-d", "--dir", default=".")
@@ -248,11 +252,33 @@ def main(argv=None) -> int:
     route_parser.add_argument("-d", "--dir", default=".",
                               help="No usado por el router (sin estado); se acepta por consistencia.")
 
+    assets_parser = subparsers.add_parser(
+        "assets", help="Manifiesto y descarga verificada de packs de assets UI (v3.5).")
+    assets_sub = assets_parser.add_subparsers(dest="assets_command", required=True)
+    assets_fetch = assets_sub.add_parser("fetch", help="Descarga y verifica los assets de un manifiesto.")
+    assets_fetch.add_argument("manifest", nargs="?", default=None,
+                              help="URL o ruta del manifiesto (por defecto: UI_ASSETS.json del proyecto).")
+    assets_fetch.add_argument("-d", "--dir", default=".")
+    assets_manifest = assets_sub.add_parser("manifest", help="Genera un manifiesto desde un directorio local.")
+    assets_manifest.add_argument("--dir-source", required=True, metavar="DIR",
+                                 help="Directorio con los assets a publicar.")
+    assets_manifest.add_argument("--base-url", required=True, metavar="URL",
+                                 help="URL base donde se alojarán los assets.")
+    assets_manifest.add_argument("-o", "--out", default="UI_ASSETS.json", metavar="ARCHIVO")
+    assets_manifest.add_argument("-d", "--dir", default=".",
+                                 help="No usado al generar; se acepta por consistencia.")
+
     args = parser.parse_args(argv)
     target = Path(args.dir)
 
     if args.command == "init":
-        return run_init(target)
+        code = run_init(target)
+        if code == 0 and args.assets:
+            from fia_harness.core.assets import fetch_manifest
+            print()
+            print(f"-> Descargando pack de assets: {args.assets}")
+            return fetch_manifest(target, args.assets)
+        return code
     if args.command == "sync":
         commands.cmd_sync(target)
         return 0
@@ -302,6 +328,12 @@ def main(argv=None) -> int:
     if args.command == "route":
         from fia_harness.core.router import cmd_route
         return cmd_route(args.descripcion)
+    if args.command == "assets":
+        from fia_harness.core.assets import cmd_assets_fetch, cmd_assets_manifest
+        if args.assets_command == "fetch":
+            ref = args.manifest or str(Path(args.dir) / "UI_ASSETS.json")
+            return cmd_assets_fetch(Path(args.dir), ref)
+        return cmd_assets_manifest(Path(args.dir_source), args.base_url, Path(args.out))
 
     parser.print_help()
     return 2

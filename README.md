@@ -172,7 +172,7 @@ so explicitly — never omitted in silence.
 |---|---|
 | ⚙️ `bootstrap.py` · 🤖 `task_generator.py` | Thin facades at the project root: the implementation lives in the installed package (ADR-001) |
 | 📦 `fia_harness/` + `pyproject.toml` | PyPI package and **single source of truth**: `fia init/check/sync/task/status/approve/seal/reopen/run/evidence/receipt/route/verify` |
-| 🗂️ `templates/` | Master templates of the kit: protocol (`INICIO_PROYECTO.md`), `SECURITY.md`, `AEO_GEO_SEO.md`, `UI_UX_EXCLUSIVA.md`, `UI_RECIPES.md`, `SKILLS_MCP.md`, `TASK_TEMPLATE.md`, `TASK_LITE_TEMPLATE.md`, `QUICKSTART_LITE.md`, `AGENTS.md`, `PRD_TEMPLATE.md`, `MODELOS.md` and the RAG module |
+| 🗂️ `templates/` | Master templates of the kit: protocol (`INICIO_PROYECTO.md`), `SECURITY.md`, `AEO_GEO_SEO.md`, `UI_UX_EXCLUSIVA.md`, `UI_RECIPES.md`, `UI_ASSETS.json`, `SKILLS_MCP.md`, `TASK_TEMPLATE.md`, `TASK_LITE_TEMPLATE.md`, `QUICKSTART_LITE.md`, `AGENTS.md`, `PRD_TEMPLATE.md`, `MODELOS.md` and the RAG module |
 | 🏛️ `governance/` | This repo's own dogfood project (operated with `-d governance`): `PROGRESS.md`, `SPEC.md`, `DECISIONS.md`, `progress.json`, `TASK-F0…F11.md`, `evidence/` (incl. phase receipts) |
 | 📖 `docs/` | v3 baseline (`V3_BASELINE.md`), the evidence-capture decision (ADR-005) and the v3.3 plan/design (`PLAN_RECIBO_ROUTER.md`, `RECEIPT_DESIGN.md`, `RECEIPT_ROUTER.md`) |
 | 🧪 `tests/` | Automated tests of the parsers, the state machine, evidence, verification, packaging and the full cycle |
@@ -245,6 +245,7 @@ fia seal / fia approve / fia reopen  # seals, human approvals, audited reopen
 fia receipt create F3 --tests 42/42  # phase receipt (rule #16): canonical manifest + hash
 fia receipt verify F3                # recompute and check the receipt (always strict)
 fia route "fix typo in docs"         # deterministic Lite/Full proposal (fail-closed, v3.3)
+fia assets fetch UI_ASSETS.json      # download + verify the UI asset pack (v3.5)
 fia verify --strict-receipts         # CI: dirty (uncommitted) receipts block the merge
 fia verify --reproduce EV-001        # re-runs allowlisted evidence and compares output (opt-in)
 fia verify --scope-base origin/main  # post-hoc scope: diff vs the TASK's declared scope
@@ -297,6 +298,20 @@ fia verify --scope-base origin/main  # post-hoc scope: diff vs the TASK's declar
 > (deferred to v3.5, ADR-011). Concrete reference recipes live in a **private local
 > library** (`*.local.md`, not distributed); the public kit ships the schema and the
 > flow, and assets are always self-hosted.
+
+---
+
+## 📦 What v3.5 adds
+
+| | v3.4 | **v3.5** |
+|---|---|---|
+| UI assets | manual (download and copy) | **`fia assets fetch`**: manifest-driven pack (`UI_ASSETS.json`) with SHA-256 verification, idempotent and opt-in |
+| Complete setup | — | **`fia init --assets <url>`**: project + asset pack in one step |
+| Publishing | — | **`fia assets manifest`** generates the manifest (`path`/`url`/`sha256`) for your own hosting |
+
+> The kit never bundles third-party media: the mechanism is public (MIT), the
+> content lives where you have distribution rights (e.g. a self-hosted bucket).
+> See `docs/UI_ASSETS.md`.
 
 ---
 

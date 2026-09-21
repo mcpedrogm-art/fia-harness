@@ -1,6 +1,6 @@
 # PROGRESS.md — Hoja de Ruta e Historial de Fases (repo FIA Harness)
 
-**Fase activa:** — (F12 cerrada; F8 en pausa hasta reanudar la validación externa)
+**Fase activa:** F13 (Pack de assets UI: manifiesto + descarga verificada) — F8 en pausa
 
 ## Fases del Proceso (Harness — dogfood del propio kit)
 
@@ -28,6 +28,7 @@
 | F10 | Router fail-closed fino (`fia route`) | `core/router.py`, comando `fia route`, tests negativos (red flags → Full) | F9 | [x] Listo |
 | F11 | Cierre v3.3: docs, plantillas, CHANGELOG, dogfood y demo | README EN/ES, plantillas (dos copias sincronizadas), `docs/RECEIPT_ROUTER.md`, CHANGELOG, demo con recibo manipulado | F10 | [x] Listo |
 | F12 | UI/UX: cuatro direcciones divergentes + esquema de recetas + `UI_RECIPES.md` | `UI_UX_EXCLUSIVA.md` §8.1–8.2, H3 de `TASK_TEMPLATE.md`, `QUICKSTART_LITE.md`, plantilla `UI_RECIPES.md` (copias sincronizadas) y biblioteca privada local | F11 | [x] Listo |
+| F13 | Pack de assets UI: manifiesto + descarga verificada (`fia assets fetch/manifest`, `fia init --assets`) | `core/assets.py` (stdlib, SHA-256, idempotente, fail-closed), plantilla `UI_ASSETS.json`, `docs/UI_ASSETS.md`, tests y E2E | F12 | [~] En curso |
 
 ## Checkpoints de Contexto Recientes
 

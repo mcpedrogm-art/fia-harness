@@ -175,7 +175,7 @@ explícitamente — nunca se omite en silencio.
 |---|---|
 | ⚙️ `bootstrap.py` · 🤖 `task_generator.py` | Fachadas finas en la raíz del proyecto: la implementación vive en el paquete instalado (ADR-001) |
 | 📦 `fia_harness/` + `pyproject.toml` | Paquete PyPI y **única fuente de verdad**: `fia init/check/sync/task/status/approve/seal/reopen/run/evidence/receipt/route/verify` |
-| 🗂️ `templates/` | Plantillas maestras del kit: protocolo (`INICIO_PROYECTO.md`), `SECURITY.md`, `AEO_GEO_SEO.md`, `UI_UX_EXCLUSIVA.md`, `UI_RECIPES.md`, `SKILLS_MCP.md`, `TASK_TEMPLATE.md`, `TASK_LITE_TEMPLATE.md`, `QUICKSTART_LITE.md`, `AGENTS.md`, `PRD_TEMPLATE.md`, `MODELOS.md` y el módulo RAG |
+| 🗂️ `templates/` | Plantillas maestras del kit: protocolo (`INICIO_PROYECTO.md`), `SECURITY.md`, `AEO_GEO_SEO.md`, `UI_UX_EXCLUSIVA.md`, `UI_RECIPES.md`, `UI_ASSETS.json`, `SKILLS_MCP.md`, `TASK_TEMPLATE.md`, `TASK_LITE_TEMPLATE.md`, `QUICKSTART_LITE.md`, `AGENTS.md`, `PRD_TEMPLATE.md`, `MODELOS.md` y el módulo RAG |
 | 🏛️ `governance/` | Proyecto dogfood del propio repo (se opera con `-d governance`): `PROGRESS.md`, `SPEC.md`, `DECISIONS.md`, `progress.json`, `TASK-F0…F11.md`, `evidence/` (incl. recibos de fase) |
 | 📖 `docs/` | Baseline v3 (`V3_BASELINE.md`), la decisión de captura de evidencia (ADR-005) y el plan/diseño v3.3 (`PLAN_RECIBO_ROUTER.md`, `RECEIPT_DESIGN.md`, `RECEIPT_ROUTER.md`) |
 | 🧪 `tests/` | Tests automatizados de los parsers, la máquina de estado, evidencia, verificación, empaquetado y el ciclo completo |
@@ -248,6 +248,7 @@ fia seal / fia approve / fia reopen  # sellos, aprobaciones humanas, reapertura 
 fia receipt create F3 --tests 42/42  # recibo de fase (nº16): manifiesto canónico + hash
 fia receipt verify F3                # recalcula y comprueba el recibo (siempre estricto)
 fia route "fix typo en docs"         # propuesta determinista Lite/Full (fail-closed, v3.3)
+fia assets fetch UI_ASSETS.json      # descarga y verifica el pack de assets UI (v3.5)
 fia verify --strict-receipts         # CI: los recibos dirty (sin commitear) bloquean el merge
 fia verify --reproduce EV-001        # re-ejecuta evidencia allowlisted y compara la salida (opt-in)
 fia verify --scope-base origin/main  # alcance post-hoc: diff vs el alcance declarado en la TASK
@@ -300,6 +301,20 @@ fia verify --scope-base origin/main  # alcance post-hoc: diff vs el alcance decl
 > (diferido a v3.5, ADR-011). Las recetas de referencia concretas viven en una
 > **biblioteca privada local** (`*.local.md`, no se distribuye); el kit público lleva
 > el esquema y el flujo, y los assets siempre se autohospedan.
+
+---
+
+## 📦 Qué añade la v3.5
+
+| | v3.4 | **v3.5** |
+|---|---|---|
+| Assets UI | manual (descargar y copiar) | **`fia assets fetch`**: pack por manifiesto (`UI_ASSETS.json`) con verificación SHA-256, idempotente y opt-in |
+| Montaje completo | — | **`fia init --assets <url>`**: proyecto + pack de assets en un paso |
+| Publicación | — | **`fia assets manifest`** genera el manifiesto (`path`/`url`/`sha256`) para tu propio hosting |
+
+> El kit nunca empaqueta media de terceros: el mecanismo es público (MIT) y el
+> contenido vive donde tengas derechos de distribución (p. ej. un bucket propio).
+> Ver `docs/UI_ASSETS.md`.
 
 ---
 

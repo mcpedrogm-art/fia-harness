@@ -114,4 +114,21 @@ clona); los assets se autohospedan.
 | F12 | `UI_UX_EXCLUSIVA.md` (§3, §8, §8.1–8.2, §10, §12), H3 de `TASK_TEMPLATE.md`, `QUICKSTART_LITE.md`, plantilla `UI_RECIPES.md` (raíz + paquete + `fia init`/`bootstrap`), `NON_PRD_FILES`, README EN/ES y biblioteca privada local (`UI_LIBRARY.local.md`, gitignored) con las recetas aportadas por el humano. |
 
 **Fuera de alcance:** gate mecánico de UI (presencia de Design DNA/approval) queda
-como propuesta v3.5 (ADR-011 lo registra como decisión diferida).
+como propuesta v3.6 (ADR-011 lo registra como decisión diferida).
+
+---
+
+## 9. Enmienda v3.5 — Pack de assets UI (APPROVAL-005, 2026-09-18)
+
+**Objetivo:** que los usuarios puedan descargar e integrar un **pack de assets UI**
+en su proyecto FIA sin que el kit distribuya contenido de terceros: el kit público
+(MIT) lleva el **mecanismo** (manifiesto + descarga verificada); el **contenido**
+lo aloja quien tenga derechos (p. ej. Supabase self-hosted del mantenedor).
+
+| Fase | Entrega |
+| --- | --- |
+| F13 | `fia_harness/core/assets.py`: manifiesto `UI_ASSETS.json` (`version`, `assets[]` con `path`/`url`/`sha256`), `fia assets fetch [URL|ruta]` (stdlib, verificación SHA-256, idempotente, fail-closed, rutas seguras sin traversal), `fia assets manifest --dir-source --base-url`, `fia init --assets <url>`; plantilla `UI_ASSETS.json` (raíz + paquete + `bootstrap`); `docs/UI_ASSETS.md`; tests con `file://` y paso en el E2E. |
+
+**Fuera de alcance:** hosting del pack (lo publica el mantenedor en su infraestructura;
+el kit solo consume el manifiesto) · firma GPG del manifiesto (futuro) · empaquetar
+media dentro de la distribución PyPI (descartado por tamaño y licencia).

@@ -168,6 +168,16 @@
       ],
       "depends_on_notes": "",
       "status": "done"
+    },
+    {
+      "id": "F13",
+      "title": "",
+      "objective": "Pack de assets UI: manifiesto + descarga verificada (fia assets fetch/manifest, fia init --assets) / core/assets.py (stdlib, SHA-256, idempotente, fail-closed), plantilla UIASSETS.json, docs/UIASSETS.md, tests y E2E",
+      "depends_on": [
+        "F12"
+      ],
+      "depends_on_notes": "",
+      "status": "in_progress"
     }
   ],
   "checkpoints": [
@@ -325,7 +335,7 @@
       "id": "CP-F12"
     }
   ],
-  "updated": "2026-09-18",
+  "updated": "2026-09-21",
   "sealed_docs": {
     "INICIO_PROYECTO.md": "49207ffcfdf3d796f3fdc2b69fa4424a7db383a9fbdaf11501b23b1f95a51581",
     "SECURITY.md": "e0dbd7fa011c95c0dccf40402698f68be7df5f6067ca24cdc05b0bf9ad8f62db",
@@ -359,8 +369,15 @@
       "date": "2026-09-18",
       "phase": "M2",
       "id": "SNAP-004"
+    },
+    {
+      "sha256": "c5f97939a6d4ece020ae81c026df9aa4acc9753eb16b15adbccda7256762d6b2",
+      "ref": "sesion 2026-09-18 (usuario aprueba el pack de assets y su hosting en Supabase self-hosted)",
+      "date": "2026-09-21",
+      "phase": "M2",
+      "id": "SNAP-005"
     }
   ],
-  "compiled_at": "2026-09-18T18:16:59",
-  "state_sha256": "d6570c8c9ef1411ed6519d13b74b38f16e147f56cc0465715ae95ba18f0fadf4"
+  "compiled_at": "2026-09-21T10:28:45",
+  "state_sha256": "275434edb8c466df1433eeb60536d10fa5759932f155571421308f16cf6684cc"
 }
