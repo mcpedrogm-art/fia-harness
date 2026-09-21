@@ -187,7 +187,7 @@
         "F13"
       ],
       "depends_on_notes": "",
-      "status": "in_progress"
+      "status": "done"
     }
   ],
   "checkpoints": [
@@ -355,9 +355,9 @@
     },
     {
       "phase": "F14",
-      "summary": "`core/ui.py`: `fia ui setup [--recetas] [--url]` (URL oficial por defecto `https://supabase.pgmia.es/…/UI_ASSETS.json`, override `--url` > env `FIA_UI_PACK_URL`; guarda el manifiesto usado en el `UI_ASSETS.json` del proyecto; reutiliza la descarga verificada SHA-256) y `fia ui status` (sin red: completo/parcial/ausente). Protocolo: **Paso 0** en `UI_UX_EXCLUSIVA.md` §8 (el agente pregunta antes; nada se descarga sin confirmación), ítem en H3 de `TASK_TEMPLATE.md`, mención en `QUICKSTART_LITE.md` y `AGENTS.md`; README EN/ES («What v3.6 adds») y `docs/UI_ASSETS.md`. Sin registro de la decisión (presencia de `media/`/`library/` = estado). Tests: 299 → 307; E2E paso 9 (`ui setup` completo, `--recetas`, `status`). **v3.6.1 (reportado por el humano en uso real):** `UI_ASSETS.json` quedaba fuera del wheel (glob `*.md`) y `fia init` fallaba en instalaciones de PyPI; corregido a `data/templates/*` + guardarraíles (test de cobertura de `package-data`, job `wheel` con `init` de humo en CI, paso de humo en el release antes de publicar) + handler de `init` afinado (recurso del paquete vs carpeta). Tests: 309.",
+      "summary": "`core/ui.py`: `fia ui setup [--recetas] [--url]` (URL oficial por defecto `https://supabase.pgmia.es/…/UI_ASSETS.json`, override `--url` > env `FIA_UI_PACK_URL`; guarda el manifiesto usado en el `UI_ASSETS.json` del proyecto; reutiliza la descarga verificada SHA-256) y `fia ui status` (sin red: completo/parcial/ausente). Protocolo: **Paso 0** en `UI_UX_EXCLUSIVA.md` §8 (el agente pregunta antes; nada se descarga sin confirmación), ítem en H3 de `TASK_TEMPLATE.md`, mención en `QUICKSTART_LITE.md` y `AGENTS.md`; README EN/ES («What v3.6 adds») y `docs/UI_ASSETS.md`. Sin registro de la decisión (presencia de `media/`/`library/` = estado). Tests: 299 → 307; E2E paso 9 (`ui setup` completo, `--recetas`, `status`). **v3.6.1 (reportado por el humano en uso real):** `UI_ASSETS.json` quedaba fuera del wheel (glob `*.md`) y `fia init` fallaba en instalaciones de PyPI; corregido a `data/templates/*` + guardarraíles (test de cobertura de `package-data`, job `wheel` con `init` de humo en CI, paso de humo en el release antes de publicar) + handler de `init` afinado (recurso del paquete vs carpeta). **v3.6.2 (test como usuario externo):** parser PRD con **cuerpo jerárquico** (el contenido de los H3 hijos cuenta para la sección padre) y **sinónimos ampliados** (\"Propósito\", \"Visión\", \"Objetivos\", \"Perfiles\", \"Alcance Funcional\", \"Módulos\", \"Características\", \"Capacidades\", \"Exclusiones\"); verificado con un brief real (problema y 51 funcionalidades extraídos, antes sin resolver). Notas de uso en README EN/ES (caché de uv tras un release; el brief debe llamarse `PRD.md`) y recordatorio en el stub de `init`. Tests: 309 → 311.",
       "evidence": "",
-      "evidence_file": "EV-025",
+      "evidence_file": "EV-026",
       "receipt_ref": "evidence/receipts/receipt-F14.json",
       "recorded_at": "2026-09-21T11:59:58",
       "id": "CP-F14"
@@ -413,6 +413,6 @@
       "id": "SNAP-006"
     }
   ],
-  "compiled_at": "2026-09-21T13:20:58",
-  "state_sha256": "7eba8d07c237cbc867ae6b84815d075e2caa8ca42e3e8ffa8bf65e54836fe8fd"
+  "compiled_at": "2026-09-21T13:21:28",
+  "state_sha256": "dd08db2d5080e8c6168ec5e991c5d9b6b9626d6a15f915881a57d7a6e28277ee"
 }

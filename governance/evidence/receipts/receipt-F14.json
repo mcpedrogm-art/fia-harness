@@ -2,50 +2,58 @@
   "version": "1.0",
   "task_ref": "TASK-F14.md",
   "mode": "FULL",
-  "commit_or_tree_ref": "cbc3c85258c8c91cad9a09a3e4705b187dd8bd02",
+  "commit_or_tree_ref": "04a70d74c5a18c5b083f66e7e60beb60e10cea36",
   "dirty": false,
   "files": [
     {
-      "path": ".github/workflows/release.yml",
-      "content_sha256": "08e80a6807e037ac0aaf63d0276755db02ff6e49b8bb48010ec8cf886fba8b75"
-    },
-    {
-      "path": ".github/workflows/tests.yml",
-      "content_sha256": "b65278a4a0985e143c03be89f5d51126ec5a4660773fce8171962bf3646da3bb"
-    },
-    {
       "path": "CHANGELOG_FIXES.md",
-      "content_sha256": "9f75354a429e622d021607fb252cc04b3e0cf68e20253dc689199b367a324960"
+      "content_sha256": "ed72829ac00aa8a67ccc1d62c30c3406e06173d6514f84a8f4241ffde9795d28"
+    },
+    {
+      "path": "README.es.md",
+      "content_sha256": "afc463ddd8f2627c60c7cb33f3cc7b489e14f5fbb3096125a5455b1e892ff666"
+    },
+    {
+      "path": "README.md",
+      "content_sha256": "af1c4af6320ed8dd78a5c2f8d2ac4e0b14b929fe02dfb03f15cc30414728017a"
     },
     {
       "path": "fia_harness/__init__.py",
-      "content_sha256": "058a025e343f7c9b66591176f906423b77a9984a4191eef5ab2ba83f07ffdbe2"
+      "content_sha256": "44f47551738b4e355061fcbcb08d02368f9a0fd9ece4924911f1c5a54eb31f67"
     },
     {
       "path": "fia_harness/cli.py",
-      "content_sha256": "d52102519a2062e41aabb87a9f6f4402e805a89a29b7badd63deb0eaf702a953"
+      "content_sha256": "5a28ed0f56277e34192d253c22b26d736b68013396967e00ac455cac308be763"
+    },
+    {
+      "path": "fia_harness/data/parser/synonyms.json",
+      "content_sha256": "e93684a0495ffe06d27f27cc940d242d2da080ae3576352ecd434b8b8c23b60f"
+    },
+    {
+      "path": "fia_harness/parser/prd.py",
+      "content_sha256": "17e76b3316102875e316992a47c6015cf7d9a7b5dfd8dc2ebc6abc0870a44428"
     },
     {
       "path": "pyproject.toml",
-      "content_sha256": "efe2ff952afef5797f8fc989f2a323597fc3f853649a876019911d14ed055d2a"
+      "content_sha256": "7e69c84d933b52385cbd3c7f358dd30965b4f0ddcaa7533603c649bc9defe6ad"
     },
     {
-      "path": "tests/test_packaging.py",
-      "content_sha256": "ebcb628d32bd5f047f0cb784753a9d7f0a327d2305656d95400046d9b289d75b"
+      "path": "tests/test_parser_prd.py",
+      "content_sha256": "7109ed0671c58870c77a777033aa2692703fad97dcd6a3a8920644278981691d"
     }
   ],
   "checks": {
     "golden_rules": "pass",
     "tests": {
-      "passed": 309,
-      "total": 309
+      "passed": 311,
+      "total": 311
     },
     "lint": "skip",
-    "scope": "fail"
+    "scope": "pass"
   },
   "evidence_refs": [
-    "EV-025"
+    "EV-026"
   ],
-  "generated_at": "2026-09-21T13:08:32",
-  "receipt_sha256": "1f153fea877aff445401ce5b42c1c56a12ca67946d8de11181505c8dc3a786bc"
+  "generated_at": "2026-09-21T13:21:17",
+  "receipt_sha256": "2501ab246131a4f077d87c920b0ff3ad2321229616d3b83fa735b730c8c69640"
 }
