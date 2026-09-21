@@ -177,7 +177,7 @@
         "F12"
       ],
       "depends_on_notes": "",
-      "status": "in_progress"
+      "status": "done"
     }
   ],
   "checkpoints": [
@@ -336,9 +336,9 @@
     },
     {
       "phase": "F13",
-      "summary": "`core/assets.py` (stdlib): manifiesto `UI_ASSETS.json` (`version`, `assets[]` con `path`/`url`/`sha256`), `fia assets fetch [URL|ruta]` (verificación SHA-256 fail-closed, idempotente, escritura atómica `.part`→replace, rutas relativas sin traversal, opt-in), `fia assets manifest --dir-source --base-url` y `fia init --assets <url>`. Plantilla `UI_ASSETS.json` (raíz + paquete + `bootstrap`), `docs/UI_ASSETS.md`, nota en `UI_UX_EXCLUSIVA.md` §8.1 y README EN/ES. El kit no empaqueta media de terceros (mecanismo MIT; contenido en la infraestructura del mantenedor: Supabase self-hosted). Tests: 291 → 299; E2E con manifiesto, fetch y hash incorrecto bloqueando. Pendiente operativo: subir el pack al VPS y probar con la URL real.",
+      "summary": "`core/assets.py` (stdlib): manifiesto `UI_ASSETS.json` (`version`, `assets[]` con `path`/`url`/`sha256`), `fia assets fetch [URL|ruta]` (verificación SHA-256 fail-closed, idempotente, escritura atómica `.part`→replace, rutas relativas sin traversal, opt-in), `fia assets manifest --dir-source --base-url` y `fia init --assets <url>`. Plantilla `UI_ASSETS.json` (raíz + paquete + `bootstrap`), `docs/UI_ASSETS.md`, nota en `UI_UX_EXCLUSIVA.md` §8.1 y README EN/ES. El kit no empaqueta media de terceros (mecanismo MIT; contenido en la infraestructura del mantenedor: Supabase self-hosted). Tests: 291 → 299; E2E con manifiesto, fetch y hash incorrecto bloqueando. **v3.5.1:** pack oficial publicado en el Supabase self-hosted (bucket `fia-assets`, 16 objetos: 15 media + `library/UI_LIBRARY.md` con las 12 recetas) y URL documentada en README EN/ES, `docs/UI_ASSETS.md` y la plantilla; verificado end-to-end (`fia init --assets <URL>` → 51.35 MB + recetas; descarga incremental e idempotente).",
       "evidence": "",
-      "evidence_file": "EV-020",
+      "evidence_file": "EV-022",
       "receipt_ref": "evidence/receipts/receipt-F13.json",
       "recorded_at": "2026-09-21T10:29:33",
       "id": "CP-F13"
@@ -387,6 +387,6 @@
       "id": "SNAP-005"
     }
   ],
-  "compiled_at": "2026-09-21T10:45:03",
-  "state_sha256": "172ce7770a859228c5b8777d05b6b7c56b0bf3489111e5aa1bf50a8706a838e7"
+  "compiled_at": "2026-09-21T10:45:33",
+  "state_sha256": "9dd0df07fc7fa286455baf96822edb42fd529bbf3ffc13041496c40b81850dd6"
 }
