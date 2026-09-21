@@ -187,7 +187,7 @@
         "F13"
       ],
       "depends_on_notes": "",
-      "status": "in_progress"
+      "status": "done"
     }
   ],
   "checkpoints": [
@@ -352,6 +352,15 @@
       "receipt_ref": "evidence/receipts/receipt-F13.json",
       "recorded_at": "2026-09-21T10:29:33",
       "id": "CP-F13"
+    },
+    {
+      "phase": "F14",
+      "summary": "`core/ui.py`: `fia ui setup [--recetas] [--url]` (URL oficial por defecto `https://supabase.pgmia.es/…/UI_ASSETS.json`, override `--url` > env `FIA_UI_PACK_URL`; guarda el manifiesto usado en el `UI_ASSETS.json` del proyecto; reutiliza la descarga verificada SHA-256) y `fia ui status` (sin red: completo/parcial/ausente). Protocolo: **Paso 0** en `UI_UX_EXCLUSIVA.md` §8 (el agente pregunta antes; nada se descarga sin confirmación), ítem en H3 de `TASK_TEMPLATE.md`, mención en `QUICKSTART_LITE.md` y `AGENTS.md`; README EN/ES («What v3.6 adds») y `docs/UI_ASSETS.md`. Sin registro de la decisión (presencia de `media/`/`library/` = estado). Tests: 299 → 307; E2E paso 9 (`ui setup` completo, `--recetas`, `status`).",
+      "evidence": "",
+      "evidence_file": "EV-023",
+      "receipt_ref": "evidence/receipts/receipt-F14.json",
+      "id": "CP-F14",
+      "recorded_at": "2026-09-21T11:59:58"
     }
   ],
   "updated": "2026-09-21",
@@ -404,6 +413,6 @@
       "id": "SNAP-006"
     }
   ],
-  "compiled_at": "2026-09-21T11:59:15",
-  "state_sha256": "b6f1e22e8f68a5b82d5c50d59f4abc20032b1e310ff2801eaf6f48999966c0c4"
+  "compiled_at": "2026-09-21T11:59:58",
+  "state_sha256": "38fc8613c2ffef12221f57034e4dfbc5e1b6d647ddb46bb350a892a2552e173a"
 }
