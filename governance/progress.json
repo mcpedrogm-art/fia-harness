@@ -188,6 +188,16 @@
       ],
       "depends_on_notes": "",
       "status": "done"
+    },
+    {
+      "id": "F15",
+      "title": "",
+      "objective": "Fix del CI generado: detección del stack en subcarpetas y sin omisiones silenciosas (regla 7) / scaffold.GITHUBWORKFLOW con paso de detección (Node/Python en cualquier subcarpeta), avisos visibles en vez de skip silencioso y tests del generador; v3.6.3",
+      "depends_on": [
+        "F7"
+      ],
+      "depends_on_notes": "",
+      "status": "done"
     }
   ],
   "checkpoints": [
@@ -361,9 +371,18 @@
       "receipt_ref": "evidence/receipts/receipt-F14.json",
       "recorded_at": "2026-09-21T11:59:58",
       "id": "CP-F14"
+    },
+    {
+      "phase": "F15",
+      "summary": "el job `calidad` de la plantilla detecta el proyecto Node/Python menos profundo con `git ls-files` (monorepos incluidos), ejecuta tests/auditoría con `working-directory` y avisa con `::warning::` si falta stack, script `test` o `tests/` — nunca skip silencioso; se elimina `npm test --if-present` y el fallback que enmascaraba fallos de pytest (`if/elif`). Bloque bash verificado con Git Bash en un monorepo real (`node_dir=.` · `py_dir=src/api`) y en el propio kit (`py_dir=.`). Tests: 311 → 313.",
+      "evidence": "",
+      "evidence_file": "EV-027",
+      "receipt_ref": "evidence/receipts/receipt-F15.json",
+      "id": "CP-F15",
+      "recorded_at": "2026-09-22T19:35:59"
     }
   ],
-  "updated": "2026-09-21",
+  "updated": "2026-09-22",
   "sealed_docs": {
     "INICIO_PROYECTO.md": "49207ffcfdf3d796f3fdc2b69fa4424a7db383a9fbdaf11501b23b1f95a51581",
     "SECURITY.md": "e0dbd7fa011c95c0dccf40402698f68be7df5f6067ca24cdc05b0bf9ad8f62db",
@@ -411,8 +430,15 @@
       "date": "2026-09-21",
       "phase": "M2",
       "id": "SNAP-006"
+    },
+    {
+      "sha256": "0e1523d9e27080c699137e9209da1a7828971402c911bc82dea97b6c8f596eac",
+      "ref": "sesion 2026-09-22 (usuario aprueba fase F15 completa y commit local sin push)",
+      "date": "2026-09-22",
+      "phase": "",
+      "id": "SNAP-007"
     }
   ],
-  "compiled_at": "2026-09-21T13:21:28",
-  "state_sha256": "dd08db2d5080e8c6168ec5e991c5d9b6b9626d6a15f915881a57d7a6e28277ee"
+  "compiled_at": "2026-09-22T19:35:59",
+  "state_sha256": "4a06c5003cb7d6f19da81956d69ae26ddce668cc58580c7175b6878075a39363"
 }

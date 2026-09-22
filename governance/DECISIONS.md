@@ -121,6 +121,20 @@
     `status` offline y re-descargas. Nada se descarga sin confirmación humana
     (opt-in estricto). Ref: SPEC §10, APPROVAL-006.
 
+*   **ADR-014 (2026-09-22):** Fix del CI generado (v3.6.3, F15). Problema real
+    (auditoría externa de un proyecto con el backend en `src/api/`): el job
+    `calidad` de `scaffold.GITHUB_WORKFLOW` detectaba el stack **solo en la raíz**,
+    así que en monorepos los pasos de Python se saltaban en silencio; además
+    `npm test --if-present` no verificaba nada. Decisión: **detección del proyecto
+    menos profundo** con `git ls-files` (ignora `node_modules`/`.venv`/`.git`) y
+    **avisos `::warning::` visibles** cuando falta stack o tests — nunca skip
+    silencioso — sin volver bloqueante la ausencia de tests (coherente con
+    ADR-007: los avisos de calidad no bloquean; el cierre de fase lo controlan la
+    regla nº7 y el recibo). Se corrige el enmascaramiento `pytest || unittest`
+    (el fallback solo se usa si pytest no está instalado). Alternativa
+    descartada: job en rojo si no hay tests (rompería fases tempranas).
+    Ref: APPROVAL-007.
+
 ## Reaperturas
 
 - **F9** (2026-09-18) · Reapertura · Razón: hallazgo del dogfood post-cierre: re-emision en done (evitar deadlock) y changed_files para estado en subcarpeta
@@ -141,3 +155,4 @@
 - **APPROVAL-004** · (2026-09-18) · Fase: M2 · Acción: UI/UX v3.4: cuatro direcciones divergentes + esquema de recetas y plantilla UI_RECIPES.md · Aprobado por: Humano · Ref: sesion 2026-09-18 (usuario aprueba el flujo de 4 variantes y la integracion de recetas)
 - **APPROVAL-005** · (2026-09-21) · Fase: M2 · Acción: Pack de assets UI v3.5: manifiesto UI_ASSETS.json + fia assets fetch/manifest + fia init --assets (el kit no empaqueta media de terceros) · Aprobado por: Humano · Ref: sesion 2026-09-18 (usuario aprueba el pack de assets y su hosting en Supabase self-hosted)
 - **APPROVAL-006** · (2026-09-21) · Fase: M2 · Acción: Entorno UI/UX asistido v3.6: fia ui setup/status con confirmacion en el protocolo (Full y Lite), URL oficial por defecto y override · Aprobado por: Humano · Ref: sesion 2026-09-21 (usuario aprueba el flujo y el nombre fia ui setup)
+- **APPROVAL-007** · (2026-09-22) · Acción: Fix del CI generado (F15): deteccion del stack en subcarpetas y avisos visibles; stack sin tests = aviso no bloqueante; v3.6.3 · Aprobado por: Humano · Ref: sesion 2026-09-22 (usuario aprueba fase F15 completa y commit local sin push)

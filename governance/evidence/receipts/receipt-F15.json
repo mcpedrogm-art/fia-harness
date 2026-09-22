@@ -1,0 +1,43 @@
+{
+  "version": "1.0",
+  "task_ref": "TASK-F15.md",
+  "mode": "FULL",
+  "commit_or_tree_ref": "03011cbc5b032e9d22347e134774a34df2df251a",
+  "dirty": false,
+  "files": [
+    {
+      "path": "CHANGELOG_FIXES.md",
+      "content_sha256": "f3150c385ee719bc4a34b9ecae2d09a25dc2568ae52bf0427fc02001ebc0efe5"
+    },
+    {
+      "path": "fia_harness/__init__.py",
+      "content_sha256": "010dc4781dbff1d68ed3b1752ce40acc8a744d3bbfa5f251fa9d51ea63ea3c7d"
+    },
+    {
+      "path": "fia_harness/generators/scaffold.py",
+      "content_sha256": "c0695eb0d4c3106f87c02030cf5b8e967fcb484f140e602977547396777ae76b"
+    },
+    {
+      "path": "pyproject.toml",
+      "content_sha256": "775147135cbdf452e683b2d3992d22cb052a8e44b333c663c52bf528fb9f3746"
+    },
+    {
+      "path": "tests/test_generators_bootstrap.py",
+      "content_sha256": "03caf17a03f0f556685090c32b5e8a25f475fcbad450e0d5d865dee4022ce0ae"
+    }
+  ],
+  "checks": {
+    "golden_rules": "pass",
+    "tests": {
+      "passed": 313,
+      "total": 313
+    },
+    "lint": "skip",
+    "scope": "skip"
+  },
+  "evidence_refs": [
+    "EV-027"
+  ],
+  "generated_at": "2026-09-22T19:35:56",
+  "receipt_sha256": "756acd88868366291286ccac62d47ae41607cdfbaf16080e2e5a0ae01d573bc7"
+}

@@ -1,6 +1,6 @@
 # PROGRESS.md — Hoja de Ruta e Historial de Fases (repo FIA Harness)
 
-**Fase activa:** — (F14 cerrada; F8 en pausa)
+**Fase activa:** — (F15 cerrada; F8 en pausa)
 
 ## Fases del Proceso (Harness — dogfood del propio kit)
 
@@ -30,6 +30,7 @@
 | F12 | UI/UX: cuatro direcciones divergentes + esquema de recetas + `UI_RECIPES.md` | `UI_UX_EXCLUSIVA.md` §8.1–8.2, H3 de `TASK_TEMPLATE.md`, `QUICKSTART_LITE.md`, plantilla `UI_RECIPES.md` (copias sincronizadas) y biblioteca privada local | F11 | [x] Listo |
 | F13 | Pack de assets UI: manifiesto + descarga verificada (`fia assets fetch/manifest`, `fia init --assets`) | `core/assets.py` (stdlib, SHA-256, idempotente, fail-closed), plantilla `UI_ASSETS.json`, `docs/UI_ASSETS.md`, tests y E2E | F12 | [x] Listo |
 | F14 | Entorno UI/UX asistido: `fia ui setup/status` + pregunta en el protocolo (Full y Lite) | `core/ui.py` (URL oficial por defecto, `--recetas`, override `--url`/env), `ui setup/status` en CLI, Paso 0 en `UI_UX_EXCLUSIVA.md`, H3, `QUICKSTART_LITE.md`, `AGENTS.md`, README EN/ES | F13 | [x] Listo |
+| F15 | Fix del CI generado: detección del stack en subcarpetas y sin omisiones silenciosas (regla 7) | `scaffold.GITHUB_WORKFLOW` con paso de detección (Node/Python en cualquier subcarpeta), avisos visibles en vez de skip silencioso y tests del generador; v3.6.3 | F7 | [x] Listo |
 
 ## Checkpoints de Contexto Recientes
 
@@ -128,3 +129,6 @@
 - **F14 (Entorno UI/UX asistido, v3.6.0 → v3.6.1):** `core/ui.py`: `fia ui setup [--recetas] [--url]` (URL oficial por defecto `https://supabase.pgmia.es/…/UI_ASSETS.json`, override `--url` > env `FIA_UI_PACK_URL`; guarda el manifiesto usado en el `UI_ASSETS.json` del proyecto; reutiliza la descarga verificada SHA-256) y `fia ui status` (sin red: completo/parcial/ausente). Protocolo: **Paso 0** en `UI_UX_EXCLUSIVA.md` §8 (el agente pregunta antes; nada se descarga sin confirmación), ítem en H3 de `TASK_TEMPLATE.md`, mención en `QUICKSTART_LITE.md` y `AGENTS.md`; README EN/ES («What v3.6 adds») y `docs/UI_ASSETS.md`. Sin registro de la decisión (presencia de `media/`/`library/` = estado). Tests: 299 → 307; E2E paso 9 (`ui setup` completo, `--recetas`, `status`). **v3.6.1 (reportado por el humano en uso real):** `UI_ASSETS.json` quedaba fuera del wheel (glob `*.md`) y `fia init` fallaba en instalaciones de PyPI; corregido a `data/templates/*` + guardarraíles (test de cobertura de `package-data`, job `wheel` con `init` de humo en CI, paso de humo en el release antes de publicar) + handler de `init` afinado (recurso del paquete vs carpeta). **v3.6.2 (test como usuario externo):** parser PRD con **cuerpo jerárquico** (el contenido de los H3 hijos cuenta para la sección padre) y **sinónimos ampliados** ("Propósito", "Visión", "Objetivos", "Perfiles", "Alcance Funcional", "Módulos", "Características", "Capacidades", "Exclusiones"); verificado con un brief real (problema y 51 funcionalidades extraídos, antes sin resolver). Notas de uso en README EN/ES (caché de uv tras un release; el brief debe llamarse `PRD.md`) y recordatorio en el stub de `init`. Tests: 309 → 311.
   Evidencia: EV-026
   Recibo: evidence/receipts/receipt-F14.json
+- **F15 (CI generado sin omisiones silenciosas, v3.6.3):** el job `calidad` de la plantilla detecta el proyecto Node/Python menos profundo con `git ls-files` (monorepos incluidos), ejecuta tests/auditoría con `working-directory` y avisa con `::warning::` si falta stack, script `test` o `tests/` — nunca skip silencioso; se elimina `npm test --if-present` y el fallback que enmascaraba fallos de pytest (`if/elif`). Bloque bash verificado con Git Bash en un monorepo real (`node_dir=.` · `py_dir=src/api`) y en el propio kit (`py_dir=.`). Tests: 311 → 313.
+  Evidencia: EV-027
+  Recibo: evidence/receipts/receipt-F15.json
