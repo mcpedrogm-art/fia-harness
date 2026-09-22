@@ -5,6 +5,30 @@ con `DECISIONS.md` del propio sistema.
 
 ---
 
+## v3.6.3 — CI generado: detección del stack en subcarpetas y sin omisiones silenciosas
+
+1. **Bug real (auditoría externa, 2026-09-22):** el job `calidad` de la plantilla
+   (`scaffold.GITHUB_WORKFLOW`) detectaba el stack **solo en la raíz**
+   (`hashFiles('pyproject.toml')`, `hashFiles('tests/**/test_*.py')`): en un
+   monorepo (backend en `src/api/`) los pasos de Python se **saltaban en
+   silencio** y el CI quedaba verde sin ejecutar la suite (regla de oro nº2).
+2. **Detección en todo el repo:** paso `Detectar stack` con `git ls-files` que
+   localiza el proyecto Node (`package.json`) y Python
+   (`pyproject.toml`/`requirements.txt`) **menos profundo**, ignorando
+   `node_modules/`, `.venv/` y `.git/`; los pasos usan `working-directory` en la
+   carpeta detectada (soporta monorepos).
+3. **Sin omisiones silenciosas:** si no hay stack → `::warning::` visible; si el
+   `package.json` no tiene script `test` (se elimina `npm test --if-present`) o
+   el proyecto Python no tiene `tests/` → `::warning::` de la regla 7, no
+   bloqueante (coherente con ADR-007).
+4. **Fallback sin enmascarar:** el `unittest` de respaldo solo se ejecuta si
+   pytest **no está instalado** (`if/elif`); antes `pytest -q || unittest`
+   ocultaba los fallos reales de pytest.
+5. Tests: 311 → 313 (detección/warnings y no-enmascaramiento). Bloque bash
+   verificado contra un monorepo real (`src/api`) y contra el propio kit (raíz).
+
+---
+
 ## v3.6.2 — Parser PRD para briefs reales + notas de uso
 
 1. **Cuerpo jerárquico de sección** (`parser/prd.py`): el cuerpo de una sección

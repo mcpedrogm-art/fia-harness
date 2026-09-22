@@ -208,37 +208,81 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
+      # Detección del stack en TODO el repo (no solo la raíz): localiza el proyecto
+      # Node/Python menos profundo y publica su carpeta. Si no hay stack, los pasos
+      # avisan con ::warning:: — nunca se omiten en silencio (regla de oro nº2).
+      - name: Detectar stack
+        id: stack
+        run: |
+          find_dir() {
+            git ls-files -z | tr '\\0' '\\n' \
+              | grep -E "$1" | grep -vE "$2" \
+              | awk -F/ '{print NF-1"\\t"$0}' | sort -n \
+              | head -n1 | cut -f2- | xargs -r dirname
+          }
+          node_dir="$(find_dir '(^|/)package\\.json$' '(^|/)node_modules/')"
+          py_dir="$(find_dir '(^|/)(pyproject\\.toml|requirements\\.txt)$' '(^|/)(node_modules|\\.venv|\\.git)/')"
+          echo "node_dir=$node_dir" >> "$GITHUB_OUTPUT"
+          echo "py_dir=$py_dir" >> "$GITHUB_OUTPUT"
+          echo "Stack detectado — Node: ${node_dir:-ninguno} · Python: ${py_dir:-ninguno}"
+
+      # --- Node ---
       - uses: actions/setup-node@v4
-        if: ${{ hashFiles('package.json') != '' }}
+        if: steps.stack.outputs.node_dir != ''
         with:
           node-version: "20"
       - name: Instalar dependencias Node
-        if: ${{ hashFiles('package.json') != '' }}
+        if: steps.stack.outputs.node_dir != ''
+        working-directory: ${{ steps.stack.outputs.node_dir }}
         run: npm ci || npm install
       - name: Tests Node
-        if: ${{ hashFiles('package.json') != '' }}
-        run: npm test --if-present
+        if: steps.stack.outputs.node_dir != ''
+        working-directory: ${{ steps.stack.outputs.node_dir }}
+        run: |
+          if node -e "process.exit(require('./package.json').scripts && require('./package.json').scripts.test ? 0 : 1)"; then
+            npm test
+          else
+            echo "::warning title=Regla 7::package.json sin script 'test' en '${{ steps.stack.outputs.node_dir }}': añade tests o personaliza este paso."
+          fi
       - name: Auditoría Node (falla en nivel high o superior)
-        if: ${{ hashFiles('package.json') != '' }}
+        if: steps.stack.outputs.node_dir != ''
+        working-directory: ${{ steps.stack.outputs.node_dir }}
         run: npm audit --audit-level=high
+
+      # --- Python ---
       - uses: actions/setup-python@v5
-        if: ${{ hashFiles('requirements.txt') != '' || hashFiles('pyproject.toml') != '' }}
+        if: steps.stack.outputs.py_dir != ''
         with:
           python-version: "3.11"
       - name: Instalar dependencias Python
-        if: ${{ hashFiles('requirements.txt') != '' }}
+        if: steps.stack.outputs.py_dir != ''
+        working-directory: ${{ steps.stack.outputs.py_dir }}
         run: |
           python -m pip install --upgrade pip
-          pip install -r requirements.txt
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+          if [ -f pyproject.toml ]; then pip install -e .; fi
       - name: Tests Python
-        if: ${{ hashFiles('tests/**/test_*.py') != '' }}
+        if: steps.stack.outputs.py_dir != ''
+        working-directory: ${{ steps.stack.outputs.py_dir }}
         run: |
-          python -m pytest --version >/dev/null 2>&1 && pytest -q || python -m unittest discover -s tests -p "test_*.py" -v
+          if [ ! -d tests ]; then
+            echo "::warning title=Regla 7::No hay carpeta tests/ en '${{ steps.stack.outputs.py_dir }}': añade tests o personaliza este paso."
+          elif python -m pytest --version >/dev/null 2>&1; then
+            pytest -q
+          else
+            python -m unittest discover -s tests -p "test_*.py" -v
+          fi
       - name: Auditoría Python (falla en vulnerabilidades conocidas)
-        if: ${{ hashFiles('requirements.txt') != '' }}
+        if: steps.stack.outputs.py_dir != ''
+        working-directory: ${{ steps.stack.outputs.py_dir }}
         run: |
           pip install pip-audit
-          pip-audit -r requirements.txt
+          if [ -f requirements.txt ]; then pip-audit -r requirements.txt; else pip-audit; fi
+
+      - name: Aviso si no hay stack detectable
+        if: steps.stack.outputs.node_dir == '' && steps.stack.outputs.py_dir == ''
+        run: echo "::warning title=Regla 7::No se detectó stack Node ni Python; personaliza o elimina el job 'calidad'."
 """
 
 

@@ -36,6 +36,31 @@ class ScaffoldTests(unittest.TestCase):
             scaffold.generate_github_workflow(d)
             self.assertEqual(wf.read_text(encoding="utf-8"), "custom")
 
+    def test_generate_github_workflow_detecta_stack_en_subcarpetas(self):
+        """El CI generado no se salta pasos en silencio: detecta el stack en
+        cualquier subcarpeta (monorepo) y avisa con ::warning:: si no lo encuentra."""
+        with tempfile.TemporaryDirectory() as d:
+            d = Path(d)
+            scaffold.generate_github_workflow(d)
+            wf = (d / ".github" / "workflows" / "harness.yml").read_text(encoding="utf-8")
+            self.assertIn("Detectar stack", wf)
+            self.assertIn("steps.stack.outputs.node_dir", wf)
+            self.assertIn("steps.stack.outputs.py_dir", wf)
+            self.assertIn("working-directory: ${{ steps.stack.outputs.py_dir }}", wf)
+            self.assertIn("::warning", wf)
+            self.assertNotIn("--if-present", wf)
+            self.assertNotIn("hashFiles('tests/**/test_*.py')", wf)
+
+    def test_generate_github_workflow_no_enmascara_fallos_de_pytest(self):
+        """El fallback a unittest solo se usa si pytest no está instalado; un
+        fallo real de pytest no debe disparar el fallback (ni quedar en verde)."""
+        with tempfile.TemporaryDirectory() as d:
+            d = Path(d)
+            scaffold.generate_github_workflow(d)
+            wf = (d / ".github" / "workflows" / "harness.yml").read_text(encoding="utf-8")
+            self.assertIn("elif python -m pytest --version", wf)
+            self.assertNotIn("&& pytest -q ||", wf)
+
     def test_generate_context_file_marca_unresolved(self):
         with tempfile.TemporaryDirectory() as d:
             d = Path(d)
