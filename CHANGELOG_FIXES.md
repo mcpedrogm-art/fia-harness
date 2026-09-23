@@ -5,6 +5,36 @@ con `DECISIONS.md` del propio sistema.
 
 ---
 
+## v3.7.0 — Módulo condicional TypeSafe/Jev (decisiones estructuradas)
+
+1. **Nuevo módulo de extensión `TYPESAFE_EXTENSION.md`** (módulo documental
+   condicional, espejo del RAG): guía para integrar **TypeSafe AI (modelo Jev,
+   "System One")** dentro del producto — contrato de la API (`POST
+   /v1/systemone`), las tres primitivas (Choice/Score/Noul), confianza y umbrales,
+   los patrones (speculative fan-out, confidence-gated routing, composite scoring,
+   intent routing), SDK Python/JS o HTTP con `urllib`, un ejemplo de trading y las
+   salvaguardas (API key como secreto, `state` que sale del entorno, coste,
+   precisión en español). El módulo deja claro que **Jev no es un LLM de código**:
+   se usa dentro del producto, no sustituye al agente.
+2. **Detección y activación automática:** `parser/prd.py` incorpora
+   `TYPESAFE_KEYWORDS` (marca + términos distintivos: `typesafe`, `jev`,
+   `system one`, `noul`, `guardrails`, `intent routing`, `composite scoring`…) y
+   `bootstrap.py` copia el módulo de `/docs` a la raíz solo si el PRD lo pide
+   (helper común `_maybe_activate_module`, reutilizado por el RAG). Se entrega con
+   `fia init` (`cli.TEMPLATE_NAMES`) y nunca se confunde con el PRD
+   (`NON_PRD_FILES`).
+3. **Gobernanza:** fila en la matriz de `SKILLS_MCP.md` (API externa, lectura,
+   aprobación previa), punto 13 de `SPEC.md` en `INICIO_PROYECTO.md` + checklist,
+   nota en `AGENTS.md` y sección en `MODELOS.md` (Jev es capa de decisión, no
+   modelo de código). La conexión exige aprobación humana (Regla de Oro nº6) y la
+   `TYPESAFE_API_KEY` se trata como secreto.
+4. Tests: 313 → 319 (detección con/sin falsos positivos, activación/no-activación
+   de los módulos RAG y TypeSafe, anti-drift del paquete y exclusión del PRD).
+   E2E verificado con un PRD de trading (activa TypeSafe, no activa RAG,
+   `fia check` en verde).
+
+---
+
 ## v3.6.3 — CI generado: detección del stack en subcarpetas y sin omisiones silenciosas
 
 1. **Bug real (auditoría externa, 2026-09-22):** el job `calidad` de la plantilla

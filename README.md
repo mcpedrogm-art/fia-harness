@@ -342,6 +342,20 @@ fia verify --scope-base origin/main  # post-hoc scope: diff vs the TASK's declar
 
 ---
 
+## 🧩 What v3.7 adds
+
+| | v3.6 | **v3.7** |
+|---|---|---|
+| Conditional modules | RAG only | **TypeSafe/Jev module**: structured AI decisions (classify, route, score, guardrails) inside the product you build |
+| Detection | PRD → `RAG_VECTOR_EXTENSION.md` | **PRD → `TYPESAFE_EXTENSION.md`** when it mentions TypeSafe/Jev or decision semantics |
+| Governance | — | row in `SKILLS_MCP.md`, SPEC point 13, `AGENTS.md`/`MODELOS.md` notes; the API key is a secret and the connection needs human approval |
+
+> Jev is **not** a coding LLM: it is a decision layer your product uses. Passing a
+> PRD that mentions Jev now gives your agent the full contract, the primitives and
+> the guardrails to build it — opt-in, stdlib-only, and never without approval.
+
+---
+
 ## 🛡️ The rules that never break
 
 1. 🚫 **Never code without an approved spec** — not a line before M3.

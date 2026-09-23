@@ -346,6 +346,20 @@ fia verify --scope-base origin/main  # alcance post-hoc: diff vs el alcance decl
 
 ---
 
+## 🧩 Qué añade la v3.7
+
+| | v3.6 | **v3.7** |
+|---|---|---|
+| Módulos condicionales | solo RAG | **módulo TypeSafe/Jev**: decisiones estructuradas con IA (clasificar, enrutar, puntuar, guardrails) dentro del producto que construyes |
+| Detección | PRD → `RAG_VECTOR_EXTENSION.md` | **PRD → `TYPESAFE_EXTENSION.md`** si menciona TypeSafe/Jev o semántica de decisión |
+| Gobernanza | — | fila en `SKILLS_MCP.md`, punto 13 de SPEC, notas en `AGENTS.md`/`MODELOS.md`; la API key es un secreto y la conexión exige aprobación humana |
+
+> Jev **no** es un LLM de código: es una capa de decisión que usa tu producto. Pasar
+> un PRD que menciona Jev ahora da a tu agente el contrato, las primitivas y las
+> salvaguardas para construirlo — opt-in, stdlib-only y nunca sin aprobación.
+
+---
+
 ## 🛡️ Las reglas que nunca se rompen
 
 1. 🚫 **Nunca codificar sin spec aprobada** — ni una línea antes del M3.
