@@ -39,6 +39,7 @@ TEMPLATE_NAMES = [
     "AGENTS.md",
     "PRD_TEMPLATE.md",
     "MODELOS.md",
+    "TYPESAFE_EXTENSION.md",
 ]
 
 RAG_NAME = "RAG_VECTOR_EXTENSION.md"

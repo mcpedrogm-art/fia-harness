@@ -44,3 +44,17 @@ periódicamente en `DECISIONS.md` (sección `## Costes`).
 
 No es un requisito de cierre: es una práctica de gobernanza de coste. Si no lo
 registras, la fase cierra igual; lo importante es que el dato no se invente.
+
+## 4. Capa de decisión: TypeSafe/Jev (no es un modelo de código)
+
+Si el proyecto usa **TypeSafe (Jev)** para decisiones estructuradas, no sustituye
+al modelo del agente: es una **capa de decisión dentro del producto** (ver
+`TYPESAFE_EXTENSION.md`). A efectos de coste y routing:
+
+- **No entra en la tabla de la sección 1** (esa tabla elige el modelo que *escribe*
+  el código por fase). Jev no escribe código.
+- **Se cobra por token de entrada** (salida gratis). La palanca de eficiencia es el
+  *speculative fan-out*: muchas preguntas atómicas en **una** llamada.
+- **Registra su coste en el checkpoint** de la fase que lo integra, indicando el
+  modelo (`jev-1.13.0` o alias) y una estimación de tokens/coste, igual que el
+  resto. Nunca se inventa el dato.

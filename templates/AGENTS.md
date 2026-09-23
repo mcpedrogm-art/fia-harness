@@ -41,6 +41,10 @@ Las respuestas alimentan `SECURITY.md`, `AEO_GEO_SEO.md` y las decisiones de
 - **Nada se descarga sin aprobación humana**, incluido el pack UI/UX: pregunta y,
   si acepta, ejecuta `fia ui setup` (o `--recetas`); `fia ui status` informa del
   estado local sin red (v3.6).
+- Si el proyecto integra decisiones estructuradas con IA (TypeSafe/Jev), aplica
+  `TYPESAFE_EXTENSION.md`: la conexión y la `TYPESAFE_API_KEY` requieren aprobación
+  previa, la clave nunca va en archivos de control ni commits, y el `state` que sale
+  del entorno se declara en `SECURITY.md`.
 
 ## 4. Protocolo de enmienda del PRD
 

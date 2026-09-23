@@ -213,6 +213,7 @@ Con el PRD + respuestas de la entrevista, el agente redacta (no codifica todaví
 10. **Dirección UI/UX** — documentar el Design DNA aprobado, la arquitectura UX, los componentes/estados, motion, responsive, accesibilidad, assets y auditoría de originalidad.
 11. **Modo de trabajo** — registrar si el proyecto usa Modo Lite o Completo, sus criterios de promoción y el motivo de la elección.
 12. **Procesamiento semántico / RAG (condicional)** — si el MVP requiere búsqueda semántica, embeddings, ingesta de documentos o memoria a largo plazo, activar `RAG_VECTOR_EXTENSION.md` y resumir aquí sus decisiones: stack vectorial elegido (pgvector, Pinecone, Qdrant...), estrategia de chunking, recuperación híbrida + reranking, metadatos obligatorios (`source_id`, `chunk_index`, `created_at`, `access_level`) y el checklist de seguridad aplicable a la capa vectorial.
+13. **Decisiones estructuradas con IA — TypeSafe/Jev (condicional)** — si el MVP necesita juicios semánticos tipados (clasificar, puntuar, enrutar, verificar, guardrails) o menciona TypeSafe/Jev, activar `TYPESAFE_EXTENSION.md` y resumir aquí: qué decisiones se delegan al modelo (Choice/Score/Noul), dónde vive la API key como secreto, qué `state` sale del entorno (y su base legal si hay PII), las preguntas y umbrales (centralizados en un único archivo) y el manejo de baja confianza/errores de la API.
 
 - [ ] El humano revisa y aprueba `SPEC.md` explícitamente antes de pasar a la Fase 3.
 - [ ] Cualquier cambio posterior de alcance se registra como una nueva versión de `SPEC.md`, nunca se sobreescribe en silencio.
@@ -324,6 +325,7 @@ Crear y mantener siempre estos archivos en la raíz del repo:
 - **`SECURITY.md`** — **Obligatorio siempre.** Especificación y checklist de seguridad: auth/2FA, RLS/autorización, gestión de secretos, hardening de servidor/firewall según el stack.
 - **`AEO_GEO_SEO.md`** — (solo si hay superficie pública) Especificación y checklist de SEO/AEO/GEO a aplicar en las fases de contenido y despliegue.
 - **`RAG_VECTOR_EXTENSION.md`** — (solo si hay búsqueda semántica, embeddings o RAG) Stack vectorial, pipeline de chunking/recuperación híbrida/reranking, metadatos obligatorios y salvaguardas de seguridad de la capa vectorial. `bootstrap.py` lo activa automáticamente si el PRD menciona RAG; también está disponible en el kit maestro, carpeta `templates/`.
+- **`TYPESAFE_EXTENSION.md`** — (solo si hay decisiones estructuradas con IA —TypeSafe/Jev—: clasificación, routing, scoring, guardrails, verificación) Contrato de la API, primitivas (Choice/Score/Noul), confianza y umbrales, patrones (fan-out, confidence-gated routing, composite scoring, intent routing), gestión de la API key como secreto y coste. `bootstrap.py` lo activa automáticamente si el PRD lo menciona; también está disponible en el kit maestro, carpeta `templates/`.
 
 ---
 
@@ -338,6 +340,7 @@ Crear y mantener siempre estos archivos en la raíz del repo:
 - [ ] `SECURITY.md` completo (auth/2FA, RLS, secretos, firewall/servidor según stack) — obligatorio, no opcional
 - [ ] `AEO_GEO_SEO.md` creado si el proyecto tiene superficie pública
 - [ ] Si el proyecto implementa RAG/búsqueda semántica: `RAG_VECTOR_EXTENSION.md` activado y resumido en `SPEC.md`
+- [ ] Si el proyecto usa decisiones estructuradas con IA (TypeSafe/Jev): `TYPESAFE_EXTENSION.md` activado y resumido en `SPEC.md`, con la API key gestionada como secreto
 - [ ] `SKILLS_MCP.md` leído y matriz inicial de Skills/MCP/conexiones preparada
 - [ ] Aprobaciones humanas registradas antes de cualquier búsqueda, instalación, activación, conexión o decisión técnica delegada
 - [ ] `UI_UX_EXCLUSIVA.md` leído si el proyecto tiene interfaz y Design DNA aprobado antes de implementar UI

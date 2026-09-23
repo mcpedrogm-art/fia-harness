@@ -39,6 +39,18 @@ RAG_KEYWORDS = re.compile(
     re.IGNORECASE,
 )
 
+# Palabras clave para activar el módulo de extensión TypeSafe/Jev (decisiones
+# estructuradas) si el PRD lo pide. Deliberadamente específicas (marca + términos
+# distintivos) para no activarse por "clasificación" o "confianza" genéricos.
+TYPESAFE_KEYWORDS = re.compile(
+    r"\b(typesafe|jev|system[\s-]?one|systemone|noul|guardrails?|"
+    r"confidence[\s-]?gated|enrutamiento\s+de\s+intenci[oó]n|intent\s+routing|"
+    r"puntuaci[oó]n\s+compuesta|composite\s+scoring|speculative\s+fan[\s-]?out|"
+    r"decisi[oó]n(?:es)?\s+estructurada(?:s)?|clasificaci[oó]n\s+sem[aá]ntica|"
+    r"juicio\s+tipado)\b",
+    re.IGNORECASE,
+)
+
 
 @dataclass
 class ExtractionResult:

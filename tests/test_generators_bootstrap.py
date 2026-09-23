@@ -95,6 +95,44 @@ class BootstrapStateTests(unittest.TestCase):
     def test_rag_module_name(self):
         self.assertEqual(bootstrap.RAG_MODULE_NAME, "RAG_VECTOR_EXTENSION.md")
 
+    def test_typesafe_module_name(self):
+        self.assertEqual(bootstrap.TYPESAFE_MODULE_NAME, "TYPESAFE_EXTENSION.md")
+
+
+class ExtensionModuleActivationTests(unittest.TestCase):
+    """Los módulos condicionales se activan solo si el PRD los menciona."""
+
+    def _project(self, d, module_name, prd_text):
+        d = Path(d)
+        (d / "docs").mkdir()
+        (d / "docs" / module_name).write_text("# módulo\n", encoding="utf-8")
+        prd = d / "PRD.md"
+        prd.write_text(prd_text, encoding="utf-8")
+        return d, prd
+
+    def test_activa_typesafe_si_el_prd_lo_menciona(self):
+        with tempfile.TemporaryDirectory() as d:
+            project, prd = self._project(
+                d, bootstrap.TYPESAFE_MODULE_NAME,
+                "# Trading\nUsa TypeSafe (Jev) para clasificar señales y rutar órdenes.\n")
+            bootstrap.maybe_activate_typesafe_module(project, prd)
+            self.assertTrue((project / bootstrap.TYPESAFE_MODULE_NAME).exists())
+
+    def test_no_activa_typesafe_sin_mencion(self):
+        with tempfile.TemporaryDirectory() as d:
+            project, prd = self._project(
+                d, bootstrap.TYPESAFE_MODULE_NAME, "# App de notas\nSin IA de decisiones.\n")
+            bootstrap.maybe_activate_typesafe_module(project, prd)
+            self.assertFalse((project / bootstrap.TYPESAFE_MODULE_NAME).exists())
+
+    def test_activa_rag_si_el_prd_lo_menciona(self):
+        with tempfile.TemporaryDirectory() as d:
+            project, prd = self._project(
+                d, bootstrap.RAG_MODULE_NAME,
+                "# Docs\nBúsqueda semántica con embeddings y pgvector.\n")
+            bootstrap.maybe_activate_rag_module(project, prd)
+            self.assertTrue((project / bootstrap.RAG_MODULE_NAME).exists())
+
 
 if __name__ == "__main__":
     unittest.main(verbosity=2)

@@ -25,7 +25,7 @@ class FindPrdFileTests(unittest.TestCase):
         for name in ("INICIO_PROYECTO.md", "SECURITY.md", "AEO_GEO_SEO.md",
                      "UI_UX_EXCLUSIVA.md", "SKILLS_MCP.md", "TASK_TEMPLATE.md",
                      "TASK_LITE_TEMPLATE.md", "UI_RECIPES.md", "QUICKSTART_LITE.md",
-                     "AGENTS.md"):
+                     "AGENTS.md", "RAG_VECTOR_EXTENSION.md", "TYPESAFE_EXTENSION.md"):
             (d / name).write_text("x", encoding="utf-8")
         self.assertIsNone(prd.find_prd_file(d))
 
@@ -125,6 +125,24 @@ class ExtractFieldConfidenceTests(unittest.TestCase):
             p.write_text("# App\n\n## Problema\np\n", encoding="utf-8")
             meta = prd.extract_prd_metadata(p)
         self.assertEqual(sorted(meta["unresolved"]), ["features", "out_of_scope", "users"])
+
+
+class ExtensionKeywordTests(unittest.TestCase):
+    """Detección de los módulos condicionales (RAG y TypeSafe/Jev) en el PRD."""
+
+    def test_typesafe_keywords_positivas(self):
+        for text in ("usa TypeSafe para las decisiones",
+                     "el modelo Jev clasifica señales",
+                     "arquitectura System One",
+                     "guardrails de entrada",
+                     "intent routing de peticiones"):
+            self.assertTrue(prd.TYPESAFE_KEYWORDS.search(text), text)
+
+    def test_typesafe_keywords_sin_falsos_positivos(self):
+        for text in ("clasificación de documentos por carpeta",
+                     "la confianza del usuario es alta",
+                     "score de crédito del cliente"):
+            self.assertIsNone(prd.TYPESAFE_KEYWORDS.search(text), text)
 
 
 class RealBriefTests(unittest.TestCase):

@@ -85,6 +85,7 @@ La matriz sirve para detectar capacidades candidatas; no autoriza su instalació
 | Observabilidad y logs | MCP de monitorización | Lectura | Redacción de secretos, PII y tokens antes de exponer resultados |
 | Documentos, hojas o presentaciones | MCP especializado del formato o servicio | Lectura o borrador | Cuenta, permisos de edición y destino final del archivo |
 | Búsqueda semántica / RAG / bases vectoriales | Módulo `RAG_VECTOR_EXTENSION.md` (MCP de pgvector/Supabase, ingesta de documentos, fetch web) | Lectura por defecto | Chunking, metadatos obligatorios (`access_level`/RLS), coste de embeddings antes de ingesta masiva y calidad del reranking |
+| Decisiones estructuradas con IA (TypeSafe / Jev) | Módulo `TYPESAFE_EXTENSION.md` + API externa TypeSafe (HTTP o SDK Python/JS; skill oficial `typesafe-ai/skills`) | Lectura (solo se envían datos; no escribe en el sistema) | Aprobación previa, `TYPESAFE_API_KEY` como secreto, declarar qué `state` sale del entorno, coste por token de entrada y validar la precisión en español |
 
 La elección final debe favorecer el MCP oficial o mejor mantenido, con el menor alcance de permisos y sin duplicar capacidades innecesariamente.
 

@@ -34,6 +34,7 @@ TEMPLATE_NAMES = [
     "AGENTS.md",
     "PRD_TEMPLATE.md",
     "MODELOS.md",
+    "TYPESAFE_EXTENSION.md",
 ]
 
 

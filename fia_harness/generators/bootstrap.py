@@ -6,7 +6,8 @@ Este módulo automatiza el arranque (Fase M0) de un nuevo proyecto:
 3. Genera la estructura básica de carpetas (src, tests, docs, infra).
 4. Crea un borrador inicial de CONTEXT.md extrayendo metadatos clave del PRD.
 5. Prepara el entorno inicializando un PROGRESS.md listo para comenzar.
-6. Si el PRD menciona búsqueda semántica / RAG, activa el módulo RAG_VECTOR_EXTENSION.md.
+6. Si el PRD menciona búsqueda semántica / RAG, activa el módulo RAG_VECTOR_EXTENSION.md;
+   si menciona decisiones estructuradas con IA (TypeSafe/Jev), activa TYPESAFE_EXTENSION.md.
 7. Genera progress.json: el estado compilado y validable que verifica el CI.
 8. Emite .github/workflows/harness.yml: las Reglas de Oro como checks de merge
    (gitleaks, auditoría de dependencias, validación de estado y aprobaciones).
@@ -25,7 +26,8 @@ from fia_harness import __version__
 from fia_harness.core import state as st
 from fia_harness.core.console import fix_windows_console_encoding
 from fia_harness.generators import scaffold
-from fia_harness.parser.prd import RAG_KEYWORDS, extract_prd_metadata, find_prd_file
+from fia_harness.parser.prd import (RAG_KEYWORDS, TYPESAFE_KEYWORDS, extract_prd_metadata,
+                                     find_prd_file)
 
 # Configuración de archivos de control obligatorios del Harness
 REQUIRED_TEMPLATES = {
@@ -48,6 +50,10 @@ DEFAULT_FOLDERS = ["src", "tests", "docs", "infra"]
 # Módulo de extensión opcional para proyectos con búsqueda semántica / RAG.
 # bootstrap.py lo activa (lo copia de /docs a la raíz) solo si el PRD lo pide.
 RAG_MODULE_NAME = "RAG_VECTOR_EXTENSION.md"
+
+# Módulo de extensión opcional para proyectos con decisiones estructuradas con IA
+# (TypeSafe / Jev). Igual que el RAG: se activa solo si el PRD lo pide.
+TYPESAFE_MODULE_NAME = "TYPESAFE_EXTENSION.md"
 
 
 def print_banner():
@@ -124,32 +130,53 @@ def generate_state_file(root_dir: Path, progress_path: Path):
     print("   [+] Estado compilado y validable generado: progress.json")
 
 
-def maybe_activate_rag_module(root_dir: Path, prd_path: Path):
-    """Si el PRD menciona búsqueda semántica / RAG / bases vectoriales, activa el
-    módulo de extensión copiándolo de /docs a la raíz. Si el PRD lo pide pero el
-    módulo no está en /docs, lo avisa explícitamente (Regla de Oro nº2: nunca
-    asumir en silencio) para que se copie desde el kit maestro antes de la Fase 2,
-    donde `INICIO_PROYECTO.md` lo exige en SPEC.md."""
+def _maybe_activate_module(root_dir: Path, prd_path: Path, *, module_name: str,
+                           keywords, label: str, spec_hint: str):
+    """Copia un módulo de extensión de /docs a la raíz si el PRD lo menciona.
+
+    Si el PRD lo pide pero el módulo no está en /docs, lo avisa explícitamente
+    (Regla de Oro nº2: nunca asumir en silencio) para que se copie desde el kit
+    maestro antes de la Fase 2, donde `INICIO_PROYECTO.md` lo exige en SPEC.md.
+    """
     if not prd_path or not prd_path.exists():
         return
 
-    if not RAG_KEYWORDS.search(prd_path.read_text(encoding="utf-8")):
+    if not keywords.search(prd_path.read_text(encoding="utf-8")):
         return
 
-    print(f"\n[✓] El PRD menciona búsqueda semántica / RAG / datos vectoriales.")
-    target = root_dir / RAG_MODULE_NAME
-    source = root_dir / "docs" / RAG_MODULE_NAME
+    print(f"\n[✓] El PRD menciona {label}.")
+    target = root_dir / module_name
+    source = root_dir / "docs" / module_name
 
     if target.exists():
-        print(f"   [.] {RAG_MODULE_NAME} ya está presente en la raíz.")
+        print(f"   [.] {module_name} ya está presente en la raíz.")
         return
     if source.exists():
         shutil.copy2(source, target)
-        print(f"   [+] Módulo de extensión RAG copiado y activado: {RAG_MODULE_NAME}")
-        print("       Resume sus decisiones en SPEC.md (Fase 2, punto 12 de INICIO_PROYECTO.md).")
+        print(f"   [+] Módulo de extensión copiado y activado: {module_name}")
+        print(f"       Resume sus decisiones en SPEC.md ({spec_hint}).")
     else:
-        print(f"   [⚠️] {RAG_MODULE_NAME} no está en /docs. Cópialo desde el kit maestro "
+        print(f"   [⚠️] {module_name} no está en /docs. Cópialo desde el kit maestro "
               f"(carpeta `templates/` del repo de FIA Harness) antes de la Fase 2.", file=sys.stderr)
+
+
+def maybe_activate_rag_module(root_dir: Path, prd_path: Path):
+    """Activa `RAG_VECTOR_EXTENSION.md` si el PRD menciona búsqueda semántica / RAG."""
+    _maybe_activate_module(
+        root_dir, prd_path,
+        module_name=RAG_MODULE_NAME, keywords=RAG_KEYWORDS,
+        label="búsqueda semántica / RAG / datos vectoriales",
+        spec_hint="Fase 2, punto 12 de INICIO_PROYECTO.md")
+
+
+def maybe_activate_typesafe_module(root_dir: Path, prd_path: Path):
+    """Activa `TYPESAFE_EXTENSION.md` si el PRD menciona decisiones estructuradas
+    con IA (TypeSafe / Jev): clasificación, routing, scoring, guardrails, etc."""
+    _maybe_activate_module(
+        root_dir, prd_path,
+        module_name=TYPESAFE_MODULE_NAME, keywords=TYPESAFE_KEYWORDS,
+        label="decisiones estructuradas con TypeSafe/Jev",
+        spec_hint="Fase 2, punto 13 de INICIO_PROYECTO.md")
 
 
 def main():
@@ -205,8 +232,9 @@ def main():
         for campo in media:
             print(f"     - {campo_nombre.get(campo, campo)} → {metadata['confidence'][campo].get('method', '')}")
 
-    # 3.2 Módulo de extensión RAG, solo si el PRD lo pide
+    # 3.2 Módulos de extensión opcionales, solo si el PRD los pide
     maybe_activate_rag_module(root_dir, prd_path)
+    maybe_activate_typesafe_module(root_dir, prd_path)
 
     # 4. Generar archivos iniciales de control
     scaffold.generate_context_file(root_dir, prd_path, metadata)
