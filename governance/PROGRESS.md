@@ -1,6 +1,6 @@
 # PROGRESS.md — Hoja de Ruta e Historial de Fases (repo FIA Harness)
 
-**Fase activa:** — (F15 cerrada; F8 en pausa)
+**Fase activa:** — (F16 cerrada; F8 en pausa)
 
 ## Fases del Proceso (Harness — dogfood del propio kit)
 
@@ -31,6 +31,7 @@
 | F13 | Pack de assets UI: manifiesto + descarga verificada (`fia assets fetch/manifest`, `fia init --assets`) | `core/assets.py` (stdlib, SHA-256, idempotente, fail-closed), plantilla `UI_ASSETS.json`, `docs/UI_ASSETS.md`, tests y E2E | F12 | [x] Listo |
 | F14 | Entorno UI/UX asistido: `fia ui setup/status` + pregunta en el protocolo (Full y Lite) | `core/ui.py` (URL oficial por defecto, `--recetas`, override `--url`/env), `ui setup/status` en CLI, Paso 0 en `UI_UX_EXCLUSIVA.md`, H3, `QUICKSTART_LITE.md`, `AGENTS.md`, README EN/ES | F13 | [x] Listo |
 | F15 | Fix del CI generado: detección del stack en subcarpetas y sin omisiones silenciosas (regla 7) | `scaffold.GITHUB_WORKFLOW` con paso de detección (Node/Python en cualquier subcarpeta), avisos visibles en vez de skip silencioso y tests del generador; v3.6.3 | F7 | [x] Listo |
+| F16 | Módulo condicional TypeSafe/Jev: detección en el PRD y activación automática del módulo documental para construir decisiones estructuradas con IA dentro del producto (v3.7.0) | `templates/TYPESAFE_EXTENSION.md` (raíz + paquete), `TYPESAFE_KEYWORDS` en el parser, `maybe_activate_typesafe_module` en bootstrap, gobernanza documental (SKILLS_MCP, INICIO_PROYECTO, AGENTS, MODELOS, README EN/ES) y tests | F15 | [x] Listo |
 
 ## Checkpoints de Contexto Recientes
 
@@ -132,3 +133,6 @@
 - **F15 (CI generado sin omisiones silenciosas, v3.6.3):** el job `calidad` de la plantilla detecta el proyecto Node/Python menos profundo con `git ls-files` (monorepos incluidos), ejecuta tests/auditoría con `working-directory` y avisa con `::warning::` si falta stack, script `test` o `tests/` — nunca skip silencioso; se elimina `npm test --if-present` y el fallback que enmascaraba fallos de pytest (`if/elif`). Bloque bash verificado con Git Bash en un monorepo real (`node_dir=.` · `py_dir=src/api`) y en el propio kit (`py_dir=.`). Tests: 311 → 313.
   Evidencia: EV-027
   Recibo: evidence/receipts/receipt-F15.json
+- **F16 (Módulo condicional TypeSafe/Jev, v3.7.0):** módulo documental condicional (espejo del RAG) para integrar TypeSafe/Jev (System One: Choice/Score/Noul, probabilidades y `confidence`) dentro del producto: `templates/TYPESAFE_EXTENSION.md` (raíz + paquete, copias byte-idénticas) con contrato de API, primitivas, patrones (speculative fan-out, confidence-gated routing, composite scoring, intent routing), integración (HTTP `urllib`/SDK) y ejemplo de trading; `parser.prd.TYPESAFE_KEYWORDS` lo detecta y `bootstrap._maybe_activate_module`/`maybe_activate_typesafe_module` lo activan de `/docs` a la raíz solo si el PRD lo pide (Jev **no** es un LLM de código; la conexión exige aprobación humana y la API key es un secreto). Distribución (`cli.TEMPLATE_NAMES`), exclusión (`NON_PRD_FILES`) y gobernanza documental (SKILLS_MCP, INICIO_PROYECTO punto 13, AGENTS, MODELOS, README EN/ES). Tests: 313 → 319; E2E con un PRD de trading (activa TypeSafe, no RAG, `fia check` verde).
+  Evidencia: EV-028
+  Recibo: evidence/receipts/receipt-F16.json

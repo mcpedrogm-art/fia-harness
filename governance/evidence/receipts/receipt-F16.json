@@ -1,0 +1,111 @@
+{
+  "version": "1.0",
+  "task_ref": "TASK-F16.md",
+  "mode": "FULL",
+  "commit_or_tree_ref": "6779529702f6e89dcd5031462efce287da426009",
+  "dirty": false,
+  "files": [
+    {
+      "path": "CHANGELOG_FIXES.md",
+      "content_sha256": "ac7075fbde3309c3a77daa277c9ee508e2d07e821f9285ac49fbd03af7e28e4e"
+    },
+    {
+      "path": "README.es.md",
+      "content_sha256": "b553c902a8b080dbd9f7c8633bd1df10005b7cee3cd8fcf3755915c95b086a80"
+    },
+    {
+      "path": "README.md",
+      "content_sha256": "d7407c28b376bf9350d59dc3667fef4586a7e1992627cdc717153d7d2fbb16e8"
+    },
+    {
+      "path": "fia_harness/__init__.py",
+      "content_sha256": "8a57ffa55d01d544cfcc93cc3286298ddf3e11414d89a39d665b98ede32547f1"
+    },
+    {
+      "path": "fia_harness/cli.py",
+      "content_sha256": "aab675b9ba2b01adb640767a93bcb58559ce78df89efc40f757e7aa488a4cc93"
+    },
+    {
+      "path": "fia_harness/data/templates/AGENTS.md",
+      "content_sha256": "8949e7f1ad07601d33daa082cd6d3b171d1f05c382244aedbcea36a063883924"
+    },
+    {
+      "path": "fia_harness/data/templates/INICIO_PROYECTO.md",
+      "content_sha256": "21dd0173d2fcd24ddf3e56aa1b0cb5182f35ab8555cfd2325b5371aaa1a9c5b1"
+    },
+    {
+      "path": "fia_harness/data/templates/MODELOS.md",
+      "content_sha256": "e878ea6e5efa06ae96a9cae1cef22bff5292da7d6baff30143e93b4a579eac81"
+    },
+    {
+      "path": "fia_harness/data/templates/SKILLS_MCP.md",
+      "content_sha256": "550d3258050ad5d63c7b7eb554f1e9e3a1a25652c7a64bed4a9dc5ec82fae54b"
+    },
+    {
+      "path": "fia_harness/data/templates/TYPESAFE_EXTENSION.md",
+      "content_sha256": "4ed7465fa465a1c2147bb203db4cb16d3e8ea4863d713b0e64e8b1870a518e70"
+    },
+    {
+      "path": "fia_harness/generators/bootstrap.py",
+      "content_sha256": "b6c110fe0b7f20384004c9d12dab071a4e72f7cc98a1d61213fc5701544434e1"
+    },
+    {
+      "path": "fia_harness/parser/discovery.py",
+      "content_sha256": "66f5d83ee4004ccb7c33e3eadc87761a09df85cfd2f6953b0eb8d1b4e9b5d72f"
+    },
+    {
+      "path": "fia_harness/parser/prd.py",
+      "content_sha256": "22812c8cbe6b59247f4915f50765fa7585c0cc62943ac8365577b8bd8326a807"
+    },
+    {
+      "path": "pyproject.toml",
+      "content_sha256": "0f771ac157702b4af135e0f6243f17c7193ae5ac755ca29bfe453c12ffb11a78"
+    },
+    {
+      "path": "templates/AGENTS.md",
+      "content_sha256": "8949e7f1ad07601d33daa082cd6d3b171d1f05c382244aedbcea36a063883924"
+    },
+    {
+      "path": "templates/INICIO_PROYECTO.md",
+      "content_sha256": "21dd0173d2fcd24ddf3e56aa1b0cb5182f35ab8555cfd2325b5371aaa1a9c5b1"
+    },
+    {
+      "path": "templates/MODELOS.md",
+      "content_sha256": "e878ea6e5efa06ae96a9cae1cef22bff5292da7d6baff30143e93b4a579eac81"
+    },
+    {
+      "path": "templates/SKILLS_MCP.md",
+      "content_sha256": "550d3258050ad5d63c7b7eb554f1e9e3a1a25652c7a64bed4a9dc5ec82fae54b"
+    },
+    {
+      "path": "templates/TYPESAFE_EXTENSION.md",
+      "content_sha256": "4ed7465fa465a1c2147bb203db4cb16d3e8ea4863d713b0e64e8b1870a518e70"
+    },
+    {
+      "path": "tests/test_generators_bootstrap.py",
+      "content_sha256": "2d27380321439430fdd851037432db71e35300ba3cfbe5ef3943dd4d44f67bbb"
+    },
+    {
+      "path": "tests/test_packaging.py",
+      "content_sha256": "44aea42b64373273e57558b732c586b885bb8c05962b9cff96300f0b7e250e1e"
+    },
+    {
+      "path": "tests/test_parser_prd.py",
+      "content_sha256": "671ee6b6a8879648ad0d63fde1bb0f269a4155de88df8160f567de470fcf38cd"
+    }
+  ],
+  "checks": {
+    "golden_rules": "pass",
+    "tests": {
+      "passed": 319,
+      "total": 319
+    },
+    "lint": "skip",
+    "scope": "pass"
+  },
+  "evidence_refs": [
+    "EV-028"
+  ],
+  "generated_at": "2026-09-23T19:05:58",
+  "receipt_sha256": "c1568573b0af83692a7e70c2d1bac5a6025adeba87d0b16dda86e9839b962bc7"
+}

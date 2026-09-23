@@ -135,6 +135,20 @@
     descartada: job en rojo si no hay tests (rompería fases tempranas).
     Ref: APPROVAL-007.
 
+*   **ADR-015 (2026-09-23):** Módulo condicional TypeSafe/Jev (v3.7.0, F16).
+    Petición del humano: al pasar un PRD que menciona Jev (p. ej. un sistema de
+    trading), poder integrarlo en el producto desarrollado con el kit. Decisión:
+    **módulo documental condicional** (mismo patrón que el RAG), no un comando de
+    red. `TYPESAFE_EXTENSION.md` documenta el contrato de TypeSafe (System One:
+    Choice/Score/Noul, probabilidades y `confidence`), los patrones y las
+    salvaguardas; `parser.prd.TYPESAFE_KEYWORDS` lo detecta y
+    `bootstrap.maybe_activate_typesafe_module` (helper común con el RAG) lo copia
+    de `/docs` a la raíz solo si aplica. Jev **no es un LLM de código**: es una
+    capa de decisión del producto; la conexión exige aprobación humana (Regla de
+    Oro nº6) y la `TYPESAFE_API_KEY` se trata como secreto. Se mantiene
+    stdlib-only/local-first (sin red en el kit). Alternativa descartada: subcomando
+    CLI con llamadas a la API. Ref: APPROVAL-008.
+
 ## Reaperturas
 
 - **F9** (2026-09-18) · Reapertura · Razón: hallazgo del dogfood post-cierre: re-emision en done (evitar deadlock) y changed_files para estado en subcarpeta
@@ -156,3 +170,4 @@
 - **APPROVAL-005** · (2026-09-21) · Fase: M2 · Acción: Pack de assets UI v3.5: manifiesto UI_ASSETS.json + fia assets fetch/manifest + fia init --assets (el kit no empaqueta media de terceros) · Aprobado por: Humano · Ref: sesion 2026-09-18 (usuario aprueba el pack de assets y su hosting en Supabase self-hosted)
 - **APPROVAL-006** · (2026-09-21) · Fase: M2 · Acción: Entorno UI/UX asistido v3.6: fia ui setup/status con confirmacion en el protocolo (Full y Lite), URL oficial por defecto y override · Aprobado por: Humano · Ref: sesion 2026-09-21 (usuario aprueba el flujo y el nombre fia ui setup)
 - **APPROVAL-007** · (2026-09-22) · Acción: Fix del CI generado (F15): deteccion del stack en subcarpetas y avisos visibles; stack sin tests = aviso no bloqueante; v3.6.3 · Aprobado por: Humano · Ref: sesion 2026-09-22 (usuario aprueba fase F15 completa y commit local sin push)
+- **APPROVAL-008** · (2026-09-23) · Acción: Módulo condicional TypeSafe/Jev (F16) y release v3.7.0: detección en el PRD, activación en bootstrap, módulo documental y gobernanza; commit y push autorizados · Aprobado por: Humano · Ref: sesion 2026-09-23 (usuario: "COMIT AND PUSH" y reflejar el cambio como punto de versión)
